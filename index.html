@@ -151,6 +151,7 @@
       <ix-menu-item id="nav-2" icon="ai">Agent Integration</ix-menu-item>
       <ix-menu-item id="nav-3" icon="connector">Bridge Tracker</ix-menu-item>
       <ix-menu-item id="nav-4" icon="barchart">Scorecard</ix-menu-item>
+      <ix-menu-item id="nav-5" icon="layers">AI &amp; Data Fabric</ix-menu-item>
     </ix-menu>
 
     <ix-content>
@@ -176,7 +177,7 @@
         <!-- VIEW 1: DIGITAL THREAD (rich flow diagram) -->
         <section class="ail-view" id="view-1">
           <div class="ail-h">QX-250 Digital Thread</div>
-          <p class="ail-sub">The woven thread across four capability domains and three lifecycle phases — Design → Realize → Optimize. Every node is a live Siemens product; thread color = agentic-readiness tier. Click a node for the verified agent interface.</p>
+          <p class="ail-sub">The woven thread across Siemens' seven published Aerospace &amp; Defense digital threads and three lifecycle phases — Design → Realize → Optimize. Every node is a live Siemens product; thread color = agentic-readiness tier. Click a node for the verified agent interface.</p>
           <div class="dt-wrap" id="dtWrap">
             <svg class="dt-svg" id="dtSvg" viewBox="0 0 1400 980" preserveAspectRatio="none" aria-hidden="true"></svg>
           </div>
@@ -212,6 +213,16 @@
           <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body"><div id="scoreChart"></div></div></ix-card>
         </section>
 
+        <!-- VIEW 5: AI & DATA FABRIC (Intelligence Center X) -->
+        <section class="ail-view" id="view-5">
+          <div class="ail-h">AI &amp; Data Fabric — Siemens Intelligence Center X</div>
+          <p class="ail-sub">The cross-cutting AI/data layer that sits <em>above</em> the 14 lifecycle stages. Siemens' newly-launched Intelligence Center X orchestrates data, models, workflows &amp; agents on one governed foundation — and its three pillars map almost 1:1 onto Griffin's local MCP &amp; skill fabric.</p>
+          <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body" id="icxBanner"></div></ix-card>
+          <div class="ail-h">Griffin's MCP &amp; agent-skill fabric</div>
+          <p class="ail-sub">The actual repos that connect agents to each tool — the local implementation of the Intelligence Center X pattern, today.</p>
+          <div class="ail-grid ail-grid--mcp" id="fabricGrid"></div>
+        </section>
+
         <div class="ail-foot">
           <strong>Source of truth:</strong> <code>AGENTIC_READINESS_VERIFIED.md</code> (this repo) · researched against docs.sw.siemens.com, community.sw.siemens.com, developer.siemens.com, docs.mendix.com, phmtechnology.com.
           <br/><strong>Key finding:</strong> No official Siemens NX MCP exists (only third-party <a href="https://github.com/DreamEnding/NX_MCP" target="_blank" rel="noopener">DreamEnding/NX_MCP</a>); Mendix is the only first-party engineering-adjacent MCP. Custom bridges required for NX, Capital, MADe &amp; Teamcenter.
@@ -238,8 +249,8 @@
       api:'Import-only API (SysML v2 ingest). NO headless-run and NO results-extraction API. FMECA/FTA/RBD generated only in-GUI.', headless:'No', auth:'—', lb:'—', note:'24 order-1 cut sets → forced dual battery, dual FC, BMS/OR-ing. Hard wall for agents.' },
     { no:'04', name:'Systems Sim (6-DOF)', prod:'Simcenter Amesim', tier:'bridge', score:7, lane:2, x:490, phase:'Design',
       api:'Python API (amesim / legacy ame_apy), CMD batch over .amegp files. Model must be pre-compiled.', headless:'Yes (CMD, no GUI)', auth:'Local license feature', lb:'Worker-session pool', note:'6-DOF cascade controller: attitude recovery ~0.86s, ζ≈0.15. Geometry & control laws coupled.' },
-    { no:'05', name:'Electrical / EWIS', prod:'Siemens Capital', tier:'wall', score:2, lane:2, x:570, phase:'Design',
-      api:'NO public API / CLI / SDK. Integration only via file/PLM (Teamcenter) handoff or RPA.', headless:'No', auth:'—', lb:'—', note:'Hardest wall. Griffin built a custom Capital Java Bridge + Project XML generator. 13 comp → 13 devices, AWG 8.' },
+    { no:'05', name:'Electrical / EWIS', prod:'Siemens Capital', tier:'bridge', score:5, lane:2, x:570, phase:'Design',
+      api:'Capital REST API (OpenAPI capital/rest/v1) — query harnesses/wires/connectors/EBOM + limited write-back, dynamically wrapped as MCP by Griffin\'s capitalMCP. But NO full ECAD design-authoring over REST — harness creation still needs Capital Studio or file/PLM (Teamcenter) handoff.', headless:'Partial — REST query/write-back headless; ECAD authoring not exposed', auth:'JSESSIONID session (capital_login / secret_login)', lb:'MCP session pool (per-session cookie)', note:'capitalMCP wraps the REST API; harness *authoring* is still materialized via the Capital Java Bridge + Project XML generator → NX. 13 comp → 13 devices, AWG 8.' },
     { no:'06', name:'Mechanical CAD', prod:'Siemens NX / NX Open', tier:'bridge', score:6, lane:2, x:650, phase:'Design',
       api:'NX Open (.NET/C++/Python NXOpen), Journaling, run_journal, -batch. NO official MCP (only 3rd-party DreamEnding/NX_MCP). Design Copilot NX = non-programmatic in-app assistant.', headless:'Yes — NX X "Server User" license (since NX2506.4000)', auth:'NX license token (per session)', lb:'License-token pool + Dispatcher / Mendix Digital Fabric', note:'53-component assembly on a single datum frame via griffin-p-quinn/nx-mcp. Every batch run burns a full license token — the core scaling bottleneck.' },
     { no:'07', name:'Structural CAE', prod:'Simcenter 3D / Nastran', tier:'bridge', score:7, lane:2, x:730, phase:'Design',
@@ -273,7 +284,7 @@
   const PHASES = [ { name:'Design', x0:200, x1:855, cx:527 }, { name:'Realize', x0:855, x1:1115, cx:985 }, { name:'Optimize', x0:1115, x1:1390, cx:1252 } ];
 
   const BRIDGES = [
-    ['Capital','2/10','wall','No public API at all — hardest wall','Capital Java Bridge + Project XML generator; harness materialized in NX'],
+    ['Capital','5/10','bridge','REST API exists (OpenAPI query + limited write-back) but NO ECAD design authoring over REST','capitalMCP wraps REST (one tool/op); Capital Java Bridge + Project XML generator for harness authoring → NX'],
     ['MADe','3/10','wall','Import-only (SysML v2); no headless run/results','Manual export + RPA handoff (open gap)'],
     ['NX','6/10','bridge','World-class NX Open scripting, but NO official MCP; license-token per batch','griffin-p-quinn/nx-mcp FastMCP + NX X Server-User token pool via Digital Fabric'],
     ['Teamcenter','6/10','bridge','Rich SOA/ITK, but Copilot/AI-BOM-Agent are closed UX','SOA C# DataManagement wrapper + AWC RDS data service'],
@@ -283,9 +294,44 @@
     { nm:'Siemens iX docs MCP', st:'yes', txt:'First-party. mcp.siemens.com / ix.siemens.io — design-system docs (RAG) only. Powers THIS site.' },
     { nm:'Mendix MCP', st:'yes', txt:'First-party, both directions: MCP Server module (microflows→tools) + MCP Client & Maia MCP Client (Studio Pro 11.8+).' },
     { nm:'Polarion MCP', st:'part', txt:'No first-party MCP, but community peakflames/PolarionMcpServers on REST v1 + first-party Copilot API (2606).' },
-    { nm:'NX MCP', st:'no', txt:'None official. Only 3rd-party experimental DreamEnding/NX_MCP (over NX Open Python). Design Copilot NX is non-programmatic.' },
+    { nm:'NX MCP', st:'part', txt:"None first-party. Griffin's griffin-p-quinn/nx-mcp FastMCP server wraps NX Open (plus 3rd-party DreamEnding/NX_MCP). Design Copilot NX is non-programmatic." },
     { nm:'Teamcenter MCP', st:'no', txt:'None shipped/announced. Teamcenter Copilot + AI BOM Agent (2606) are closed Siemens UX.' },
-    { nm:'Capital MCP', st:'no', txt:'None. No public API of any kind to wrap.' },
+    { nm:'Capital MCP', st:'yes', txt:"Griffin's capitalMCP (TypeScript) dynamically wraps the Capital REST API (OpenAPI capital/rest/v1) — one MCP tool per operation + session login tools. Query/EBOM/write-back only; no ECAD authoring over REST." },
+  ];
+
+  // ===== Siemens Intelligence Center X (industrial-AI orchestration; launched 1 Jun 2026, Realize LIVE Americas) =====
+  const ICX = {
+    launched:'Launched 1 Jun 2026 · Realize LIVE Americas, Detroit',
+    what:'Industrial-AI orchestration platform: connects industrial data, models, workflows and AI agents on one governed foundation — turning isolated AI experiments into auditable, production-grade agentic workflows on top of what enterprises already own. Connects OT/IT across SAP S/4HANA, Siemens Industrial Edge and Snowflake.',
+    url:'https://news.siemens.com/en-us/siemens-intelligence-center-x/',
+    pillars:[
+      { nm:'Graph Studio', role:'Data & ontology layer', icon:'distribution', local:'GraphStudio / GraphRAG (Neo4j + Cypher)',
+        desc:'Connects OT/IT data and gives it meaning via out-of-the-box industrial ontologies — the "understand your data" layer.' },
+      { nm:'AI Studio (RapidMiner)', role:'ML model layer', icon:'ai', local:'AIStudioMCPAgent (JAR plugin → MCP)',
+        desc:'Grounds machine-learning models in enterprise context; AutoModel + visual data-science workflows from the RapidMiner portfolio.' },
+      { nm:'Mendix', role:'Agentic app · the "Act" layer', icon:'cogwheel', local:'Mendix Digital Fabric (official MCP)',
+        desc:'Low-code agentic application development, process orchestration and human-in-the-loop governance — the "Act" phase of the ICX loop.' },
+    ],
+  };
+
+  // ===== Griffin's MCP & agent-skill fabric — the local implementation of the ICX pattern, today =====
+  const FABRIC = [
+    { nm:'nx-mcp', maps:'NX · Mechanical CAD', kind:'FastMCP server (Python)', icon:'connector', src:'griffin-p-quinn/nx-mcp',
+      what:'FastMCP server wrapping NX Open (C#/Python) — build parts & assemblies, drive expressions, export STEP/JT, run FEA demos. The mechanical-CAD agent surface.' },
+    { nm:'capitalMCP', maps:'Capital · Electrical / EWIS', kind:'MCP server (TypeScript)', icon:'connector', src:'capital/rest/v1 (OpenAPI)',
+      what:'Dynamically loads Capital\'s OpenAPI spec and registers one MCP tool per operation + session login tools. Query harnesses/wires/connectors/EBOM + limited write-back — no ECAD authoring.' },
+    { nm:'mcp-teamcenter', maps:'Teamcenter · PLM', kind:'MCP + SOA connector', icon:'connector', src:'Teamcenter SOA',
+      what:'Teamcenter Connector for Mendix + SOA MCP layer — drives DataManagement / StructureManagement SOA services for BOM & change operations.' },
+    { nm:'AIStudioMCPAgent', maps:'AI Studio (RapidMiner)', kind:'JAR plugin → MCP', icon:'ai', src:'AI Studio Java API',
+      what:'JAR plugin running inside AI Studio that exposes its Java API as MCP tools — run_process, get_results, get_model_metrics, import_data. The ICX "AI Studio" pillar, agent-driven.' },
+    { nm:'GraphStudio / GraphRAG', maps:'Graph Studio · data & ontology', kind:'Neo4j + Cypher + RAG', icon:'distribution', src:'Neo4j / Cypher',
+      what:'Builds ontology models from Teamcenter BOM (Neo4j) and adds LLM-augmented graph retrieval — the local analogue of the ICX Graph Studio pillar.' },
+    { nm:'LLMS · Siemens GenAI', maps:'Siemens GenAI model catalog', kind:'OpenAI-compatible REST', icon:'ai', src:'Siemens GenAI REST',
+      what:'CLI + WebUI over the Siemens-hosted model catalog (OpenAI-compatible). Backs the DTC Co-Pilot & priceBook chat agents; swappable with Anthropic.' },
+    { nm:'Mendix Digital Fabric', maps:'Mendix · orchestration', kind:'Official MCP (both directions)', icon:'cogwheel', src:'docs.mendix.com/agents/mcp',
+      what:'Queue dispatcher + license-token pool; exposes microflows as MCP tools (MCP Server module) and consumes tools (MCP / Maia Client). The ICX "Act" / orchestration layer.' },
+    { nm:'Industrial Edge → Mendix', maps:'Shop-floor OT data', kind:'OPC UA → MQTT → Mendix', icon:'connected', src:'OPC UA / MQTT',
+      what:'Edge apps read PLC tags over OPC UA, publish to the MQTT Databus, and feed a containerized Mendix runtime — the OT data feed into the fabric.' },
   ];
 
   // ===== Interface reference library: what each technology IS + where it comes from =====
@@ -317,9 +363,12 @@
     amesim_py:     { term:'Amesim Python API (amesim / ame_apy)', kind:'Python API', from:'Simcenter Amesim', icon:'code',
                      what:'Scriptable 1D systems simulation; runs headless via CMD batch over pre-compiled .amegp models (no GUI).',
                      url:'https://plm.sw.siemens.com/en-US/simcenter/systems-simulation/amesim/' },
-    capital:       { term:'Capital — no public API', kind:'None (wall)', from:'Siemens Capital', icon:'shield',
-                     what:'No public API, CLI or SDK of any kind. Integration is only via Teamcenter file/PLM handoff or RPA. The hardest wall in the lifecycle — Griffin fills it with a custom Java bridge + Project XML generator.',
+    capital:       { term:'Capital REST API (OpenAPI)', kind:'REST API', from:'Siemens Capital', icon:'cloud',
+                     what:'OpenAPI-described capital/rest/v1 — query harnesses, wires, connectors and EBOM, plus limited write-back. It does NOT expose full ECAD design authoring; harness *creation* still needs Capital Studio or file/PLM handoff.',
                      url:'https://www.siemens.com/en-us/products/capital/' },
+    capital_mcp:   { term:'capitalMCP (OpenAPI → MCP)', kind:'MCP server', from:"Griffin's Work", icon:'ai',
+                     what:'TypeScript MCP server that dynamically loads Capital\'s OpenAPI spec and registers one MCP tool per operation, plus session tools (capital_login / logout / status). Each session keeps its own JSESSIONID — query/EBOM/write-back only, no ECAD authoring.',
+                     url:'' },
     nxopen:        { term:'NX Open API', kind:'Automation API', from:'Siemens NX', icon:'connector',
                      what:'.NET / C++ / Python (NXOpen) automation of modeling, assemblies and STEP/JT export — world-class scripting.',
                      url:'https://plm.sw.siemens.com/en-US/nx/' },
@@ -411,7 +460,7 @@
     '02':['polarion_rest','oslc','wsdl','polarion_copilot','polarion_mcp'],
     '03':['made','sysml2'],
     '04':['amesim_py','amesim_batch','fmi'],
-    '05':['capital','capital_bridge','capital_xml'],
+    '05':['capital','capital_mcp','capital_bridge','capital_xml'],
     '06':['nxopen','nx_batch','nx_serveruser','nx_mcp','nx_copilot'],
     '07':['nxcae','nastran','heeds'],
     '08':['questa','tcl'],
@@ -438,7 +487,7 @@
   const kpis = [
     { label:'RFP→Delivery stages verified', value:14, state:'neutral' },
     { label:'Native agent-ready products', value:6, unit:'/ 14', state:'neutral' },
-    { label:'Hard walls (Capital, MADe)', value:2, state:'alarm' },
+    { label:'Hard wall (MADe only)', value:1, state:'alarm' },
     { label:'Build time · 0 human tool clicks', value:'23.8', unit:'h', state:'neutral' },
   ];
   el('kpiRow').innerHTML = kpis.map(k=>`
@@ -610,14 +659,46 @@
     });
   }
 
+  // ---- View 5: AI & Data Fabric (Intelligence Center X) ----
+  el('icxBanner').innerHTML = `
+    <div class="ail-spread" style="align-items:flex-start;gap:1rem;flex-wrap:wrap;">
+      <div style="flex:1 1 320px;">
+        <div class="ail-row" style="gap:.5rem;"><ix-icon name="ai" style="color:var(--theme-color-primary)"></ix-icon><span class="ail-title" style="font-size:1.15rem;">Siemens Intelligence Center X</span></div>
+        <p class="ail-eyebrow" style="margin:.15rem 0 .4rem;">${ICX.launched}</p>
+        <p class="ail-muted" style="font-size:.86rem;line-height:1.5;margin:0;">${ICX.what}</p>
+        <a class="ail-iface-src" style="margin-top:.5rem;display:inline-flex;" href="${ICX.url}" target="_blank" rel="noopener"><ix-icon name="link" size="14"></ix-icon>${hostOf(ICX.url)}</a>
+      </div>
+    </div>
+    <div class="ail-grid ail-grid--3" style="margin-top:1rem;">
+      ${ICX.pillars.map(p=>`
+        <ix-card variant="filled" passive class="ail-fill-card"><div class="ail-card-body">
+          <div class="ail-row" style="gap:.5rem;"><ix-icon name="${p.icon}" style="color:var(--theme-color-primary)"></ix-icon><span class="ail-title" style="font-size:.98rem;">${p.nm}</span></div>
+          <p class="ail-eyebrow" style="margin:.1rem 0 .35rem;">${p.role}</p>
+          <p class="ail-muted" style="font-size:.82rem;line-height:1.45;margin:0 0 .5rem;">${p.desc}</p>
+          <div class="ail-attr"><div class="lab">Griffin's local grounding</div><div class="val ail-mono" style="font-size:.8rem;">${p.local}</div></div>
+        </div></ix-card>`).join('')}
+    </div>`;
+
+  el('fabricGrid').innerHTML = FABRIC.map(f=>`
+    <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body">
+      <div class="ail-row" style="gap:.5rem;"><ix-icon name="${f.icon}" style="color:var(--theme-color-primary)"></ix-icon><span class="ail-title" style="font-size:.95rem;">${f.nm}</span></div>
+      <p class="ail-eyebrow" style="margin:.1rem 0 .3rem;">${f.maps}</p>
+      <p class="ail-muted" style="margin:0 0 .5rem;font-size:.82rem;line-height:1.45;">${f.what}</p>
+      <div class="ail-row" style="gap:.4rem;flex-wrap:wrap;">
+        <ix-pill variant="primary" outline>${f.kind}</ix-pill>
+        <ix-pill variant="neutral" outline>${f.src}</ix-pill>
+      </div>
+    </div></ix-card>`).join('');
+
   // ---- navigation ----
+  const NAV_N = 6;
   function showView(idx){
     document.querySelectorAll('.ail-view').forEach((v,i)=>v.classList.toggle('active', i===idx));
-    for(let i=0;i<5;i++){ const n = el('nav-'+i); if(n) n.active = (i===idx); }
+    for(let i=0;i<NAV_N;i++){ const n = el('nav-'+i); if(n) n.active = (i===idx); }
     if(idx===1) ensureThread();
     if(idx===4){ drawChart(); }
   }
-  for(let i=0;i<5;i++){ const n = el('nav-'+i); if(n) n.addEventListener('click', ()=>showView(i)); }
+  for(let i=0;i<NAV_N;i++){ const n = el('nav-'+i); if(n) n.addEventListener('click', ()=>showView(i)); }
   window.addEventListener('resize', ()=>{ if(chart) chart.resize(); });
   </script>
 </body>
