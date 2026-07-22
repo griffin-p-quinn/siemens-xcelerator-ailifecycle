@@ -84,7 +84,7 @@
 
     /* ============ DIGITAL THREAD CANVAS (rich flow diagram) ============ */
     .dt-wrap {
-      position: relative; width: 100%; aspect-ratio: 1400 / 980; min-height: 560px;
+      position: relative; width: 100%; aspect-ratio: 1400 / 620; min-height: 360px; max-height: 56vh;
       border-radius: 14px; overflow: hidden;
       border: 1px solid var(--theme-color-soft-bdr);
       background:
@@ -191,19 +191,20 @@
     .ail-dl-btn.lg { padding:.6rem 1rem; font-size:.9rem; }
     .ail-dl-btn.zip { color: var(--theme-color-std-text); border-color: var(--theme-color-soft-bdr); background: var(--theme-color-2); }
     /* ---- skill popover (ix-dropdown slotted content) ---- */
-    #skillPop { --ix-dropdown-max-width: 340px; }
-    .skill-pop-body { display:flex; flex-direction:column; gap:.5rem; max-width:320px; padding:.15rem .1rem; }
-    .ail-pop-name { font-weight:700; font-size:.95rem; line-height:1.25; }
-    .ail-pop-sum { margin:0; font-size:.8rem; line-height:1.45; color: var(--theme-color-soft-text); }
-    .ail-pop-chips { display:flex; flex-wrap:wrap; gap:.3rem; }
+    #skillPop { --ix-dropdown-max-width: 360px; }
+    #skillPop::part(dropdown), #skillPop .dropdown-menu { padding: 0 !important; }
+    .skill-pop-body { display:flex; flex-direction:column; gap:.7rem; max-width:340px; padding:1.05rem 1.15rem 1.1rem; }
+    .ail-pop-name { font-weight:700; font-size:.98rem; line-height:1.3; }
+    .ail-pop-sum { margin:.05rem 0 0; font-size:.82rem; line-height:1.5; color: var(--theme-color-soft-text); }
+    .ail-pop-chips { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.1rem; }
     .ail-pop-chip { display:inline-flex; align-items:center; gap:.25rem; font-size:.68rem; font-weight:600;
       padding:.16rem .4rem; border-radius:6px; color: var(--theme-color-weak-text);
       background: var(--theme-color-3); border:1px solid var(--theme-color-soft-bdr); }
-    .ail-pop-note { display:flex; gap:.4rem; align-items:flex-start; font-size:.72rem; line-height:1.4;
+    .ail-pop-note { display:flex; gap:.45rem; align-items:flex-start; font-size:.73rem; line-height:1.45; margin-top:.15rem; padding:.55rem .6rem; border-radius:8px;
       color: var(--theme-color-warning); background: color-mix(in srgb, var(--theme-color-warning) 10%, transparent);
-      border:1px solid color-mix(in srgb, var(--theme-color-warning) 35%, transparent); border-radius:7px; padding:.4rem .5rem; }
+      border:1px solid color-mix(in srgb, var(--theme-color-warning) 35%, transparent); }
     .ail-pop-note ix-icon { flex:none; margin-top:.05rem; }
-    .ail-pop-dls { display:flex; flex-direction:column; gap:.35rem; }
+    .ail-pop-dls { display:flex; flex-direction:column; gap:.4rem; margin-top:.2rem; }
     .ail-pop-dls .ail-dl-btn { justify-content:flex-start; }
     .ail-pop-all { display:inline-flex; align-items:center; gap:.35rem; font-size:.72rem; font-weight:600;
       color: var(--theme-color-weak-text); text-decoration:none; padding-top:.15rem; }
@@ -729,6 +730,11 @@
     skillPop.anchor = anchorEl;
     skillPop.show = true;
   }
+  // toggle: re-clicking the same anchor minimizes the popover instantly
+  function toggleSkillPop(anchorEl, opts){
+    if(skillPop.show && skillPop.anchor === anchorEl){ skillPop.show = false; return; }
+    openSkillPop(anchorEl, opts);
+  }
   // build opts from a stage `no`
   function stagePopOpts(no){
     const s = STAGES.find(x=>x.no===no), dl = DOWNLOAD[no]; if(!s||!dl) return null;
@@ -772,10 +778,10 @@
     el('stageDetail').innerHTML = detailCard(STAGES[i]);
   }
   el('stageGrid').addEventListener('click', e=>{ const c = e.target.closest('ix-card'); if(!c) return;
-    drawDetail(+c.dataset.i); const o = stagePopOpts(c.dataset.no); if(o) openSkillPop(c, o); });
+    drawDetail(+c.dataset.i); const o = stagePopOpts(c.dataset.no); if(o) toggleSkillPop(c, o); });
   el('stageGrid').addEventListener('keydown', e=>{ if(e.key!=='Enter' && e.key!==' ') return;
     const c = e.target.closest('ix-card'); if(!c) return; e.preventDefault();
-    drawDetail(+c.dataset.i); const o = stagePopOpts(c.dataset.no); if(o) openSkillPop(c, o); });
+    drawDetail(+c.dataset.i); const o = stagePopOpts(c.dataset.no); if(o) toggleSkillPop(c, o); });
   el('stageGrid').addEventListener('focusin', e=>{ const c = e.target.closest('ix-card'); if(!c) return;
     const o = stagePopOpts(c.dataset.no); if(o) openSkillPop(c, o); });
   drawDetail(5);
@@ -831,12 +837,11 @@
         const i = +n.dataset.i;
         wrap.querySelectorAll('.dt-node').forEach(m=>m.classList.toggle('sel', m===n));
         el('dtDetail').innerHTML = detailCard(STAGES[i]);
-        el('dtDetail').scrollIntoView({behavior:'smooth', block:'nearest'});
       };
-      const pop = ()=>{ const o = stagePopOpts(n.dataset.no); if(o) openSkillPop(n, o); };
-      n.addEventListener('click', ()=>{ openDetail(); pop(); });
-      n.addEventListener('focus', pop);
-      n.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openDetail(); pop(); } });
+      const o = stagePopOpts(n.dataset.no);
+      n.addEventListener('click', ()=>{ openDetail(); if(o) toggleSkillPop(n, o); });
+      n.addEventListener('focus', ()=>{ if(o) openSkillPop(n, o); });
+      n.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openDetail(); if(o) toggleSkillPop(n, o); } });
     });
   }
   // scroll-wheel zoom (to cursor) + drag-to-pan + double-click reset
