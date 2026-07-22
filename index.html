@@ -728,7 +728,12 @@
     if(!anchorEl || !opts) return;
     skillPop.innerHTML = popBodyHtml(opts);
     skillPop.anchor = anchorEl;
-    skillPop.show = true;
+    // defer show to the next tick: the click that opened us bubbles to
+    // document, where ix-dropdown's close-behavior="outside" handler runs
+    // against a still-closed dropdown (no-op). We open after it settles.
+    skillPop.show = false;
+    clearTimeout(openSkillPop._t);
+    openSkillPop._t = setTimeout(()=>{ skillPop.show = true; }, 0);
   }
   // build opts from a stage `no`
   function stagePopOpts(no){
