@@ -730,11 +730,6 @@
     skillPop.anchor = anchorEl;
     skillPop.show = true;
   }
-  // toggle: re-clicking the same anchor minimizes the popover instantly
-  function toggleSkillPop(anchorEl, opts){
-    if(skillPop.show && skillPop.anchor === anchorEl){ skillPop.show = false; return; }
-    openSkillPop(anchorEl, opts);
-  }
   // build opts from a stage `no`
   function stagePopOpts(no){
     const s = STAGES.find(x=>x.no===no), dl = DOWNLOAD[no]; if(!s||!dl) return null;
@@ -778,10 +773,10 @@
     el('stageDetail').innerHTML = detailCard(STAGES[i]);
   }
   el('stageGrid').addEventListener('click', e=>{ const c = e.target.closest('ix-card'); if(!c) return;
-    drawDetail(+c.dataset.i); const o = stagePopOpts(c.dataset.no); if(o) toggleSkillPop(c, o); });
+    drawDetail(+c.dataset.i); const o = stagePopOpts(c.dataset.no); if(o) openSkillPop(c, o); });
   el('stageGrid').addEventListener('keydown', e=>{ if(e.key!=='Enter' && e.key!==' ') return;
     const c = e.target.closest('ix-card'); if(!c) return; e.preventDefault();
-    drawDetail(+c.dataset.i); const o = stagePopOpts(c.dataset.no); if(o) toggleSkillPop(c, o); });
+    drawDetail(+c.dataset.i); const o = stagePopOpts(c.dataset.no); if(o) openSkillPop(c, o); });
   el('stageGrid').addEventListener('focusin', e=>{ const c = e.target.closest('ix-card'); if(!c) return;
     const o = stagePopOpts(c.dataset.no); if(o) openSkillPop(c, o); });
   drawDetail(5);
@@ -839,9 +834,10 @@
         el('dtDetail').innerHTML = detailCard(STAGES[i]);
       };
       const o = stagePopOpts(n.dataset.no);
-      n.addEventListener('click', ()=>{ openDetail(); if(o) toggleSkillPop(n, o); });
-      n.addEventListener('focus', ()=>{ if(o) openSkillPop(n, o); });
-      n.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openDetail(); if(o) toggleSkillPop(n, o); } });
+      const pop = ()=>{ if(o) openSkillPop(n, o); };
+      n.addEventListener('click', ()=>{ openDetail(); pop(); });
+      n.addEventListener('focus', pop);
+      n.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openDetail(); pop(); } });
     });
   }
   // scroll-wheel zoom (to cursor) + drag-to-pan + double-click reset
