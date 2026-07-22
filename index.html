@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" data-ix-theme="classic" data-ix-color-schema="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xcelerator AI Lifecycle — Agentic Readiness Tracker (RFP → Delivery)</title>
+
+  <!-- Siemens iX Design System 5.1.1 (verified CDN entry points) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@siemens/ix@5.1.1/dist/siemens-ix/siemens-ix.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@siemens/ix@5.1.1/dist/siemens-ix/theme/classic-dark.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@siemens/ix-icons@3.4.0/dist/ix-icons/ix-icons.esm.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@siemens/ix@5.1.1/dist/siemens-ix/siemens-ix.esm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+
+  <style>
+    :root {
+      --tier-native: var(--theme-color-success, #01d65a);
+      --tier-bridge: var(--theme-color-warning, #ffbc00);
+      --tier-wall:   var(--theme-color-alarm, #ff2640);
+      --accent:      var(--theme-color-primary, #00cccc);
+      --ink:         var(--theme-color-std-text, #e8ecee);
+      --soft:        var(--theme-color-soft-text, #9aa4ab);
+      --surface-1:   var(--theme-color-1, #16233a);
+      --surface-2:   var(--theme-color-2, #23233c);
+      --surface-3:   var(--theme-color-component-1, #1a2334);
+      --line:        var(--theme-color-soft-bdr, #37374d);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; min-height: 100vh;
+      background:
+        radial-gradient(1200px 600px at 12% -8%, rgba(0,204,204,.10), transparent 60%),
+        radial-gradient(1000px 500px at 100% 0%, rgba(0,90,120,.16), transparent 55%),
+        var(--theme-color-body-background, #000028);
+      color: var(--ink);
+      font-family: "Siemens Sans", "Segoe UI", system-ui, sans-serif;
+    }
+    .wrap { max-width: 1320px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* ---------- Top bar ---------- */
+    .topbar {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 24px; border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(0,40,60,.55), rgba(0,0,40,.35));
+      backdrop-filter: blur(6px);
+      position: sticky; top: 0; z-index: 40;
+    }
+    .brand-dot {
+      width: 34px; height: 34px; border-radius: 9px; flex: none;
+      background: conic-gradient(from 200deg, var(--accent), #007a86 60%, var(--accent));
+      box-shadow: 0 0 22px rgba(0,204,204,.55);
+    }
+    .brand-t { font-weight: 700; letter-spacing: .3px; font-size: 1.02rem; }
+    .brand-s { color: var(--soft); font-size: .78rem; margin-top: 1px; }
+    .topbar .spacer { flex: 1; }
+    .live-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: .74rem; color: var(--soft); border: 1px solid var(--line);
+      padding: 5px 11px; border-radius: 999px;
+    }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--tier-native); box-shadow: 0 0 10px var(--tier-native); animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    /* ---------- Hero ---------- */
+    .hero { padding: 46px 0 26px; }
+    .eyebrow { color: var(--accent); font-size: .78rem; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 600; }
+    .hero h1 { font-size: clamp(1.9rem, 3.6vw, 3rem); line-height: 1.05; margin: 12px 0 10px; font-weight: 700; }
+    .hero h1 .grad { background: linear-gradient(90deg, var(--accent), #7ce0ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero p { color: var(--soft); max-width: 780px; font-size: 1.02rem; line-height: 1.6; }
+
+    /* thread strip */
+    .thread { display: flex; align-items: stretch; gap: 0; margin: 30px 0 8px; overflow-x: auto; padding-bottom: 8px; }
+    .thread .node {
+      flex: 1 0 auto; min-width: 88px; text-align: center; position: relative; padding: 0 6px;
+    }
+    .thread .chip {
+      width: 40px; height: 40px; margin: 0 auto 8px; border-radius: 11px; display: grid; place-items: center;
+      background: var(--surface-3); border: 1px solid var(--line); font-size: 1.1rem;
+    }
+    .thread .node:not(:last-child)::after {
+      content: ""; position: absolute; top: 20px; left: calc(50% + 26px); right: calc(-50% + 26px); height: 2px;
+      background: linear-gradient(90deg, var(--accent), rgba(0,204,204,.15));
+    }
+    .thread .lbl { font-size: .68rem; color: var(--soft); line-height: 1.25; }
+
+    /* KPI row */
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 26px 0 8px; }
+    .kpi { background: linear-gradient(160deg, var(--surface-1), rgba(20,26,46,.5)); border: 1px solid var(--line); border-radius: 14px; padding: 18px 18px 16px; }
+    .kpi .v { font-size: 1.9rem; font-weight: 700; color: #fff; }
+    .kpi .v small { font-size: .9rem; color: var(--accent); font-weight: 600; }
+    .kpi .k { color: var(--soft); font-size: .8rem; margin-top: 4px; }
+    @media (max-width: 860px){ .kpis{ grid-template-columns: repeat(2,1fr);} }
+
+    /* ---------- Tabs area ---------- */
+    .panel { display: none; animation: fade .35s ease; }
+    .panel.active { display: block; }
+    @keyframes fade { from{opacity:0; transform: translateY(6px)} to{opacity:1; transform:none} }
+    .section-h { font-size: 1.35rem; font-weight: 700; margin: 30px 0 4px; }
+    .section-sub { color: var(--soft); margin: 0 0 18px; font-size: .92rem; }
+
+    /* stage grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+    .card {
+      background: linear-gradient(165deg, var(--surface-1), rgba(18,24,42,.55));
+      border: 1px solid var(--line); border-radius: 14px; padding: 15px 15px 14px; cursor: pointer;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease; position: relative; overflow: hidden;
+    }
+    .card::before { content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background: var(--tier); }
+    .card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+    .card.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+    .card .st-no { font-size: .72rem; color: var(--soft); letter-spacing: 1px; }
+    .card .st-name { font-weight: 700; margin: 3px 0 6px; font-size: 1rem; }
+    .card .st-prod { color: var(--accent); font-size: .82rem; }
+    .card .st-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+    .tier-pill { font-size: .68rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; text-transform: uppercase; letter-spacing: .5px; }
+    .score-badge { font-size: .78rem; font-weight: 700; color: #001; background: var(--tier); border-radius: 8px; padding: 2px 8px; min-width: 30px; text-align: center; }
+
+    /* drill-down */
+    .drawer {
+      margin-top: 18px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+      background: linear-gradient(180deg, var(--surface-2), rgba(20,26,46,.5));
+    }
+    .drawer-top { padding: 20px 22px; border-bottom: 1px solid var(--line); display:flex; gap:16px; align-items:flex-start; }
+    .drawer-top .num { font-size: 2rem; font-weight: 800; color: var(--accent); opacity: .55; line-height: 1; }
+    .drawer-top h3 { margin: 0; font-size: 1.25rem; }
+    .drawer-top .prod { color: var(--accent); font-size: .9rem; margin-top: 3px; }
+    .drawer-body { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+    .attr { padding: 16px 22px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); }
+    .attr:nth-child(even){ border-right: none; }
+    .attr .lab { color: var(--soft); font-size: .72rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .attr .val { font-size: .95rem; line-height: 1.45; }
+    .mono { font-family: "Cascadia Code", "Consolas", monospace; font-size: .84rem; color: #cfe9ff; }
+
+    /* tier columns */
+    .tiers { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    @media (max-width: 900px){ .tiers{ grid-template-columns: 1fr; } .drawer-body{ grid-template-columns:1fr;} .attr{ border-right:none;} }
+    .tier-col { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--surface-1); }
+    .tier-head { padding: 14px 16px; font-weight: 700; display:flex; align-items:center; gap:9px; border-bottom: 1px solid var(--line); }
+    .tier-head .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .tier-item { padding: 12px 16px; border-bottom: 1px solid var(--line); display:flex; justify-content: space-between; align-items:center; gap: 10px; }
+    .tier-item:last-child { border-bottom: none; }
+    .tier-item .nm { font-weight: 600; font-size: .92rem; }
+    .tier-item .why { color: var(--soft); font-size: .76rem; margin-top: 2px; }
+
+    /* integration architecture */
+    .arch { border: 1px solid var(--line); border-radius: 16px; padding: 22px; background: var(--surface-1); }
+    .arch .layer { border: 1px dashed var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+    .arch .layer.hl { border-style: solid; border-color: var(--accent); background: rgba(0,204,204,.06); }
+    .arch .lt { font-size: .72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 10px; font-weight: 700; }
+    .pool-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 10px; }
+    .pool { background: var(--surface-3); border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; }
+    .pool .pn { font-weight: 700; font-size: .88rem; }
+    .pool .pd { color: var(--soft); font-size: .74rem; margin-top: 3px; }
+    .flow-note { color: var(--soft); font-size: .82rem; margin: 6px 0 0; }
+
+    table.mtx { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    table.mtx th, table.mtx td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    table.mtx th { color: var(--soft); font-size: .72rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+    table.mtx tr:hover td { background: rgba(0,204,204,.04); }
+
+    .mcp-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap:12px; }
+    .mcp { border:1px solid var(--line); border-radius:12px; padding:14px 15px; background: var(--surface-1); }
+    .mcp .top { display:flex; align-items:center; gap:8px; font-weight:700; }
+    .mcp .desc { color: var(--soft); font-size:.8rem; margin-top:7px; line-height:1.45; }
+    .yes { color: var(--tier-native); } .no { color: var(--tier-wall); } .part { color: var(--tier-bridge); }
+
+    #scoreChart { width: 100%; height: 560px; }
+    .foot { margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--soft); font-size: .8rem; line-height: 1.6; }
+    .foot a { color: var(--accent); text-decoration: none; }
+    .legend { display:flex; gap:18px; flex-wrap:wrap; margin: 8px 0 2px; font-size:.8rem; color:var(--soft); }
+    .legend span{ display:inline-flex; align-items:center; gap:7px;}
+    .legend i{ width:11px;height:11px;border-radius:50%; display:inline-block;}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand-dot"></div>
+    <div>
+      <div class="brand-t">Siemens Xcelerator &middot; AI Lifecycle</div>
+      <div class="brand-s">Agentic Readiness Tracker &mdash; RFP &rarr; Delivery</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="live-pill"><span class="live-dot"></span> QX-250 Digital Thread &middot; Verified 2026-07-22</div>
+  </div>
+
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">FlyNow &bull; "Fly in 3" &bull; QX-250 Quadcopter</div>
+      <h1>The entire <span class="grad">RFP&nbsp;&rarr;&nbsp;Delivery</span> cycle,<br/>mapped to how an AI agent drives every Siemens product.</h1>
+      <p>Fourteen lifecycle stages, each verified against the <em>actual</em> Siemens product interface &mdash; the exact API, whether it runs headless, how the agent load-balances against it, and whether it is natively agent-ready or needs a custom bridge. Built entirely on the Siemens iX design system.</p>
+
+      <div class="thread" id="threadStrip"></div>
+
+      <div class="kpis">
+        <div class="kpi"><div class="v">14</div><div class="k">RFP&rarr;Delivery stages mapped &amp; verified</div></div>
+        <div class="kpi"><div class="v">6&nbsp;<small>native</small> &middot; 6&nbsp;<small>bridge</small></div><div class="k">Agentic readiness split (of 14 products)</div></div>
+        <div class="kpi"><div class="v">2</div><div class="k">Hard walls needing custom bridges (Capital, MADe)</div></div>
+        <div class="kpi"><div class="v">23.8<small>h</small></div><div class="k">Build time &middot; 0 human tool clicks</div></div>
+      </div>
+    </section>
+
+    <ix-tabs id="mainTabs" selected="0">
+      <ix-tab-item>Lifecycle</ix-tab-item>
+      <ix-tab-item>Agent Integration</ix-tab-item>
+      <ix-tab-item>Bridge Tracker</ix-tab-item>
+      <ix-tab-item>Scorecard</ix-tab-item>
+    </ix-tabs>
+
+    <!-- ============ TAB 1: LIFECYCLE ============ -->
+    <div class="panel active" id="panel-0">
+      <div class="section-h">RFP &rarr; Delivery lifecycle</div>
+      <p class="section-sub">Click any stage to inspect exactly how the agent works with that Siemens product.</p>
+      <div class="legend">
+        <span><i style="background:var(--tier-native)"></i> Native agent-ready</span>
+        <span><i style="background:var(--tier-bridge)"></i> Scriptable &mdash; needs bridge</span>
+        <span><i style="background:var(--tier-wall)"></i> Custom bridge / wall</span>
+      </div>
+      <div class="grid" id="stageGrid" style="margin-top:14px;"></div>
+      <div class="drawer" id="drawer"></div>
+    </div>
+
+    <!-- ============ TAB 2: AGENT INTEGRATION ============ -->
+    <div class="panel" id="panel-1">
+      <div class="section-h">How the agent connects &amp; scales</div>
+      <p class="section-sub">Orchestration flows top-down: request &rarr; Mendix Digital Fabric queue &rarr; token-gated headless worker pools &rarr; Siemens products. Load balancing shown per tier.</p>
+      <div class="arch" id="archDiagram"></div>
+      <div class="section-h">Per-product connection matrix</div>
+      <p class="section-sub">Protocol, authentication, and the load-balancer / pooling pattern the agent uses.</p>
+      <div style="border:1px solid var(--line); border-radius:14px; overflow:auto;">
+        <table class="mtx" id="connMatrix"></table>
+      </div>
+    </div>
+
+    <!-- ============ TAB 3: BRIDGE TRACKER ============ -->
+    <div class="panel" id="panel-2">
+      <div class="section-h">Native vs. custom-bridge tracker</div>
+      <p class="section-sub">What is available for agentic interaction today &mdash; and what we must build bridges for.</p>
+      <div class="tiers" id="tierCols"></div>
+
+      <div class="section-h">Custom bridges required (the gap Griffin's Work fills)</div>
+      <div style="border:1px solid var(--line); border-radius:14px; overflow:auto;">
+        <table class="mtx" id="bridgeTable"></table>
+      </div>
+
+      <div class="section-h">Official Siemens MCP &amp; AI inventory</div>
+      <p class="section-sub">Verified 2026-07-22. Only design-system docs and Mendix ship first-party MCP today; no engineering-tool MCP exists.</p>
+      <div class="mcp-grid" id="mcpGrid"></div>
+    </div>
+
+    <!-- ============ TAB 4: SCORECARD ============ -->
+    <div class="panel" id="panel-3">
+      <div class="section-h">Agentic-readiness scorecard</div>
+      <p class="section-sub">0&ndash;10, verified against actual product interfaces. Color = tier. Amesim, NX &amp; Tecnomatix scores were corrected upward from the provisional goal spec; NX &amp; Capital confirmed as bridge-required.</p>
+      <div id="scoreChart"></div>
+    </div>
+
+    <div class="foot">
+      <strong>Source of truth:</strong> <code>AGENTIC_READINESS_VERIFIED.md</code> (this repo) &middot; researched against docs.sw.siemens.com, community.sw.siemens.com, developer.siemens.com, docs.mendix.com, phmtechnology.com.
+      <br/><strong>Key finding:</strong> No official Siemens NX MCP exists (only third-party <a href="https://github.com/DreamEnding/NX_MCP" target="_blank" rel="noopener">DreamEnding/NX_MCP</a>); Mendix is the only first-party engineering-adjacent MCP. Custom bridges required for NX, Capital, MADe &amp; Teamcenter.
+      <br/>Dual-track: <strong>Griffin's Work</strong> (griffin-p-quinn/nx-mcp, Mendix Digital Fabric, DTC Co-Pilot) vs. <strong>Their Work</strong> (xcelerator.us cloud endpoints, flynow.xcelerator.us).
+    </div>
+  </div>
+
+  <script>
+  // ================= VERIFIED DATA (mirrors AGENTIC_READINESS_VERIFIED.md) =================
+  const TIER = {
+    native: { key:'native', label:'Native-ready', color:'var(--tier-native)' },
+    bridge: { key:'bridge', label:'Needs bridge', color:'var(--tier-bridge)' },
+    wall:   { key:'wall',   label:'Custom bridge', color:'var(--tier-wall)' },
+  };
+  const STAGES = [
+    { no:'01', name:'RFP Intake & Capture', prod:'Doc ingestion → Polarion/TC', icon:'document', tier:'bridge', score:null,
+      api:'LLM parse of the 41-page USAF spec → write requirements via Polarion REST v1.', headless:'Yes', auth:'Bearer PAT / SSO', lb:'HTTP load balancer', note:'Ingestion bridge; no native "read-a-PDF" product endpoint.' },
+    { no:'02', name:'Requirements & RFLP', prod:'Polarion ALM (+ TC SysML)', icon:'checklist', tier:'native', score:8,
+      api:'REST API v1 /polarion/rest/v1 (OpenAPI), OSLC, SOAP/WSDL. Polarion 2606 Copilot API. Community MCP peakflames/PolarionMcpServers.', headless:'Yes', auth:'Personal Access Token (bearer) / SAML SSO', lb:'Multi-instance cluster + HTTP LB', note:'Closest to native agent-ready in the PLM/ALM tier. 51 requirements trace-linked.' },
+    { no:'03', name:'Reliability / PhSM', prod:'PHM Technology MADe', icon:'error', tier:'wall', score:3,
+      api:'Import-only API (SysML v2 ingest). NO headless-run and NO results-extraction API. FMECA/FTA/RBD generated only in-GUI.', headless:'No', auth:'—', lb:'—', note:'24 order-1 cut sets → forced dual battery, dual FC, BMS/OR-ing. Hard wall for agents.' },
+    { no:'04', name:'Systems Sim (6-DOF)', prod:'Simcenter Amesim', icon:'analysis', tier:'bridge', score:7,
+      api:'Python API (amesim / legacy ame_apy), CMD batch over .amegp files. Model must be pre-compiled.', headless:'Yes (CMD, no GUI)', auth:'Local license feature', lb:'Worker-session pool', note:'6-DOF cascade controller: attitude recovery ~0.86s, ζ≈0.15. Geometry & control laws coupled.' },
+    { no:'05', name:'Electrical / EWIS', prod:'Siemens Capital', icon:'flash', tier:'wall', score:2,
+      api:'NO public API / CLI / SDK. Integration only via file/PLM (Teamcenter) handoff or RPA.', headless:'No', auth:'—', lb:'—', note:'Hardest wall. Griffin built a custom Capital Java Bridge + Project XML generator. 13 comp → 13 devices, AWG 8.' },
+    { no:'06', name:'Mechanical CAD', prod:'Siemens NX / NX Open', icon:'cad', tier:'bridge', score:6,
+      api:'NX Open (.NET/C++/Python NXOpen), Journaling, run_journal, -batch. NO official MCP (only 3rd-party DreamEnding/NX_MCP). Design Copilot NX = non-programmatic in-app assistant.', headless:'Yes — NX X "Server User" license (since NX2506.4000)', auth:'NX license token (per session)', lb:'License-token pool + Dispatcher / Mendix Digital Fabric', note:'53-component assembly on a single datum frame via griffin-p-quinn/nx-mcp. Every batch run burns a full license token — the core scaling bottleneck.' },
+    { no:'07', name:'Structural CAE', prod:'Simcenter 3D / Nastran', icon:'process-bar', tier:'bridge', score:7,
+      api:'NXOpen.CAE (C#/Python) for pre/post. Nastran solver CLI: nastran deck.dat — SOL 101 / 106 fully headless. HEEDS for design-space exploration.', headless:'Yes (solver decoupled)', auth:'NX authoring + solver license', lb:'Solver farm + dual-license mgmt', note:'Von Mises safety factor 1.63 @ 5G pull-up load case.' },
+    { no:'08', name:'Embedded / FPGA', prod:'Siemens EDA Questa/ModelSim', icon:'chip', tier:'native', score:9,
+      api:'vsim -c (console), -do <file>.do (TCL), qrun, -batch. Deterministic text-in/text-out.', headless:'Yes — first-class', auth:'EDA license per invocation', lb:'CI regression farm', note:'Highest agentic readiness of the toolchain. 8 SystemVerilog RTL blocks, self-checking testbenches.' },
+    { no:'09', name:'Program & Build', prod:'Teamcenter (IPP&E)', icon:'org-chart', tier:'bridge', score:6,
+      api:'SOA (.NET Teamcenter.Soa.Client / Java), ITK, TcXML, StructureManagementService. Copilot/AI-BOM-Agent are closed UX, not open MCP.', headless:'Yes (SOA/ITK)', auth:'Session via CredentialManager; SSO (SAML/OIDC) at AWC gateway', lb:'Pool Manager — 4-tier tcserver pool', note:'12-task schedule, 22-item EBOM, stage MBOM, 10-op process plan.' },
+    { no:'10', name:'Mfg / Assembly Sim', prod:'Tecnomatix Process Simulate & Plant Sim', icon:'factory', tier:'native', score:8,
+      api:'COM/ActiveX RemoteControl, SimTalk 2.0, pyplantsim, .NET automation. Headless via visible=False, suppress_3d.', headless:'Yes (COM)', auth:'Windows/COM licensed instance', lb:'COM licensed-instance pool', note:'DTC Co-Pilot: robotic fastening, RULA ergonomics (score 2), AMR dispatch.' },
+    { no:'11', name:'Production Execution / MES', prod:'Opcenter (APS/Execution)', icon:'gantt-chart', tier:'native', score:8,
+      api:'REST + OData v4.1 (Intelligence API; Execution Core REST for recipe/formula/MES objects).', headless:'Yes', auth:'OAuth / API key', lb:'HTTP load balancer', note:'Line tact time 14.2 min after virtual line balancing.' },
+    { no:'12', name:'Shop-floor Telemetry / Edge', prod:'Industrial Edge + Insights Hub', icon:'iot', tier:'native', score:9,
+      api:'REST services, MindConnect MQTT (cert-managed), OPC UA (PubSub over MQTT/JSON). Apps are Docker containers.', headless:'Yes', auth:'X.509 certs / OAuth', lb:'Broker / edge cluster', note:'Real-time torque + laser-scan ingestion for as-built vs CAD compare.' },
+    { no:'13', name:'Verification & Validation', prod:'Teamcenter V&V', icon:'checkbox', tier:'bridge', score:6,
+      api:'SOA services + trace-link objects. Programmatic Target→Measured verification.', headless:'Yes', auth:'Session / SSO', lb:'Pool Manager', note:'51/51 requirements PASS, 24 RFP standards section-linked (100%).' },
+    { no:'14', name:'Delivery / Airworthiness', prod:'Teamcenter + AI Lifecycle Harness', icon:'success', tier:'bridge', score:null,
+      api:'SOA cert sign-off + Human-in-the-Loop approval gate stewarded by the AI Lifecycle Harness (Agentic WBS).', headless:'Yes', auth:'Session / SSO + HITL', lb:'—', note:'Final Certificate of Airworthiness: 0 open NCs → 100% CERTIFIED FLIGHT READY.' },
+  ];
+
+  const ORCH = [
+    { nm:'Mendix Digital Fabric', pd:'Official MCP both ways (Server module + Maia MCP Client, Studio Pro 11.8+). REST/OData/GraphQL + Java actions. THE orchestration/queue-dispatch layer.', score:9 },
+    { nm:'Teamcenter Dispatcher', pd:'Siemens-native queue/job dispatch (translations, batch, NX-TC). Closest native worker-dispatch pattern.', score:null },
+    { nm:'AgentCenter Control Tower', pd:'Their Work — master visual agent control (agentcenter.xcelerator.us).', score:null },
+    { nm:'AI Lifecycle Harness', pd:'Meta-layer steward: Deliverables → Criteria → Accomplishment → Milestones.', score:null },
+  ];
+
+  const BRIDGES = [
+    ['Capital','🔴 2/10','No public API at all — hardest wall','Capital Java Bridge + Project XML generator; harness materialized in NX'],
+    ['MADe','🔴 3/10','Import-only (SysML v2); no headless run/results','Manual export + RPA handoff (open gap)'],
+    ['NX','🟡 6/10','World-class NX Open scripting, but NO official MCP; license-token per batch','griffin-p-quinn/nx-mcp FastMCP + NX X Server-User token pool via Digital Fabric'],
+    ['Teamcenter','🟡 6/10','Rich SOA/ITK, but Copilot/AI-BOM-Agent are closed UX','SOA C# DataManagement wrapper + AWC RDS data service'],
+    ['Simcenter Amesim/3D','🟡 7/10','Headless solve exists; no agent layer + license gating','Python ame_apy / NXOpen.CAE + Nastran CLI wrappers'],
+  ];
+
+  const MCP_INV = [
+    { nm:'Siemens iX docs MCP', st:'yes', txt:'First-party. mcp.siemens.com / ix.siemens.io — design-system docs (RAG) only. Powers THIS site.' },
+    { nm:'Mendix MCP', st:'yes', txt:'First-party, both directions: MCP Server module (microflows→tools) + MCP Client & Maia MCP Client (Studio Pro 11.8+).' },
+    { nm:'Polarion MCP', st:'part', txt:'No first-party MCP, but community peakflames/PolarionMcpServers on REST v1 + first-party Copilot API (2606).' },
+    { nm:'NX MCP', st:'no', txt:'None official. Only 3rd-party experimental DreamEnding/NX_MCP (over NX Open Python). Design Copilot NX is non-programmatic.' },
+    { nm:'Teamcenter MCP', st:'no', txt:'None shipped/announced. Teamcenter Copilot + AI BOM Agent (2606) are closed Siemens UX.' },
+    { nm:'Capital MCP', st:'no', txt:'None. No public API of any kind to wrap.' },
+  ];
+
+  // ================= RENDER =================
+  const cssVar = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const tierColor = (t) => t==='native' ? '#01d65a' : t==='bridge' ? '#ffbc00' : '#ff2640';
+
+  // thread strip
+  const threadIcons = ['📄','✅','⚠️','📈','⚡','🧩','🏗️','🔌','🗂️','🏭','⚙️','📡','🔎','🏁'];
+  document.getElementById('threadStrip').innerHTML = STAGES.map((s,i)=>`
+    <div class="node">
+      <div class="chip">${threadIcons[i]}</div>
+      <div class="lbl">${s.name.split(' ')[0]}${s.name.split(' ')[1]?'<br/>'+s.name.split(' ').slice(1).join(' '):''}</div>
+    </div>`).join('');
+
+  // stage grid
+  const grid = document.getElementById('stageGrid');
+  grid.innerHTML = STAGES.map((s,i)=>`
+    <div class="card" data-i="${i}" style="--tier:${tierColor(s.tier)}">
+      <div class="st-no">STAGE ${s.no}</div>
+      <div class="st-name">${s.name}</div>
+      <div class="st-prod">${s.prod}</div>
+      <div class="st-foot">
+        <span class="tier-pill" style="background:${tierColor(s.tier)}22;color:${tierColor(s.tier)}">${TIER[s.tier].label}</span>
+        ${s.score!=null?`<span class="score-badge" style="--tier:${tierColor(s.tier)}">${s.score}</span>`:'<span class="st-no">HITL</span>'}
+      </div>
+    </div>`).join('');
+
+  function drawDrawer(i){
+    const s = STAGES[i];
+    document.querySelectorAll('.card').forEach(c=>c.classList.toggle('sel', +c.dataset.i===i));
+    document.getElementById('drawer').innerHTML = `
+      <div class="drawer-top">
+        <div class="num">${s.no}</div>
+        <div style="flex:1">
+          <h3>${s.name}</h3>
+          <div class="prod">${s.prod}</div>
+        </div>
+        <div style="text-align:right">
+          <span class="tier-pill" style="background:${tierColor(s.tier)}22;color:${tierColor(s.tier)}">${TIER[s.tier].label}</span>
+          ${s.score!=null?`<div class="score-badge" style="--tier:${tierColor(s.tier)};margin-top:8px;display:inline-block">${s.score}/10</div>`:''}
+        </div>
+      </div>
+      <div class="drawer-body">
+        <div class="attr"><div class="lab">Agent Interface (verified)</div><div class="val mono">${s.api}</div></div>
+        <div class="attr"><div class="lab">Headless Execution</div><div class="val">${s.headless}</div></div>
+        <div class="attr"><div class="lab">Authentication</div><div class="val">${s.auth}</div></div>
+        <div class="attr"><div class="lab">Load Balancing / Scale Pattern</div><div class="val">${s.lb}</div></div>
+        <div class="attr" style="grid-column:1/-1;border-right:none"><div class="lab">QX-250 Ground Truth</div><div class="val">${s.note}</div></div>
+      </div>`;
+  }
+  grid.addEventListener('click', e=>{ const c=e.target.closest('.card'); if(c) drawDrawer(+c.dataset.i); });
+  drawDrawer(5); // open NX by default (the headline gap)
+
+  // ---- Tab 2: architecture ----
+  document.getElementById('archDiagram').innerHTML = `
+    <div class="layer"><div class="lt">1 · Request Ingestion</div>
+      AgentCenter Control Tower &amp; web agents → REST/GraphQL gateway. HTTP load balancer fronts the fabric.</div>
+    <div class="layer hl"><div class="lt">2 · Mendix Digital Fabric — Orchestration & Queue Dispatch (official MCP)</div>
+      Asynchronous priority job queue converts synchronous calls into job IDs (JOB-2026-####). State machine + Teamcenter OAuth token management. Exposes microflows as MCP tools.</div>
+    <div class="layer"><div class="lt">3 · License-Token Pool & Load Balancers (per domain)</div>
+      <div class="pool-row">
+        <div class="pool"><div class="pn">NX token pool</div><div class="pd">NX X Server-User seats; warm sessions avoid ~18s cold GUI spawn</div></div>
+        <div class="pool"><div class="pn">Teamcenter Pool Mgr</div><div class="pd">4-tier tcserver pool load-balances SOA sessions</div></div>
+        <div class="pool"><div class="pn">Solver / regression farm</div><div class="pd">Nastran CLI + Questa vsim -c fan-out</div></div>
+        <div class="pool"><div class="pn">HTTP LB</div><div class="pd">Polarion / Opcenter / Insights Hub REST clusters</div></div>
+      </div></div>
+    <div class="layer"><div class="lt">4 · Headless Worker Sessions → Siemens Products</div>
+      <div class="pool-row">
+        ${STAGES.filter(s=>s.score!=null).map(s=>`<div class="pool" style="border-left:3px solid ${tierColor(s.tier)}"><div class="pn">${s.prod.split('(')[0].trim()}</div><div class="pd">${s.headless}</div></div>`).join('')}
+      </div>
+      <p class="flow-note">Results flow back up as artifacts (STEP/JT, .fem, XML, telemetry) → Teamcenter system of record → HITL gate.</p>
+    </div>`;
+
+  // connection matrix
+  const cm = document.getElementById('connMatrix');
+  cm.innerHTML = `<thead><tr><th>Product</th><th>Protocol / Interface</th><th>Auth</th><th>Load balancing</th><th>Tier</th></tr></thead><tbody>${
+    STAGES.filter(s=>s.score!=null).map(s=>`<tr>
+      <td><strong>${s.prod.split('(')[0].trim()}</strong></td>
+      <td class="mono" style="font-size:.78rem">${s.api.split('.')[0]}.</td>
+      <td>${s.auth}</td>
+      <td>${s.lb}</td>
+      <td><span class="tier-pill" style="background:${tierColor(s.tier)}22;color:${tierColor(s.tier)}">${s.score}/10</span></td>
+    </tr>`).join('')}</tbody>`;
+
+  // ---- Tab 3: tiers ----
+  const tierGroups = { native:[], bridge:[], wall:[] };
+  STAGES.filter(s=>s.score!=null).forEach(s=>tierGroups[s.tier].push(s));
+  const tierMeta = [
+    ['native','Native agent-ready','Open programmatic interface, headless, deterministic'],
+    ['bridge','Scriptable — needs bridge','Rich API but no agent/MCP layer; wrap it'],
+    ['wall','Custom bridge required','No or import-only API — a wall for agents'],
+  ];
+  document.getElementById('tierCols').innerHTML = tierMeta.map(([k,t,d])=>`
+    <div class="tier-col">
+      <div class="tier-head"><span class="dot" style="background:${tierColor(k)}"></span>${t}</div>
+      ${tierGroups[k].sort((a,b)=>b.score-a.score).map(s=>`
+        <div class="tier-item">
+          <div><div class="nm">${s.prod.split('(')[0].trim()}</div><div class="why">${d}</div></div>
+          <span class="score-badge" style="--tier:${tierColor(k)}">${s.score}</span>
+        </div>`).join('')}
+    </div>`).join('');
+
+  // bridge table
+  document.getElementById('bridgeTable').innerHTML =
+    `<thead><tr><th>Product</th><th>Score</th><th>Why a bridge is needed</th><th>Griffin's bridge</th></tr></thead><tbody>${
+    BRIDGES.map(b=>`<tr><td><strong>${b[0]}</strong></td><td>${b[1]}</td><td>${b[2]}</td><td class="mono" style="font-size:.78rem">${b[3]}</td></tr>`).join('')}</tbody>`;
+
+  // mcp inventory
+  const stMark = {yes:'✅ Shipped', no:'❌ None', part:'🟡 Community/partial'};
+  document.getElementById('mcpGrid').innerHTML = MCP_INV.map(m=>`
+    <div class="mcp" style="border-left:3px solid ${m.st==='yes'?tierColor('native'):m.st==='no'?tierColor('wall'):tierColor('bridge')}">
+      <div class="top"><span class="${m.st}">${stMark[m.st]}</span> · ${m.nm}</div>
+      <div class="desc">${m.txt}</div>
+    </div>`).join('');
+
+  // ---- Tab 4: chart ----
+  let chart;
+  function drawChart(){
+    if(chart) return;
+    const all = [...STAGES.filter(s=>s.score!=null).map(s=>({n:s.prod.split('(')[0].trim(), v:s.score, t:s.tier})),
+                 {n:'Mendix Digital Fabric', v:9, t:'native'}];
+    all.sort((a,b)=>a.v-b.v);
+    chart = echarts.init(document.getElementById('scoreChart'), null, {renderer:'canvas'});
+    chart.setOption({
+      grid:{ left:200, right:60, top:20, bottom:30 },
+      tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
+      xAxis:{ type:'value', max:10, splitLine:{lineStyle:{color:'rgba(255,255,255,.06)'}}, axisLabel:{color:'#9aa4ab'} },
+      yAxis:{ type:'category', data:all.map(d=>d.n), axisLabel:{color:'#e8ecee', fontSize:12}, axisLine:{lineStyle:{color:'#37374d'}} },
+      series:[{ type:'bar', data:all.map(d=>({ value:d.v, itemStyle:{ color:tierColor(d.t), borderRadius:[0,5,5,0] } })),
+        barWidth:'62%', label:{show:true, position:'right', color:'#fff', fontWeight:700, formatter:'{c}/10'} }]
+    });
+  }
+
+  // ---- iX tabs wiring ----
+  const tabs = document.getElementById('mainTabs');
+  function showPanel(idx){
+    document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active', i===idx));
+    if(idx===3){ drawChart(); setTimeout(()=>chart&&chart.resize(),60); }
+  }
+  tabs.addEventListener('selectedChange', e=> showPanel(e.detail));
+  tabs.addEventListener('tabClick', e=> { if(typeof e.detail==='number') showPanel(e.detail); });
+  // fallback: clicks on tab items
+  tabs.querySelectorAll('ix-tab-item').forEach((t,i)=> t.addEventListener('click', ()=>showPanel(i)));
+  window.addEventListener('resize', ()=> chart && chart.resize());
+  </script>
+</body>
+</html>

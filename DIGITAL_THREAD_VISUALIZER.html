@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlyNow QX-250 — Griffin's Work vs. Their Work Landscape Visualizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-base: #06090e;
+    --bg-surface: #0c121e;
+    --bg-surface-elevated: #141d2e;
+    --bg-glass: rgba(12, 18, 30, 0.85);
+    --bg-glass-card: rgba(20, 29, 46, 0.65);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-bright: rgba(0, 226, 184, 0.35);
+    
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-tertiary: #64748b;
+    
+    --siemens-teal: #00e2b8;
+    --siemens-teal-glow: rgba(0, 226, 184, 0.25);
+    --cyber-blue: #0091ff;
+    --cyber-blue-glow: rgba(0, 145, 255, 0.25);
+    --violet: #9d4edd;
+    --amber: #ffaa00;
+    --coral: #ff5252;
+    
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Animated Liquid Mesh Atmosphere */
+  .atmosphere {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.18;
+    animation: float 20s infinite ease-in-out alternate;
+  }
+  .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--siemens-teal); animation-duration: 22s; }
+  .blob-2 { bottom: -15%; right: -10%; width: 60vw; height: 60vw; background: var(--cyber-blue); animation-duration: 28s; }
+  .blob-3 { top: 40%; left: 30%; width: 45vw; height: 45vw; background: var(--violet); animation-duration: 25s; }
+
+  @keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(60px, 40px) scale(1.1); }
+  }
+
+  /* Navigation Bar */
+  .hub-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--siemens-teal), var(--cyber-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #000;
+    font-size: 16px;
+    box-shadow: 0 0 20px var(--siemens-teal-glow);
+  }
+  .brand-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .status-badge {
+    background: rgba(0, 226, 184, 0.12);
+    color: var(--siemens-teal);
+    border: 1px solid rgba(0, 226, 184, 0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 6px;
+    background: rgba(6, 9, 14, 0.8);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .tab-btn:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.04); }
+  .tab-btn.active {
+    background: var(--bg-surface-elevated);
+    color: var(--siemens-teal);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 226, 184, 0.2);
+  }
+
+  main {
+    position: relative;
+    z-index: 10;
+    flex: 1;
+    max-width: 1560px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px;
+  }
+
+  .hero-section {
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+  }
+  .hero-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #ffffff 40%, var(--text-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    max-width: 840px;
+    margin-top: 6px;
+  }
+
+  .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+  .tab-pane.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .table-container {
+    background: var(--bg-glass-card);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 16px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+  th {
+    background: rgba(12, 18, 30, 0.9);
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    font-family: var(--font-mono);
+  }
+  td { padding: 16px 20px; border-bottom: 1px solid var(--border); color: var(--text-primary); vertical-align: top; }
+  tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+  .badge-griffin {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 226, 184, 0.15);
+    color: var(--siemens-teal);
+    border: 1px solid rgba(0, 226, 184, 0.3);
+  }
+  .badge-chris {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 145, 255, 0.15);
+    color: var(--cyber-blue);
+    border: 1px solid rgba(0, 145, 255, 0.3);
+  }
+
+  footer {
+    position: relative;
+    z-index: 10;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    padding: 24px 32px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+</style>
+</head>
+<body>
+
+<div class="atmosphere">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<header class="hub-bar">
+  <div class="brand-group">
+    <div class="brand-logo">S</div>
+    <div>
+      <div class="brand-title">
+        Siemens Agentic Lifecycle Landscape
+        <span class="status-badge">Griffin's Work vs. Their Work</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('landscape')">Griffin vs. Chris Landscape</button>
+    <button class="tab-btn" onclick="switchTab('thread')">QX-250 Digital Thread</button>
+    <button class="tab-btn" onclick="switchTab('scorecard')">Agentic Scorecard</button>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero-section">
+    <div>
+      <h1 class="hero-title">Griffin's Work vs. Their Work Landscape Analysis</h1>
+      <p class="hero-desc">
+        Tracking <strong>Griffin's Work</strong> (<code>griffin-p-quinn/nx-mcp</code>, Mendix Digital Fabric Queue Dispatcher, DTC Co-Pilot <code>d:\projectsD\DTComposer</code>, Mendix Widget Foundry) vs. <strong>Their Work</strong> (Chris's <code>xcelerator.us</code> Cloud Endpoints &amp; <code>flynow.xcelerator.us</code>).
+      </p>
+    </div>
+  </div>
+
+  <!-- TAB 1: LANDSCAPE ANALYSIS -->
+  <div id="tab-landscape" class="tab-pane active">
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Lifecycle Domain</th>
+            <th>Griffin's Work (Our Local / Workspace Work)</th>
+            <th>Their Work (Chris's / xcelerator.us Work)</th>
+            <th>Commomality &amp; Gap Resolution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Master Orchestration &amp; Queue</strong></td>
+            <td><span class="badge-griffin">Mendix Digital Fabric Queue</span><br><small style="color:var(--text-tertiary)">Worker queue pooling for active NX/Capital sessions</small></td>
+            <td><span class="badge-chris">https://agentcenter.xcelerator.us/</span><br><small style="color:var(--text-tertiary)">Visual Agent Control Tower</small></td>
+            <td>Griffin's Digital Fabric solves the critical <strong>headless CAD license token bottleneck</strong> during multi-agent execution.</td>
+          </tr>
+          <tr>
+            <td><strong>Mechanical CAD (NX)</strong></td>
+            <td><span class="badge-griffin">griffin-p-quinn/nx-mcp</span><br><small style="color:var(--text-tertiary)">FastMCP server (expressions, STEP/JT, NXOpen)</small></td>
+            <td><span class="badge-chris">https://nx.xcelerator.us/</span><br><small style="color:var(--text-tertiary)">Cloud NX Agent REST Endpoint</small></td>
+            <td>Griffin's <code>nx-mcp</code> provides native FastMCP JSON-RPC introspection that Chris's HTTP REST endpoints lack.</td>
+          </tr>
+          <tr>
+            <td><strong>Electrical EWIS (Capital)</strong></td>
+            <td><span class="badge-griffin">Mendix + Capital Bridge Java</span><br><small style="color:var(--text-tertiary)">Project XML Generator &amp; Harness 3D in NX</small></td>
+            <td><span class="badge-chris">https://capital.xcelerator.us/</span><br><small style="color:var(--text-tertiary)">Cloud Capital Agent REST Endpoint</small></td>
+            <td>Both automate schematic capture; Griffin's Bridge handles direct 3D harness keep-in zone routing in NX.</td>
+          </tr>
+          <tr>
+            <td><strong>Production &amp; 3D Plant Co-Pilot</strong></td>
+            <td><span class="badge-griffin">DTC Co-Pilot (d:\projectsD\DTComposer)</span><br><small style="color:var(--text-tertiary)">FastAPI + LangGraph + SSE + React Three Fiber 3D</small></td>
+            <td><span class="badge-chris">flynow.xcelerator.us</span><br><small style="color:var(--text-tertiary)">Tecnomatix Plant Simulation &amp; Process Simulate</small></td>
+            <td>Griffin's DTC Co-Pilot streams live reactive 3D WebGL plant updates to operators in real-time via SSE.</td>
+          </tr>
+          <tr>
+            <td><strong>Low-Code App &amp; Visual UI</strong></td>
+            <td><span class="badge-griffin">Mendix Studio Pro &amp; Pluggable Widgets</span><br><small style="color:var(--text-tertiary)">d:\projectsD\projectSite</small></td>
+            <td><span class="badge-chris">flynow.xcelerator.us</span><br><small style="color:var(--text-tertiary)">Custom HTML/CSS Static Web Pages</small></td>
+            <td>Griffin's Mendix Widget Foundry embeds live 3D canvasses &amp; AI co-pilots directly inside Mendix Studio Pro apps.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: QX-250 THREAD -->
+  <div id="tab-thread" class="tab-pane">
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>QX-250 Step</th>
+            <th>Engineering Tool</th>
+            <th>Ground-Truth Result &amp; Finding</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>01. Origin &amp; Reqs</strong></td>
+            <td>USAF Solicitation RFP &amp; Teamcenter SRS</td>
+            <td>41-page spec decomposed into 51 SRS requirements &amp; 13 logical functions.</td>
+          </tr>
+          <tr>
+            <td><strong>02. Reliability (PhSM)</strong></td>
+            <td>PHM Technology MADe</td>
+            <td>Found <strong>24 order-1 cut sets</strong>. Added 2nd battery, 2nd FC &amp; BMS/OR-ing block before CAD freeze!</td>
+          </tr>
+          <tr>
+            <td><strong>03. 6-DOF Performance</strong></td>
+            <td>Simcenter Amesim (<code>ame_apy</code>)</td>
+            <td>Attitude recovery ~0.86s, lightly damped (&zeta;&approx;0.15). Verified flight at 650g as-built mass.</td>
+          </tr>
+          <tr>
+            <td><strong>04. Electrical EWIS</strong></td>
+            <td>Siemens Capital AI Architect</td>
+            <td>13 components &rarr; 13 devices, AWG 8 power wire routing.</td>
+          </tr>
+          <tr>
+            <td><strong>05. Mechanical CAD</strong></td>
+            <td>Siemens NX (<code>griffin-p-quinn/nx-mcp</code>)</td>
+            <td>53 components assembled on single datum frame in NX CAD (0.0mm clash pass).</td>
+          </tr>
+          <tr>
+            <td><strong>06. FPGA Compute</strong></td>
+            <td>Siemens EDA Questa (<code>vsim -c</code>)</td>
+            <td>8 SystemVerilog RTL blocks, self-checking testbenches regressed headlessly.</td>
+          </tr>
+          <tr>
+            <td><strong>07. V&amp;V Sign-Off</strong></td>
+            <td>Teamcenter V&amp;V Engine</td>
+            <td>51/51 requirements trace-linked to results (100% PASS). 23.8h build time, 0 human tool clicks.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: SCORECARD -->
+  <div id="tab-scorecard" class="tab-pane">
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Siemens Product</th>
+            <th>Headless</th>
+            <th>MCP-Native</th>
+            <th>Score</th>
+            <th>Critical Take</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Siemens EDA Questa</td><td>YES</td><td>NO</td><td><strong>7 / 10</strong></td><td>Most agent-ready native tool. Batch CLI scripts run headlessly.</td></tr>
+          <tr><td>Teamcenter SOA Backend</td><td>YES</td><td>NO</td><td><strong>6 / 10</strong></td><td>Strong backend C# API (<code>Teamcenter.Soa.Client</code>).</td></tr>
+          <tr><td>Simcenter Amesim</td><td>YES</td><td>NO</td><td><strong>5 / 10</strong></td><td><code>ame_apy</code> Python API runs 6-DOF simulation unattended.</td></tr>
+          <tr><td>Siemens Capital EWIS</td><td>PARTIAL</td><td>NO</td><td><strong>4 / 10</strong></td><td>Griffin Quinn built custom Java Bridge &amp; Project XML generator.</td></tr>
+          <tr><td>Siemens NX CAD</td><td>PARTIAL</td><td>NO</td><td><strong>3 / 10</strong></td><td>NX Open batch exists; Griffin built <code>griffin-p-quinn/nx-mcp</code> FastMCP server.</td></tr>
+          <tr><td>Teamcenter Active Workspace UI</td><td>NO</td><td>NO</td><td><strong>3 / 10</strong></td><td>Web UI renderer freezes under CDP browser automation.</td></tr>
+          <tr><td>PHM Technology MADe</td><td>NO</td><td>NO</td><td><strong>2 / 10</strong></td><td>0% headless path. GUI-only, PDF-only exports. Complete wall for agents.</td></tr>
+          <tr><td>Neutral MCP Bridge (Griffin Quinn)</td><td>YES</td><td>YES</td><td><strong>9 / 10</strong></td><td>Custom FastMCP bridge by Griffin Quinn proving the MCP pattern.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Siemens Xcelerator Digital Fabric &mdash; Griffin's Work vs. Their Work Landscape Visualizer
+</footer>
+
+<script>
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+    document.getElementById('tab-' + tabId).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

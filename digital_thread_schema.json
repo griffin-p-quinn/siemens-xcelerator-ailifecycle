@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Siemens FlyNow QX-250 Quadcopter Digital Thread Specification",
+  "description": "Ground-truth machine-readable specification for the QX-250 Quadcopter Digital Thread stewarded by the AI Lifecycle Harness.",
+  "version": "3.0.0",
+  "vehicle": {
+    "name": "QX-250 Quadcopter",
+    "type": "5-inch Freestyle Class Quadcopter",
+    "rfp_source": "U.S. Air Force Solicitation RFP (41-page spec)",
+    "design_mass_g": 500,
+    "as_built_mass_g": 650,
+    "max_mass_limit_g": 700,
+    "thrust_to_weight_ratio": "3.83:1 (as-built)",
+    "mttf_hours": 4673,
+    "reliability_r": 0.9999784,
+    "requirements_count": 51,
+    "nx_assembly_components": 53
+  },
+  "live_urls": {
+    "demonstrator": "https://flynow.xcelerator.us/",
+    "harness": "https://flynow.xcelerator.us/harness.html",
+    "scorecard": "https://flynow.xcelerator.us/scorecard.html",
+    "telemetry": "https://flynow.xcelerator.us/telemetry.html",
+    "agentcenter": "https://agentcenter.xcelerator.us/",
+    "nx_agent": "https://nx.xcelerator.us/",
+    "capital_agent": "https://capital.xcelerator.us/",
+    "tc_agent": "https://tc.xcelerator.us/"
+  },
+  "toolchain": [
+    {
+      "domain": "Origin",
+      "tool": "USAF Solicitation RFP",
+      "artifact": "41-page System Specification"
+    },
+    {
+      "domain": "Requirements & RFLP",
+      "tool": "Polarion ALM & Teamcenter SRS",
+      "artifact": "51 Requirements, 13 Functions, 13-Block Logical Architecture"
+    },
+    {
+      "domain": "Reliability & PhSM",
+      "tool": "PHM Technology MADe",
+      "artifact": "FMECA, Fault Tree, RBD -> 24 Order-1 Cut Sets (Dual Battery & Dual FC Redundancy)"
+    },
+    {
+      "domain": "6-DOF Performance",
+      "tool": "Simcenter Amesim",
+      "artifact": "6-DOF Cascade Flight Controller (Attitude Loop ~0.86s, Lightly Damped)"
+    },
+    {
+      "domain": "Electrical EWIS",
+      "tool": "Siemens Capital Suite",
+      "artifact": "AI -> Capital Architect (13 Comp -> 13 Devices, AWG 8 Power Wire)"
+    },
+    {
+      "domain": "Mechanical CAD",
+      "tool": "Siemens NX CAD",
+      "artifact": "53-Component Assembly on Single Datum Frame via griffin-p-quinn/nx-mcp"
+    },
+    {
+      "domain": "FPGA Compute",
+      "tool": "Siemens EDA Questa",
+      "artifact": "8 SystemVerilog RTL Blocks, Self-Checking Testbenches (vsim -c CLI)"
+    },
+    {
+      "domain": "Program & Build",
+      "tool": "Teamcenter IPP&E / Schedule Mgr",
+      "artifact": "12-Task Schedule, 22-Item EBOM, Stage MBOM, 10-Op Process Plan"
+    },
+    {
+      "domain": "Verification",
+      "tool": "Teamcenter V&V Engine",
+      "artifact": "51/51 Target->Measured Requirements PASS, 24 RFP Standards"
+    }
+  ],
+  "agentic_readiness_scorecard": {
+    "questa": 7,
+    "teamcenter_soa": 6,
+    "simcenter_amesim": 5,
+    "capital_ewis": 4,
+    "nx_cad": 3,
+    "teamcenter_aw_ui": 3,
+    "phm_made": 2,
+    "griffin_neutral_mcp": 9
+  },
+  "autonomy_telemetry": {
+    "total_time_hours": 23.8,
+    "human_tool_clicks": 0,
+    "human_direction_touches": 16,
+    "machine_verification_coverage_pct": 57,
+    "prompts_per_deliverable": 0.7
+  }
+}
