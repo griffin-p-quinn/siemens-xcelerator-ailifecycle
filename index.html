@@ -121,6 +121,16 @@
     .dt-legend span { display:inline-flex; align-items:center; gap:.35rem; }
     .dt-legend i { width:10px; height:10px; border-radius:50%; display:inline-block; }
 
+    /* ---- structured agent-interface blinds ---- */
+    .ail-iface-list { display: flex; flex-direction: column; gap: .5rem; margin-top: .55rem; }
+    .ail-iface-list ix-blind { --theme-blind--label--font-size: .88rem; }
+    .ail-iface-body { padding: .55rem .35rem .25rem; display: flex; flex-direction: column; gap: .55rem; }
+    .ail-iface-body p { margin: 0; color: var(--theme-color-soft-text); font-size: .86rem; line-height: 1.5; }
+    .ail-iface-src { display: inline-flex; align-items: center; gap: .35rem; width: fit-content;
+      color: var(--theme-color-primary); text-decoration: none;
+      font-family: "Cascadia Code", "Roboto Mono", ui-monospace, Consolas, monospace; font-size: .78rem; }
+    .ail-iface-src:hover { text-decoration: underline; }
+
     @media (max-width: 820px){ .ail-attrs { grid-template-columns: 1fr; } .ail-attr { border-right: none; } .dt-node .cap { display:none; } }
   </style>
 </head>
@@ -271,6 +281,126 @@
     { nm:'Capital MCP', st:'no', txt:'None. No public API of any kind to wrap.' },
   ];
 
+  // ===== Interface reference library: what each technology IS + where it comes from =====
+  const REF = {
+    harness:       { term:'AI Lifecycle Harness (Agentic WBS)', kind:'Orchestration', from:"Griffin's Work", icon:'cogwheel',
+                     what:'The meta-layer steward that LLM-parses the 41-page RFP spec, drives Deliverables→Criteria→Accomplishment→Milestones, and enforces the human-in-the-loop gate.',
+                     url:'https://github.com/griffin-p-quinn/siemens-xcelerator-ailifecycle/blob/main/AGENTIC_READINESS_VERIFIED.md' },
+    polarion_rest: { term:'Polarion REST API v1', kind:'REST API', from:'Siemens Polarion ALM', icon:'cloud',
+                     what:'OpenAPI-described /polarion/rest/v1 — create and query requirements, work items and trace links. The closest-to-native agent surface in the PLM/ALM tier.',
+                     url:'https://testdrive.polarion.com/polarion/rest/v1/definition' },
+    oslc:          { term:'OSLC', kind:'Interop standard', from:'OASIS', icon:'certificate',
+                     what:'Open Services for Lifecycle Collaboration — RDF/HTTP linked-data spec for tool-to-tool ALM integration and cross-tool trace links.',
+                     url:'https://open-services.net/' },
+    wsdl:          { term:'SOAP / WSDL Web Services', kind:'Protocol standard', from:'W3C', icon:'certificate',
+                     what:'XML-RPC style web-services protocol; WSDL is the machine-readable endpoint contract Polarion also exposes alongside REST.',
+                     url:'https://www.w3.org/TR/wsdl/' },
+    polarion_copilot:{ term:'Polarion Copilot API (2606)', kind:'First-party AI API', from:'Siemens Polarion', icon:'ai',
+                     what:'Programmatic Copilot surface introduced in Polarion 2606 for AI-assisted requirements authoring.',
+                     url:'https://blogs.sw.siemens.com/polarion/' },
+    polarion_mcp:  { term:'PolarionMcpServers (community)', kind:'MCP server', from:'peakflames · GitHub', icon:'ai',
+                     what:'Community-built Model Context Protocol server layered on Polarion REST v1 — no first-party Polarion MCP exists yet.',
+                     url:'https://github.com/peakflames/PolarionMcpServers' },
+    made:          { term:'MADe import API (SysML v2)', kind:'Import-only', from:'PHM Technology', icon:'package',
+                     what:'Ingests SysML v2 models only — there is NO headless-run and NO results-extraction API. FMECA/FTA/RBD are produced solely in-GUI: a hard wall for agents.',
+                     url:'https://www.phmtechnology.com/made' },
+    sysml2:        { term:'SysML v2', kind:'Modeling standard', from:'OMG', icon:'certificate',
+                     what:'Object Management Group systems-modeling language; the only thing MADe will accept programmatically.',
+                     url:'https://www.omg.org/spec/SysML/' },
+    amesim_py:     { term:'Amesim Python API (amesim / ame_apy)', kind:'Python API', from:'Simcenter Amesim', icon:'code',
+                     what:'Scriptable 1D systems simulation; runs headless via CMD batch over pre-compiled .amegp models (no GUI).',
+                     url:'https://plm.sw.siemens.com/en-US/simcenter/systems-simulation/amesim/' },
+    capital:       { term:'Capital — no public API', kind:'None (wall)', from:'Siemens Capital', icon:'shield',
+                     what:'No public API, CLI or SDK of any kind. Integration is only via Teamcenter file/PLM handoff or RPA. The hardest wall in the lifecycle — Griffin fills it with a custom Java bridge + Project XML generator.',
+                     url:'https://www.siemens.com/en-us/products/capital/' },
+    nxopen:        { term:'NX Open API', kind:'Automation API', from:'Siemens NX', icon:'connector',
+                     what:'.NET / C++ / Python (NXOpen) automation of modeling, assemblies and STEP/JT export — world-class scripting.',
+                     url:'https://plm.sw.siemens.com/en-US/nx/' },
+    nx_batch:      { term:'Journaling · run_journal · -batch', kind:'CLI / batch', from:'Siemens NX', icon:'code',
+                     what:'Record a journal in the GUI, then replay it headlessly via run_journal or NX -batch for unattended runs.',
+                     url:'https://plm.sw.siemens.com/en-US/nx/' },
+    nx_serveruser: { term:'NX X Server-User license', kind:'Headless licensing', from:'Siemens community', icon:'shield',
+                     what:'Non-interactive NX X session (since NX2506.4000) — the real enabler for the license-token worker pool. Every batch run burns a full token.',
+                     url:'https://community.sw.siemens.com/s/article/Running-local-NX-X-session-with-Server-User-license' },
+    nx_mcp:        { term:'No official MCP · 3rd-party NX_MCP', kind:'MCP status', from:'DreamEnding · GitHub', icon:'ai',
+                     what:'No Siemens NX MCP exists, is announced, or is on the public roadmap. Only an experimental third-party server (over NX Open Python).',
+                     url:'https://github.com/DreamEnding/NX_MCP' },
+    nx_copilot:    { term:'Design Copilot NX', kind:'In-app AI (non-programmatic)', from:'Siemens', icon:'ai',
+                     what:'Summer-2025 in-app learning/documentation assistant — NOT an agent API; cannot be driven headlessly.',
+                     url:'https://news.siemens.com/en-us/siemens-designcenter-nx-summer-2025/' },
+    nxcae:         { term:'NXOpen.CAE', kind:'Automation API', from:'Simcenter 3D', icon:'connector',
+                     what:'C#/Python pre- and post-processing automation for Simcenter 3D meshing and results extraction.',
+                     url:'https://plm.sw.siemens.com/en-US/simcenter/3d-simulation/' },
+    nastran:       { term:'Nastran solver CLI', kind:'CLI', from:'Simcenter Nastran', icon:'code',
+                     what:'nastran deck.dat — SOL 101/106 fully headless solve, decoupled from the authoring GUI. Ideal for a solver farm.',
+                     url:'https://plm.sw.siemens.com/en-US/simcenter/mechanical-simulation/nastran/' },
+    heeds:         { term:'HEEDS', kind:'Design-space exploration', from:'Siemens HEEDS', icon:'reference',
+                     what:'Optimization / DSE driver that fans out many solver runs to search the design space.',
+                     url:'https://plm.sw.siemens.com/en-US/simcenter/products/heeds-design-space-exploration/' },
+    questa:        { term:'Questa vsim -c · qrun', kind:'CLI', from:'Siemens EDA', icon:'code',
+                     what:'Console simulation (vsim -c), -do TCL scripts, qrun and -batch — deterministic text-in/text-out. The highest agentic readiness in the toolchain.',
+                     url:'https://eda.sw.siemens.com/en-US/ic/questa/' },
+    tcl:           { term:'Tcl / .do scripts', kind:'Language', from:'Tcl Core Team', icon:'code',
+                     what:'Tool Command Language; Questa/ModelSim consume -do <file>.do batch scripts.',
+                     url:'https://www.tcl.tk/' },
+    tc_soa:        { term:'Teamcenter SOA', kind:'Service-oriented API', from:'Siemens Teamcenter', icon:'connector',
+                     what:'.NET (Teamcenter.Soa.Client) / Java service API — e.g. StructureManagementService for BOM operations. Copilot / AI-BOM-Agent are closed UX, not open MCP.',
+                     url:'https://www.siemens.com/en-us/products/teamcenter/' },
+    tc_itk:        { term:'ITK · TcXML', kind:'C API / XML', from:'Siemens Teamcenter', icon:'connector',
+                     what:'Integration Toolkit (C) and TcXML import/export for bulk PLM data operations.',
+                     url:'https://www.siemens.com/en-us/products/teamcenter/' },
+    plantsim_com:  { term:'Plant Simulation COM (RemoteControl)', kind:'COM / ActiveX API', from:'Tecnomatix Plant Simulation', icon:'connector',
+                     what:'ActiveX RemoteControl automation; runs headless via visible=False and suppress_3d flags.',
+                     url:'https://plm.sw.siemens.com/en-US/tecnomatix/products/plant-simulation-software/' },
+    simtalk:       { term:'SimTalk 2.0', kind:'Embedded language', from:'Tecnomatix (help)', icon:'code',
+                     what:'Plant Simulation embedded scripting language for model logic and event control.',
+                     url:'https://scredirect.docs.sws.siemens.com/tdoc/plantsim/16/plant_sim_help/' },
+    pyplantsim:    { term:'pyplantsim', kind:'Python library', from:'PyPI', icon:'library',
+                     what:'Open-source Python wrapper over the Plant Simulation COM interface — the agent-friendly path in.',
+                     url:'https://pypi.org/project/pyplantsim/' },
+    procsim:       { term:'Process Simulate .NET automation', kind:'.NET API', from:'Tecnomatix Process Simulate', icon:'connector',
+                     what:'Managed automation surface for robotic fastening, RULA ergonomics and assembly-sequence simulation.',
+                     url:'https://plm.sw.siemens.com/en-US/tecnomatix/products/process-simulate-software/' },
+    com:           { term:'COM / ActiveX', kind:'Windows API', from:'Microsoft', icon:'connected',
+                     what:'The Component Object Model that Tecnomatix exposes as its RemoteControl automation surface.',
+                     url:'https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal' },
+    opcenter_odata:{ term:'Opcenter Intelligence OData API', kind:'REST / OData', from:'Siemens developer portal', icon:'cloud',
+                     what:'OData v4.1 Intelligence API plus Execution Core REST for recipe/formula/MES objects.',
+                     url:'https://developer.siemens.com/insights-hub/docs/apis/advanced-opcenter-intelligence/api-opcenter-intelligence-api.html' },
+    odata:         { term:'OData v4.1', kind:'Data standard', from:'OASIS', icon:'certificate',
+                     what:'REST-based queryable data protocol ($filter, $expand) over JSON — the shape of Opcenter Intelligence.',
+                     url:'https://www.odata.org/' },
+    insightshub:   { term:'Insights Hub / Industrial Edge APIs', kind:'REST', from:'Siemens developer portal', icon:'cloud',
+                     what:'REST services for cloud + edge; MindConnect MQTT ingestion; edge apps ship as Docker containers.',
+                     url:'https://developer.siemens.com/insights-hub/docs/apis/index.html' },
+    mqtt:          { term:'MindConnect MQTT', kind:'Messaging protocol', from:'OASIS · mqtt.org', icon:'connected',
+                     what:'Lightweight publish/subscribe telemetry transport (cert-managed) feeding Insights Hub.',
+                     url:'https://mqtt.org/' },
+    opcua:         { term:'OPC UA (PubSub)', kind:'Industrial standard', from:'OPC Foundation', icon:'certificate',
+                     what:'Shop-floor interoperability protocol; here PubSub over MQTT/JSON for as-built telemetry.',
+                     url:'https://opcfoundation.org/about/opc-technologies/opc-ua/' },
+    docker:        { term:'Docker containers', kind:'Runtime', from:'Docker', icon:'package',
+                     what:'Industrial Edge apps are packaged and deployed as OCI containers to shop-floor devices.',
+                     url:'https://www.docker.com/' },
+  };
+  // which interfaces each stage exposes (keys into REF), in priority order
+  const IFACES = {
+    '01':['harness','polarion_rest'],
+    '02':['polarion_rest','oslc','wsdl','polarion_copilot','polarion_mcp'],
+    '03':['made','sysml2'],
+    '04':['amesim_py'],
+    '05':['capital'],
+    '06':['nxopen','nx_batch','nx_serveruser','nx_mcp','nx_copilot'],
+    '07':['nxcae','nastran','heeds'],
+    '08':['questa','tcl'],
+    '09':['tc_soa','tc_itk'],
+    '10':['plantsim_com','simtalk','pyplantsim','procsim','com'],
+    '11':['opcenter_odata','odata'],
+    '12':['insightshub','mqtt','opcua','docker'],
+    '13':['tc_soa'],
+    '14':['tc_soa','harness'],
+  };
+
   // ================= HELPERS =================
   const tok = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#888';
   const tierColor = (t) => tok(TIER[t].token);
@@ -306,6 +436,18 @@
         ${s.score!=null ? `<ix-pill variant="${TIER[s.tier].variant}">${s.score}/10</ix-pill>` : `<ix-pill variant="neutral" outline>HITL</ix-pill>`}
       </div></div></ix-card>`).join('');
 
+  const hostOf = (u) => { try { return new URL(u).host.replace(/^www\./,''); } catch(e){ return u; } };
+  function ifaceBlinds(no){
+    const list = IFACES[no] || [];
+    if(!list.length) return '';
+    return `<div class="ail-iface-list">${list.map(k=>{ const r = REF[k]; if(!r) return '';
+      return `<ix-blind collapsed variant="outline" icon="${r.icon}" label="${r.term}" sublabel="${r.kind} · ${r.from}">
+          <div class="ail-iface-body">
+            <p>${r.what}</p>
+            ${r.url ? `<a class="ail-iface-src" href="${r.url}" target="_blank" rel="noopener"><ix-icon name="link" size="14"></ix-icon>${hostOf(r.url)}</a>` : ''}
+          </div>
+        </ix-blind>`; }).join('')}</div>`;
+  }
   function detailCard(s){
     return `<ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body" style="gap:0;padding:0;">
         <div class="ail-spread" style="padding:1.1rem 1.2rem;">
@@ -319,7 +461,7 @@
           </div>
         </div>
         <div class="ail-attrs">
-          <div class="ail-attr"><div class="lab">Agent Interface (verified)</div><div class="val ail-mono">${s.api}</div></div>
+          <div class="ail-attr full"><div class="lab">Agent Interface (verified) — expand each for what it is &amp; where it comes from</div>${ifaceBlinds(s.no)}</div>
           <div class="ail-attr"><div class="lab">Headless Execution</div><div class="val">${s.headless}</div></div>
           <div class="ail-attr"><div class="lab">Authentication</div><div class="val">${s.auth}</div></div>
           <div class="ail-attr"><div class="lab">Load Balancing / Scale Pattern</div><div class="val">${s.lb}</div></div>
