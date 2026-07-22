@@ -41,58 +41,59 @@
     .ail-thread-strip .node:not(:last-child)::after { content:""; position:absolute; top:17px; left: calc(50% + 24px); right: calc(-50% + 24px); height:2px; background: var(--theme-color-soft-bdr); }
     .ail-thread-strip .lbl { font-size: .66rem; color: var(--theme-color-weak-text); line-height: 1.25; }
 
-    /* ============ BOLD LANDING HERO (thread-as-hero) ============ */
-    .ail-landing-hero { position: relative; overflow: hidden; border-radius: 20px; isolation: isolate;
-      padding: clamp(2rem, 4.5vw, 4rem) clamp(1.4rem, 4vw, 3.4rem) clamp(2rem, 4vw, 3.2rem);
+    /* ============ BOLD LANDING HERO (living thread) ============ */
+    .ail-landing-hero { position: relative; overflow: hidden; border-radius: 18px; isolation: isolate;
+      padding: clamp(1.9rem, 3.6vw, 3.2rem) clamp(1.5rem, 3.6vw, 3rem) clamp(1.5rem, 3vw, 2.4rem);
       border: 1px solid var(--theme-color-soft-bdr);
       background:
-        radial-gradient(1200px 560px at 12% -20%, color-mix(in srgb, var(--theme-color-primary) 26%, transparent), transparent 60%),
-        radial-gradient(1000px 520px at 108% 120%, color-mix(in srgb, var(--theme-color-primary) 16%, transparent), transparent 55%),
-        linear-gradient(155deg, var(--theme-color-2), var(--theme-color-1) 70%); }
-    .ail-landing-hero::before, .ail-landing-hero::after { content:""; position:absolute; border-radius:50%; z-index:-1;
-      filter: blur(46px); opacity:.5; animation: ail-orb 16s ease-in-out infinite; }
-    .ail-landing-hero::before { width:420px; height:420px; top:-140px; left:-90px;
-      background: radial-gradient(circle, color-mix(in srgb, var(--theme-color-primary) 60%, transparent), transparent 70%); }
-    .ail-landing-hero::after { width:360px; height:360px; right:-110px; bottom:-150px; animation-delay:-8s;
-      background: radial-gradient(circle, color-mix(in srgb, var(--theme-color-dynamic, var(--theme-color-primary)) 44%, transparent), transparent 70%); }
-    @keyframes ail-orb { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(30px,24px) scale(1.12);} }
-    .ail-lh-kicker { display:inline-flex; align-items:center; gap:.5rem; font-size:.74rem; font-weight:700; letter-spacing:.2em;
+        radial-gradient(900px 420px at 16% -30%, color-mix(in srgb, var(--theme-color-primary) 17%, transparent), transparent 60%),
+        linear-gradient(162deg, var(--theme-color-2), var(--theme-color-1) 78%); }
+    .ail-landing-hero::before { content:""; position:absolute; inset:0; z-index:-1; opacity:.55;
+      background-image: radial-gradient(circle at center, color-mix(in srgb, var(--theme-color-primary) 15%, transparent) 1px, transparent 1.4px);
+      background-size: 26px 26px;
+      -webkit-mask-image: linear-gradient(180deg, #000, transparent 62%); mask-image: linear-gradient(180deg, #000, transparent 62%); }
+    .ail-lh-kicker { display:inline-flex; align-items:center; gap:.55rem; font-size:.72rem; font-weight:700; letter-spacing:.2em;
       text-transform:uppercase; color: var(--theme-color-primary); }
-    .ail-lh-kicker::before { content:""; width:26px; height:2px; background: var(--theme-color-primary); display:inline-block; }
-    .ail-lh-title { margin:.7rem 0 0; font-weight:800; letter-spacing:-.02em; line-height:1.03;
-      font-size: clamp(2.1rem, 6vw, 4.4rem); max-width: 16ch; }
-    .ail-lh-title .grad { background: linear-gradient(100deg, var(--theme-color-primary), color-mix(in srgb, var(--theme-color-primary) 40%, #fff));
-      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-    .ail-lh-sub { margin:1.1rem 0 0; max-width: 60ch; font-size: clamp(.95rem, 1.3vw, 1.08rem);
+    .ail-lh-kicker::before { content:""; width:24px; height:2px; background: var(--theme-color-primary); display:inline-block; }
+    .ail-lh-title { margin:.9rem 0 0; font-weight:800; letter-spacing:-.025em; line-height:1.02;
+      font-size: clamp(2.2rem, 5.4vw, 4.1rem); max-width: 22ch; }
+    .ail-lh-title .hl { color: var(--theme-color-primary); }
+    .ail-lh-sub { margin:1.05rem 0 0; max-width: 64ch; font-size: clamp(.95rem, 1.25vw, 1.1rem);
       line-height:1.6; color: var(--theme-color-soft-text); }
-    .ail-lh-cta { display:flex; flex-wrap:wrap; gap:.7rem; margin-top:1.6rem; }
-    .ail-lh-thread { margin-top: clamp(1.8rem, 4vw, 3rem); }
-    /* hero variant of the thread strip: bigger chips, tier color, animated flow */
-    .ail-thread-strip--hero { padding:.5rem 0 .8rem; }
-    .ail-thread-strip--hero .chip { width:44px; height:44px; border-radius:11px; border-width:1.5px;
-      border-color: color-mix(in srgb, var(--nd-c, var(--theme-color-primary)) 60%, transparent);
-      color: var(--nd-c, var(--theme-color-primary));
-      background: color-mix(in srgb, var(--nd-c, var(--theme-color-primary)) 14%, var(--theme-color-1));
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--nd-c, var(--theme-color-primary)) 12%, transparent);
-      transition: transform .25s ease, box-shadow .25s ease; }
-    .ail-thread-strip--hero .node:hover .chip { transform: translateY(-4px) scale(1.08);
-      box-shadow: 0 0 0 5px color-mix(in srgb, var(--nd-c) 26%, transparent), 0 6px 22px color-mix(in srgb, var(--nd-c) 40%, transparent); }
-    .ail-thread-strip--hero .node:not(:last-child)::after { top:22px; height:2.5px; border-radius:2px;
-      background: linear-gradient(90deg, color-mix(in srgb, var(--nd-c, var(--theme-color-primary)) 70%, transparent), color-mix(in srgb, var(--theme-color-primary) 20%, transparent));
-      background-size: 220% 100%; animation: ail-flow 2.4s linear infinite; }
+    .ail-lh-actions { display:flex; flex-wrap:wrap; align-items:center; gap:.8rem 1.6rem; margin-top:1.5rem; }
+    .ail-lh-cta { display:flex; flex-wrap:wrap; gap:.7rem; }
+    /* meaningful tier readout (the real finding, not vanity metrics) */
+    .ail-tier-readout { display:flex; flex-wrap:wrap; gap:1rem 1.2rem; }
+    .ail-tier-readout .tr { display:inline-flex; align-items:center; gap:.45rem; font-size:.84rem; font-weight:600; color: var(--theme-color-soft-text); }
+    .ail-tier-readout .tr b { color: var(--theme-color-std-text); font-weight:800; font-variant-numeric:tabular-nums; }
+    .ail-tier-readout .tr i { width:9px; height:9px; border-radius:50%; display:inline-block; }
+    .ail-tier-readout .native i { background: var(--theme-color-success); box-shadow:0 0 0 3px color-mix(in srgb, var(--theme-color-success) 22%, transparent); }
+    .ail-tier-readout .bridge i { background: var(--theme-color-warning); box-shadow:0 0 0 3px color-mix(in srgb, var(--theme-color-warning) 22%, transparent); }
+    .ail-tier-readout .wall i { background: var(--theme-color-alarm); box-shadow:0 0 0 3px color-mix(in srgb, var(--theme-color-alarm) 22%, transparent); }
+    /* ==== the living thread ribbon (hero centerpiece) ==== */
+    .ail-lh-thread { margin-top: clamp(1.7rem, 3.4vw, 2.6rem); }
+    .ail-ribbon { position:relative; display:flex; gap:0; overflow-x:auto; overflow-y:hidden; padding:.7rem 0 .3rem; scrollbar-width:thin; }
+    .rb-node { position:relative; flex:1 0 auto; min-width:74px; text-align:center; padding:0 2px; cursor:pointer;
+      opacity:0; transform: translateY(14px); animation: rb-in .55s cubic-bezier(.22,.61,.36,1) forwards; animation-delay: calc(var(--i) * .055s + .25s); }
+    .rb-node:not(:last-child)::after { content:""; position:absolute; top:31px; left: calc(50% + 27px); right: calc(-50% + 27px); height:3px; border-radius:3px;
+      background: linear-gradient(90deg, var(--nd-c), color-mix(in srgb, var(--nd-c) 12%, transparent));
+      background-size: 220% 100%; animation: ail-flow 2.6s linear infinite; }
+    .rb-chip { width:54px; height:54px; margin:0 auto .55rem; border-radius:15px; display:grid; place-items:center;
+      color: var(--nd-c); border:1.5px solid color-mix(in srgb, var(--nd-c) 55%, transparent);
+      background: color-mix(in srgb, var(--nd-c) 15%, var(--theme-color-1));
+      box-shadow: 0 0 0 5px color-mix(in srgb, var(--nd-c) 10%, transparent);
+      animation: rb-breathe 3.4s ease-in-out infinite; animation-delay: calc(var(--i) * .17s);
+      transition: transform .2s ease, box-shadow .2s ease; }
+    .rb-node:hover .rb-chip { transform: translateY(-5px) scale(1.09);
+      box-shadow: 0 0 0 6px color-mix(in srgb, var(--nd-c) 22%, transparent), 0 10px 26px color-mix(in srgb, var(--nd-c) 45%, transparent); }
+    .rb-node.wall .rb-chip { animation: rb-breathe 3.4s ease-in-out infinite, rb-alarm 1.9s ease-in-out infinite; }
+    .rb-no { display:block; font-size:.6rem; font-weight:700; letter-spacing:.08em; color: var(--theme-color-weak-text); }
+    .rb-nm { display:block; font-size:.73rem; font-weight:600; line-height:1.2; color: var(--theme-color-soft-text); margin-top:.12rem; }
+    .rb-node:hover .rb-nm { color: var(--theme-color-std-text); }
+    @keyframes rb-in { to { opacity:1; transform: translateY(0);} }
+    @keyframes rb-breathe { 0%,100%{ transform: translateY(0) scale(1);} 50%{ transform: translateY(-2px) scale(1.045);} }
+    @keyframes rb-alarm { 0%,100%{ box-shadow:0 0 0 5px color-mix(in srgb, var(--nd-c) 10%, transparent);} 50%{ box-shadow:0 0 0 9px color-mix(in srgb, var(--nd-c) 32%, transparent);} }
     @keyframes ail-flow { to { background-position: -220% 0; } }
-    .ail-thread-strip--hero .lbl { font-size:.7rem; color: var(--theme-color-soft-text); font-weight:600; }
-    .ail-thread-strip--hero .snm { display:block; font-size:.6rem; font-weight:700; color: var(--theme-color-weak-text); letter-spacing:.06em; margin-bottom:.15rem; }
-    /* count-up stat band */
-    .ail-lh-stats { display:flex; flex-wrap:wrap; gap: clamp(1rem, 4vw, 3rem); margin-top: clamp(1.6rem, 3.5vw, 2.6rem);
-      padding-top: 1.4rem; border-top: 1px solid var(--theme-color-soft-bdr); }
-    .ail-stat { display:flex; flex-direction:column; gap:.15rem; }
-    .ail-stat .n { font-size: clamp(1.8rem, 4vw, 2.9rem); font-weight:800; line-height:1; letter-spacing:-.02em;
-      font-variant-numeric: tabular-nums; }
-    .ail-stat .n small { font-size:.5em; font-weight:700; color: var(--theme-color-weak-text); margin-left:.15rem; }
-    .ail-stat.alarm .n { color: var(--theme-color-alarm); }
-    .ail-stat.native .n { color: var(--theme-color-success); }
-    .ail-stat .l { font-size:.76rem; color: var(--theme-color-weak-text); font-weight:600; max-width: 20ch; }
 
     /* ============ COLLAPSIBLE CONTEXT BAR (inner views) ============ */
     .ail-ctxbar { border:1px solid var(--theme-color-soft-bdr); border-radius:12px; overflow:hidden;
@@ -120,9 +121,9 @@
     .ctx-stats .s .n { font-size:1.25rem; font-weight:800; line-height:1.1; font-variant-numeric:tabular-nums; }
     .ctx-stats .s.alarm .n { color: var(--theme-color-alarm); }
     .ctx-stats .s .l { font-size:.68rem; color: var(--theme-color-weak-text); font-weight:600; }
-    .ail-lh-title, .ail-lh-kicker, .ail-lh-sub, .ail-lh-cta, .ail-lh-thread, .ail-lh-stats { animation: ail-rise .7s cubic-bezier(.22,.61,.36,1) both; }
-    .ail-lh-kicker{ animation-delay:.02s; } .ail-lh-title{ animation-delay:.10s; } .ail-lh-sub{ animation-delay:.18s; }
-    .ail-lh-cta{ animation-delay:.26s; } .ail-lh-thread{ animation-delay:.34s; } .ail-lh-stats{ animation-delay:.42s; }
+    .ail-lh-kicker, .ail-lh-title, .ail-lh-sub, .ail-lh-actions { animation: ail-rise .7s cubic-bezier(.22,.61,.36,1) both; }
+    .ail-lh-kicker{ animation-delay:.02s; } .ail-lh-title{ animation-delay:.10s; }
+    .ail-lh-sub{ animation-delay:.18s; } .ail-lh-actions{ animation-delay:.26s; }
     @media (max-width: 720px){ .ctx-title { display:none; } .ail-lh-cta ix-button { width:100%; } }
 
     .ail-stage { cursor: pointer; transition: transform .15s ease; }
@@ -290,11 +291,14 @@
     .ail-dl-btn:focus-visible, .ail-pop-all:focus-visible { outline:2px solid var(--theme-color-primary); outline-offset:2px; }
 
     @media (prefers-reduced-motion: reduce){
-      .reveal, .ail-lh-kicker, .ail-lh-title, .ail-lh-sub, .ail-lh-cta, .ail-lh-thread, .ail-lh-stats,
-      .ail-landing-hero::before, .ail-landing-hero::after, .ail-thread-strip--hero .node:not(:last-child)::after {
+      .reveal, .ail-lh-kicker, .ail-lh-title, .ail-lh-sub, .ail-lh-actions,
+      .rb-node, .rb-chip, .rb-node:not(:last-child)::after {
         animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
       .ail-dl-btn:hover { transform: none !important; }
     }
+    /* ?static — freeze all motion to final state (screenshot / low-motion testing) */
+    html.static-motion *, html.static-motion *::before, html.static-motion *::after {
+      animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
   </style>
 </head>
 <body>
@@ -338,14 +342,16 @@
         <section class="ail-view active" id="view-0">
           <section class="ail-landing-hero">
             <span class="ail-lh-kicker">FlyNow · "Fly in 3" · QX-250 Quadcopter</span>
-            <h1 class="ail-lh-title">The entire RFP&nbsp;→&nbsp;Delivery cycle, driven by <span class="grad">one AI agent</span>.</h1>
-            <p class="ail-lh-sub">Fourteen Siemens lifecycle stages — each verified against the <em>real</em> product interface: the exact API, whether it runs headless, how the agent scales against it, and whether it is natively agent-ready or needs a custom bridge. Built entirely on the Siemens&nbsp;iX design system.</p>
-            <div class="ail-lh-cta">
-              <ix-button id="ctaThread" variant="primary" icon="chevron-right-small">Follow the digital thread</ix-button>
-              <ix-button id="ctaLifecycle" variant="secondary">Explore the lifecycle</ix-button>
+            <h1 class="ail-lh-title">One agent drives the whole Siemens lifecycle&nbsp;— <span class="hl">where it can</span>.</h1>
+            <p class="ail-lh-sub">Fourteen products, from RFP intake to airworthiness, each verified against its <em>real</em> integration layer: the exact API, whether it runs headless, and whether an agent can drive it natively, through a bridge, or not at all. The thread below is colored by that verdict.</p>
+            <div class="ail-lh-actions">
+              <div class="ail-lh-cta">
+                <ix-button id="ctaThread" variant="primary" icon="chevron-right-small">Follow the digital thread</ix-button>
+                <ix-button id="ctaLifecycle" variant="secondary">Explore the lifecycle</ix-button>
+              </div>
+              <div class="ail-tier-readout" id="heroReadout"></div>
             </div>
-            <div class="ail-lh-thread"><div class="ail-thread-strip ail-thread-strip--hero" id="heroThread"></div></div>
-            <div class="ail-lh-stats" id="heroStats"></div>
+            <div class="ail-lh-thread"><div class="ail-ribbon" id="heroThread"></div></div>
           </section>
           <div class="ail-land-intro reveal" style="margin-top:2.4rem;">
             <span class="ail-eyebrow">Explore the tracker</span>
@@ -441,6 +447,7 @@
   </ix-application>
 
   <script>
+  if (location.search.includes('static')) document.documentElement.classList.add('static-motion');
   // ================= VERIFIED DATA (mirrors AGENTIC_READINESS_VERIFIED.md) =================
   const TIER = {
     native: { label:'Native-ready', variant:'success', token:'--theme-color-success', icon:'success' },
@@ -763,43 +770,36 @@
   const prodName = (p) => p.split('(')[0].trim();
   const el = (id) => document.getElementById(id);
 
-  // ---- hero thread strip (tier-colored, animated) ----
-  el('heroThread').innerHTML = STAGES.map((s)=>`
-    <div class="node" style="--nd-c:${tierColor(s.tier)}">
-      <div class="chip"><ix-icon name="${TIER[s.tier].icon}" size="16"></ix-icon></div>
-      <span class="snm">${s.no}</span>
-      <div class="lbl">${s.name.split(' ')[0]}${s.name.split(' ')[1] ? '<br/>'+s.name.split(' ').slice(1).join(' ') : ''}</div>
+  // ---- hero: living thread ribbon (real product names, tier-colored) ----
+  const RB_SHORT = ['Ingest','Polarion','MADe','Amesim','Capital','NX','Simcenter 3D','Questa','Teamcenter','Tecnomatix','Opcenter','Industrial Edge','TC V&V','Delivery'];
+  el('heroThread').innerHTML = STAGES.map((s,i)=>`
+    <div class="rb-node ${s.tier==='wall'?'wall':''}" style="--nd-c:${tierColor(s.tier)};--i:${i}" tabindex="0" role="button" aria-label="${s.no} ${prodName(s.prod)} — ${TIER[s.tier].label}">
+      <div class="rb-chip"><ix-icon name="${TIER[s.tier].icon}" size="22"></ix-icon></div>
+      <span class="rb-no">${s.no}</span>
+      <span class="rb-nm">${RB_SHORT[i]}</span>
     </div>`).join('');
 
-  // ---- hero KPI stats (count-up) + collapsed context-bar stats ----
-  const kpis = [
-    { n:14, label:'RFP→Delivery stages verified', variant:'' },
-    { n:6,  suffix:'<small>/ 14</small>', label:'Native agent-ready products', variant:'native' },
-    { n:1,  label:'Hard wall (MADe only)', variant:'alarm' },
-    { n:23.8, suffix:'<small>h</small>', dec:1, label:'Build time · 0 human tool clicks', variant:'' },
-  ];
-  el('heroStats').innerHTML = kpis.map((k,i)=>`
-    <div class="ail-stat ${k.variant}">
-      <span class="n" data-to="${k.n}" data-dec="${k.dec||0}">0${k.suffix||''}</span>
-      <span class="l">${k.label}</span>
-    </div>`).join('');
-  el('ctxStats').innerHTML = kpis.map(k=>`
-    <div class="s ${k.variant}"><span class="n">${k.n}${(k.suffix||'').replace(/<\/?small>/g,'')}</span><span class="l">${k.label}</span></div>`).join('');
-  el('ctxMini').innerHTML = `<span class="m">14 stages</span><span class="m">6 native</span><span class="m alarm">1 wall</span>`;
+  // ---- the real finding: how many products an agent can actually drive ----
+  const tierCount = t => STAGES.filter(s=>s.tier===t).length;
+  const nNative = tierCount('native'), nBridge = tierCount('bridge'), nWall = tierCount('wall');
+  el('heroReadout').innerHTML = `
+    <span class="tr native"><i></i><b>${nNative}</b> native-ready</span>
+    <span class="tr bridge"><i></i><b>${nBridge}</b> need a bridge</span>
+    <span class="tr wall"><i></i><b>${nWall}</b> hard wall</span>`;
+  el('ctxStats').innerHTML = `
+    <div class="s"><span class="n">14</span><span class="l">lifecycle products verified</span></div>
+    <div class="s native"><span class="n">${nNative}</span><span class="l">agent-native</span></div>
+    <div class="s"><span class="n">${nBridge}</span><span class="l">need a custom bridge</span></div>
+    <div class="s alarm"><span class="n">${nWall}</span><span class="l">hard wall (MADe)</span></div>`;
+  el('ctxMini').innerHTML = `<span class="m">${nNative} native</span><span class="m">${nBridge} bridge</span><span class="m alarm">${nWall} wall</span>`;
 
-  // ---- count-up animation for hero stats (runs when hero visible) ----
-  function runCountUp(){
-    document.querySelectorAll('#heroStats .n[data-to]').forEach((elm)=>{
-      if (elm.dataset.done) return; elm.dataset.done = '1';
-      const to = parseFloat(elm.dataset.to), dec = parseInt(elm.dataset.dec,10)||0;
-      const suffix = elm.querySelector('small') ? elm.querySelector('small').outerHTML : '';
-      const t0 = performance.now(), dur = 1100;
-      const step = (t)=>{ const p = Math.min(1,(t-t0)/dur); const e = 1-Math.pow(1-p,3);
-        elm.innerHTML = (to*e).toFixed(dec) + suffix;
-        if (p<1) requestAnimationFrame(step); else elm.innerHTML = to.toFixed(dec) + suffix; };
-      requestAnimationFrame(step);
-    });
-  }
+  // ---- hero ribbon nodes → open the same skill popover as the thread view ----
+  document.querySelectorAll('#heroThread .rb-node').forEach((n,i)=>{
+    const o = stagePopOpts(STAGES[i].no);
+    const pop = ()=>{ if(o) openSkillPop(n,o); };
+    n.addEventListener('click', pop);
+    n.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pop(); } });
+  });
 
   // ---- landing CTAs ----
   el('ctaThread').addEventListener('click', ()=>showView(2));
@@ -1100,7 +1100,6 @@
     document.querySelectorAll('.ail-view').forEach((v,i)=>v.classList.toggle('active', i===idx));
     for(let i=0;i<NAV_N;i++){ const n = el('nav-'+i); if(n) n.active = (i===idx); }
     const bar = el('ctxBar'); if(bar) bar.hidden = (idx===0);
-    if(idx===0) runCountUp();
     if(idx===2) ensureThread();
     if(idx===5){ drawChart(); }
     revealScan();
@@ -1133,7 +1132,6 @@
   }
   document.addEventListener('scroll', (e)=>{ updateProgress(e.target); }, true);
   revealScan();
-  runCountUp();
   </script>
 </body>
 </html>
