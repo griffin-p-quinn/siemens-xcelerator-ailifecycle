@@ -137,9 +137,56 @@
     .ail-iface-src:hover { text-decoration: underline; }
 
     @media (max-width: 820px){ .ail-attrs { grid-template-columns: 1fr; } .ail-attr { border-right: none; } .dt-node .cap { display:none; } }
+
+    /* ============ LANDING · scroll-alive motion ============ */
+    .ail-scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0;
+      background: linear-gradient(90deg, var(--theme-color-primary), color-mix(in srgb, var(--theme-color-primary) 40%, transparent));
+      z-index: 999; transition: width .08s linear; box-shadow: 0 0 10px color-mix(in srgb, var(--theme-color-primary) 60%, transparent); }
+
+    @keyframes ail-rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+    /* staggered "land" entrance for the persistent hero */
+    .ail-hero > * { animation: ail-rise .7s cubic-bezier(.22,.61,.36,1) both; }
+    .ail-hero > *:nth-child(1){ animation-delay:.02s; }
+    .ail-hero > *:nth-child(2){ animation-delay:.10s; }
+    .ail-hero > *:nth-child(3){ animation-delay:.18s; }
+    .ail-hero > *:nth-child(4){ animation-delay:.26s; }
+    .ail-hero > *:nth-child(5){ animation-delay:.34s; }
+
+    /* reveal-on-scroll */
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .6s cubic-bezier(.22,.61,.36,1); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* overview navigation cards */
+    .ail-land-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+    .ail-land-card { position: relative; cursor: pointer; overflow: hidden; height: 100%;
+      border: 1px solid var(--theme-color-soft-bdr); border-radius: 12px; background: var(--theme-color-2);
+      padding: 1.1rem 1.2rem 1.15rem; display: flex; flex-direction: column; gap: .5rem;
+      transition: transform .2s cubic-bezier(.22,.61,.36,1), border-color .2s ease, box-shadow .2s ease; }
+    .ail-land-card::before { content:""; position:absolute; inset:0 auto 0 0; width:3px;
+      background: var(--theme-color-primary); opacity:.0; transition: opacity .2s ease; }
+    .ail-land-card:hover { transform: translateY(-5px); border-color: var(--theme-color-primary);
+      box-shadow: 0 14px 34px rgba(0,0,0,.4), 0 0 0 1px color-mix(in srgb, var(--theme-color-primary) 30%, transparent); }
+    .ail-land-card:hover::before { opacity: 1; }
+    .ail-land-card .lc-top { display:flex; align-items:center; gap:.6rem; }
+    .ail-land-card .lc-idx { font-size:.7rem; font-weight:700; letter-spacing:.12em; color: var(--theme-color-weak-text); margin-left:auto; }
+    .ail-land-card .lc-ic { width:38px; height:38px; border-radius:9px; display:grid; place-items:center; flex:none;
+      background: color-mix(in srgb, var(--theme-color-primary) 14%, transparent); color: var(--theme-color-primary); }
+    .ail-land-card .lc-nm { font-weight:700; font-size:1.02rem; }
+    .ail-land-card .lc-desc { color: var(--theme-color-soft-text); font-size:.84rem; line-height:1.5; margin:0; }
+    .ail-land-card .lc-go { margin-top:auto; display:inline-flex; align-items:center; gap:.35rem; padding-top:.4rem;
+      color: var(--theme-color-primary); font-size:.78rem; font-weight:600; }
+    .ail-land-card .lc-go ix-icon { transition: transform .2s ease; }
+    .ail-land-card:hover .lc-go ix-icon { transform: translateX(4px); }
+    .ail-land-intro, .ail-land-foot { display:flex; flex-direction:column; gap:.15rem; }
+    .ail-land-foot { margin-top:1.3rem; }
+
+    @media (prefers-reduced-motion: reduce){
+      .ail-hero > *, .reveal { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+    }
   </style>
 </head>
 <body>
+  <div class="ail-scroll-progress" id="scrollProgress"></div>
   <ix-application>
     <ix-application-header name="Xcelerator AI Lifecycle — Agentic Readiness Tracker">
       <div slot="logo" class="ail-logo" style="display:flex;align-items:center;gap:.5rem;">
@@ -149,12 +196,13 @@
     </ix-application-header>
 
     <ix-menu enable-toggle-theme aria-label="Main navigation">
-      <ix-menu-item id="nav-0" icon="factory-reset" active>Lifecycle</ix-menu-item>
-      <ix-menu-item id="nav-1" icon="distribution">Digital Thread</ix-menu-item>
-      <ix-menu-item id="nav-2" icon="ai">Agent Integration</ix-menu-item>
-      <ix-menu-item id="nav-3" icon="connector">Bridge Tracker</ix-menu-item>
-      <ix-menu-item id="nav-4" icon="barchart">Scorecard</ix-menu-item>
-      <ix-menu-item id="nav-5" icon="layers">AI &amp; Data Fabric</ix-menu-item>
+      <ix-menu-item id="nav-0" icon="home" active>Overview</ix-menu-item>
+      <ix-menu-item id="nav-1" icon="factory-reset">Lifecycle</ix-menu-item>
+      <ix-menu-item id="nav-2" icon="distribution">Digital Thread</ix-menu-item>
+      <ix-menu-item id="nav-3" icon="ai">Agent Integration</ix-menu-item>
+      <ix-menu-item id="nav-4" icon="connector">Bridge Tracker</ix-menu-item>
+      <ix-menu-item id="nav-5" icon="barchart">Scorecard</ix-menu-item>
+      <ix-menu-item id="nav-6" icon="layers">AI &amp; Data Fabric</ix-menu-item>
     </ix-menu>
 
     <ix-content>
@@ -167,8 +215,22 @@
           <div class="ail-grid ail-grid--kpi" id="kpiRow"></div>
         </section>
 
-        <!-- VIEW 0: LIFECYCLE -->
+        <!-- VIEW 0: OVERVIEW / LANDING -->
         <section class="ail-view active" id="view-0">
+          <div class="ail-land-intro reveal">
+            <span class="ail-eyebrow">Explore the tracker</span>
+            <div class="ail-h" style="font-size:1.55rem;">Six corners of the agentic-readiness landscape</div>
+            <p class="ail-sub" style="max-width:820px;">This is a living map of how an AI agent drives the <strong>entire Siemens RFP&nbsp;→&nbsp;Delivery lifecycle</strong> — verified product by product. Start anywhere: follow the woven digital thread, inspect how the agent connects and scales, or see exactly which walls still need a custom bridge.</p>
+          </div>
+          <div class="ail-grid ail-land-grid" id="landGrid" style="margin-top:1.1rem;"></div>
+          <div class="ail-land-foot reveal">
+            <div class="ail-h" style="font-size:1.15rem;">At a glance</div>
+            <p class="ail-sub" style="max-width:820px;">14 lifecycle stages · 3 phases · 7 Siemens digital threads · one governed AI &amp; data fabric. Every claim traces to <code>AGENTIC_READINESS_VERIFIED.md</code>.</p>
+          </div>
+        </section>
+
+        <!-- VIEW 1: LIFECYCLE -->
+        <section class="ail-view" id="view-1">
           <div class="ail-spread">
             <div><div class="ail-h">RFP → Delivery lifecycle</div><p class="ail-sub">Select any stage to inspect exactly how the agent works with that Siemens product.</p></div>
             <div class="ail-row" id="tierLegend"></div>
@@ -177,8 +239,8 @@
           <div id="stageDetail" style="margin-top:1rem;"></div>
         </section>
 
-        <!-- VIEW 1: DIGITAL THREAD (rich flow diagram) -->
-        <section class="ail-view" id="view-1">
+        <!-- VIEW 2: DIGITAL THREAD (rich flow diagram) -->
+        <section class="ail-view" id="view-2">
           <div class="ail-h">QX-250 Digital Thread</div>
           <p class="ail-sub">The woven thread across Siemens' seven published Aerospace &amp; Defense digital threads and three lifecycle phases — Design → Realize → Optimize. Every node is a live Siemens product; thread color = agentic-readiness tier. Click a node for the verified agent interface. <em>Scroll to zoom · drag to pan · double-click to reset.</em></p>
           <div class="dt-wrap" id="dtWrap">
@@ -189,8 +251,8 @@
           <div id="dtDetail" style="margin-top:1rem;"></div>
         </section>
 
-        <!-- VIEW 2: AGENT INTEGRATION -->
-        <section class="ail-view" id="view-2">
+        <!-- VIEW 3: AGENT INTEGRATION -->
+        <section class="ail-view" id="view-3">
           <div class="ail-h">How the agent connects &amp; scales</div>
           <p class="ail-sub">Orchestration flows top-down: request → Mendix Digital Fabric queue → token-gated headless worker pools → Siemens products.</p>
           <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body ail-stack" id="archDiagram"></div></ix-card>
@@ -199,8 +261,8 @@
           <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body"><div style="overflow:auto;"><table class="ail-mtx" id="connMatrix"></table></div></div></ix-card>
         </section>
 
-        <!-- VIEW 3: BRIDGE TRACKER -->
-        <section class="ail-view" id="view-3">
+        <!-- VIEW 4: BRIDGE TRACKER -->
+        <section class="ail-view" id="view-4">
           <div class="ail-h">Native vs. custom-bridge tracker</div>
           <p class="ail-sub">What is available for agentic interaction today — and what we must build bridges for.</p>
           <div class="ail-grid ail-grid--3" id="tierCols"></div>
@@ -211,27 +273,32 @@
           <div class="ail-grid ail-grid--mcp" id="mcpGrid"></div>
         </section>
 
-        <!-- VIEW 4: SCORECARD -->
-        <section class="ail-view" id="view-4">
+        <!-- VIEW 5: SCORECARD -->
+        <section class="ail-view" id="view-5">
           <div class="ail-h">Agentic-readiness scorecard</div>
           <p class="ail-sub">0–10, verified against actual product interfaces. Color = tier. Amesim, NX &amp; Tecnomatix scores were corrected upward from the provisional goal spec; NX &amp; Capital confirmed as bridge-required.</p>
           <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body"><div id="scoreChart"></div></div></ix-card>
         </section>
 
-        <!-- VIEW 5: AI & DATA FABRIC (Intelligence Center X) -->
-        <section class="ail-view" id="view-5">
+        <!-- VIEW 6: AI & DATA FABRIC (Intelligence Center X) -->
+        <section class="ail-view" id="view-6">
           <div class="ail-h">AI &amp; Data Fabric — Siemens Intelligence Center X</div>
           <p class="ail-sub">The cross-cutting AI/data layer that sits <em>above</em> the 14 lifecycle stages. Siemens' newly-launched Intelligence Center X orchestrates data, models, workflows &amp; agents on one governed foundation — and its three pillars map almost 1:1 onto Griffin's local MCP &amp; skill fabric.</p>
           <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body" id="icxBanner"></div></ix-card>
           <div class="ail-h">Griffin's MCP &amp; agent-skill fabric</div>
           <p class="ail-sub">The actual repos that connect agents to each tool — the local implementation of the Intelligence Center X pattern, today.</p>
           <div class="ail-grid ail-grid--mcp" id="fabricGrid"></div>
+
+          <div class="ail-h" style="margin-top:1.4rem;">Agentic app &amp; software-delivery thread</div>
+          <p class="ail-sub">The same digital-thread discipline, turned inward: how an <em>agentic application itself</em> is built, shipped and run on this fabric. Nine phases from spec to observability — an AgentOps / SDLC weave that mirrors the ICX loop (Understand&nbsp;→&nbsp;Predict&nbsp;→&nbsp;Act) and the MLOps lifecycle behind AI Studio &amp; Mendix.</p>
+          <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body" style="gap:.2rem;"><div class="ail-thread-strip ail-thread-strip--sdlc" id="sdlcStrip"></div></div></ix-card>
+          <div class="ail-grid ail-grid--mcp" id="sdlcGrid" style="margin-top:1rem;"></div>
         </section>
 
         <div class="ail-foot">
           <strong>Source of truth:</strong> <code>AGENTIC_READINESS_VERIFIED.md</code> (this repo) · researched against docs.sw.siemens.com, community.sw.siemens.com, developer.siemens.com, docs.mendix.com, phmtechnology.com.
           <br/><strong>Key finding:</strong> No first-party Siemens NX MCP exists — Griffin's <a href="https://github.com/griffin-p-quinn/nx-mcp" target="_blank" rel="noopener">griffin-p-quinn/nx-mcp</a> FastMCP server is the NX MCP bridge (an experimental 3rd-party <a href="https://github.com/DreamEnding/NX_MCP" target="_blank" rel="noopener">DreamEnding/NX_MCP</a> also exists); Mendix is the only first-party engineering-adjacent MCP. Custom bridges required for NX, Capital, MADe &amp; Teamcenter.
-          <br/>Dual-track: <strong>Griffin's Work</strong> (griffin-p-quinn/nx-mcp, Mendix Digital Fabric, DTC Co-Pilot) vs. <strong>Their Work</strong> (xcelerator.us cloud endpoints, flynow.xcelerator.us).
+          <br/>Dual-track: <strong>Griffin's Work</strong> (griffin-p-quinn/nx-mcp, Mendix Digital Fabric, DTC Co-Pilot) vs. <strong>Martini's Work</strong> (xcelerator.us cloud endpoints, flynow.xcelerator.us).
         </div>
       </div>
     </ix-content>
@@ -337,6 +404,38 @@
       what:'Queue dispatcher + license-token pool; exposes microflows as MCP tools (MCP Server module) and consumes tools (MCP / Maia Client). The ICX "Act" / orchestration layer.' },
     { nm:'Industrial Edge → Mendix', maps:'Shop-floor OT data', kind:'OPC UA → MQTT → Mendix', icon:'connected', src:'OPC UA / MQTT',
       what:'Edge apps read PLC tags over OPC UA, publish to the MQTT Databus, and feed a containerized Mendix runtime — the OT data feed into the fabric.' },
+  ];
+
+  // ===== Agentic app / software-delivery lifecycle thread (AgentOps · maps to ICX Understand→Predict→Act + MLOps) =====
+  const SDLC = [
+    { no:'S1', phase:'Plan', nm:'Spec &amp; intent', icon:'document', tool:'AI Lifecycle Harness',
+      what:'LLM-parse the requirement/RFP into a work-breakdown of deliverables, criteria and milestones — the agentic backlog that steers every phase downstream.' },
+    { no:'S2', phase:'Understand', nm:'Data &amp; ontology', icon:'distribution', tool:'Graph Studio · GraphRAG',
+      what:'Connect OT/IT data and give it meaning with industrial ontologies (Neo4j + Cypher). Grounds the agent in a queryable knowledge graph, not raw tables.' },
+    { no:'S3', phase:'Predict', nm:'Model &amp; train', icon:'ai', tool:'AI Studio (RapidMiner)',
+      what:'Build/validate ML models with AutoModel + visual data-science; MLOps versioning and metrics. Exposed to agents via the AIStudioMCPAgent JAR→MCP plugin.' },
+    { no:'S4', phase:'Build', nm:'Compose the agent app', icon:'cogwheel', tool:'Mendix Studio Pro',
+      what:'Low-code assembly of the agentic app: microflows, UI, business logic and human-in-the-loop screens — the "Act" surface, built fast and governed.' },
+    { no:'S5', phase:'Integrate', nm:'Wrap tools as MCP', icon:'connector', tool:'FastMCP · nx-mcp · capitalMCP',
+      what:'Every engineering tool without a native agent API is wrapped as an MCP server (one tool per operation). This is where 🟡/🔴 tools become agent-callable.' },
+    { no:'S6', phase:'Orchestrate', nm:'Queue &amp; dispatch', icon:'hierarchy', tool:'Mendix Digital Fabric',
+      what:'Requests fan out through the queue dispatcher + license-token pool to headless worker sessions; MCP Server/Client + Maia wire tools in both directions.' },
+    { no:'S7', phase:'Govern', nm:'Approve &amp; audit', icon:'certificate', tool:'HITL gate · ICX governance',
+      what:'Human-in-the-loop approval, policy checks and an auditable trace turn isolated AI experiments into production-grade, compliant agentic workflows.' },
+    { no:'S8', phase:'Deploy', nm:'Ship to runtime', icon:'rocket', tool:'Containers · Industrial Edge',
+      what:'Package the app + MCP servers as containers; deploy to cloud or to Industrial Edge next to the line. OPC UA / MQTT feed live OT data back in.' },
+    { no:'S9', phase:'Observe', nm:'Monitor &amp; optimize', icon:'gauge', tool:'Insights Hub · Opcenter',
+      what:'Telemetry, model-drift and KPI monitoring close the loop — feeding the Optimize phase and the next iteration of the harness backlog.' },
+  ];
+
+  // ===== Overview / landing navigation cards → jump into each corner of the site =====
+  const LAND = [
+    { idx:1, icon:'factory-reset', nm:'Lifecycle', desc:'All 14 RFP→Delivery stages as inspectable cards — the exact API, headless status and load-balancing pattern per Siemens product.' },
+    { idx:2, icon:'distribution', nm:'Digital Thread', desc:'The woven thread across seven Siemens A&D digital threads and three phases. Zoomable, pannable; node color = agentic-readiness tier.' },
+    { idx:3, icon:'ai', nm:'Agent Integration', desc:'How the agent connects and scales — orchestration flow plus the per-product protocol, auth and pooling matrix.' },
+    { idx:4, icon:'connector', nm:'Bridge Tracker', desc:'Native vs. custom-bridge status, the exact gaps Griffin\'s Work fills, and the verified first-party Siemens MCP inventory.' },
+    { idx:5, icon:'barchart', nm:'Scorecard', desc:'0–10 agentic-readiness scores per product, verified against actual interfaces and color-coded by tier.' },
+    { idx:6, icon:'layers', nm:'AI &amp; Data Fabric', desc:'Siemens Intelligence Center X, Griffin\'s MCP/skill fabric, and the agentic app &amp; software-delivery thread.' },
   ];
 
   // ===== Interface reference library: what each technology IS + where it comes from =====
@@ -718,16 +817,70 @@
       </div>
     </div></ix-card>`).join('');
 
+  // ---- Overview / landing navigation cards ----
+  el('landGrid').innerHTML = LAND.map(c=>`
+    <div class="ail-land-card reveal" role="button" tabindex="0" data-goto="${c.idx}">
+      <div class="lc-top">
+        <span class="lc-ic"><ix-icon name="${c.icon}" size="20"></ix-icon></span>
+        <span class="lc-nm">${c.nm}</span>
+        <span class="lc-idx">0${c.idx}</span>
+      </div>
+      <p class="lc-desc">${c.desc}</p>
+      <span class="lc-go">Open ${c.nm.replace(/&amp;/g,'&')} <ix-icon name="chevron-right-small" size="16"></ix-icon></span>
+    </div>`).join('');
+
+  // ---- AI Fabric: agentic app / software-delivery thread ----
+  el('sdlcStrip').innerHTML = SDLC.map((s,i)=>`
+    <div class="node">
+      <div class="chip"><ix-icon name="${s.icon}" size="16"></ix-icon></div>
+      <div class="lbl"><strong style="color:var(--theme-color-primary);display:block;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;">${s.phase}</strong>${s.nm}</div>
+    </div>`).join('');
+
+  el('sdlcGrid').innerHTML = SDLC.map(s=>`
+    <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body">
+      <div class="ail-row" style="gap:.5rem;"><ix-icon name="${s.icon}" style="color:var(--theme-color-primary)"></ix-icon><span class="ail-title" style="font-size:.95rem;">${s.no} · ${s.nm}</span></div>
+      <p class="ail-eyebrow" style="margin:.1rem 0 .3rem;">${s.phase}</p>
+      <p class="ail-muted" style="margin:0 0 .5rem;font-size:.82rem;line-height:1.45;">${s.what}</p>
+      <div class="ail-row"><ix-pill variant="primary" outline>${s.tool}</ix-pill></div>
+    </div></ix-card>`).join('');
+
   // ---- navigation ----
-  const NAV_N = 6;
+  const NAV_N = 7;
   function showView(idx){
     document.querySelectorAll('.ail-view').forEach((v,i)=>v.classList.toggle('active', i===idx));
     for(let i=0;i<NAV_N;i++){ const n = el('nav-'+i); if(n) n.active = (i===idx); }
-    if(idx===1) ensureThread();
-    if(idx===4){ drawChart(); }
+    if(idx===2) ensureThread();
+    if(idx===5){ drawChart(); }
+    revealScan();
+    const sc = document.querySelector('ix-content'); if(sc && sc.scrollTo) sc.scrollTo({top:0});
   }
   for(let i=0;i<NAV_N;i++){ const n = el('nav-'+i); if(n) n.addEventListener('click', ()=>showView(i)); }
   window.addEventListener('resize', ()=>{ if(chart) chart.resize(); });
+
+  // ---- landing card → view navigation ----
+  document.querySelectorAll('.ail-land-card').forEach(card=>{
+    const go = ()=>showView(parseInt(card.dataset.goto,10));
+    card.addEventListener('click', go);
+    card.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
+  });
+
+  // ---- scroll-alive motion: reveal-on-scroll + top progress bar ----
+  const revealIO = ('IntersectionObserver' in window)
+    ? new IntersectionObserver((entries)=>{ entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); revealIO.unobserve(en.target); } }); }, { threshold:.12, rootMargin:'0px 0px -8% 0px' })
+    : null;
+  function revealScan(){
+    document.querySelectorAll('.reveal:not(.in)').forEach(elm=>{
+      if(revealIO) revealIO.observe(elm); else elm.classList.add('in');
+    });
+  }
+  const progressBar = el('scrollProgress');
+  function updateProgress(target){
+    const t = (target && target.scrollHeight) ? target : document.scrollingElement || document.documentElement;
+    const max = t.scrollHeight - t.clientHeight;
+    progressBar.style.width = (max>0 ? Math.min(100, (t.scrollTop/max)*100) : 0) + '%';
+  }
+  document.addEventListener('scroll', (e)=>{ updateProgress(e.target); }, true);
+  revealScan();
   </script>
 </body>
 </html>
