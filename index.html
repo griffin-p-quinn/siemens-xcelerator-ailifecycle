@@ -99,15 +99,17 @@
     .dt-lane-lbl { position: absolute; left: .6%; transform: translateY(-50%); display: flex; align-items: center; gap: .4rem;
       max-width: 15%; font-size: clamp(.6rem, .82vw, .8rem); font-weight: 600; color: var(--theme-color-soft-text); line-height: 1.15; }
     .dt-lane-lbl ix-icon { color: var(--theme-color-primary); flex: none; }
-    .dt-node { position: absolute; transform: translate(-50%, -50%); width: clamp(46px, 4.6vw, 66px); aspect-ratio: 1; cursor: pointer; z-index: 3; }
+    .dt-node { position: absolute; transform: translate(-50%, -50%); width: clamp(40px, 4vw, 56px); aspect-ratio: 1; cursor: pointer; z-index: 3; }
     .dt-node .ring { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; position: relative;
       background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--dt-c) 34%, var(--theme-color-1)), var(--theme-color-1) 72%);
       border: 2px solid var(--dt-c); box-shadow: 0 0 0 4px color-mix(in srgb, var(--dt-c) 16%, transparent), 0 6px 18px rgba(0,0,0,.45);
       transition: transform .16s ease, box-shadow .16s ease; }
     .dt-node:hover .ring, .dt-node.sel .ring { transform: scale(1.12); box-shadow: 0 0 0 5px color-mix(in srgb, var(--dt-c) 30%, transparent), 0 0 26px var(--dt-c); }
     .dt-node .snum { font-weight: 800; font-size: clamp(.72rem, 1.1vw, .98rem); color: #fff; }
-    .dt-node .cap { position: absolute; top: 104%; left: 50%; transform: translateX(-50%); white-space: nowrap;
-      font-size: clamp(.54rem, .74vw, .72rem); font-weight: 600; color: var(--theme-color-soft-text); text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+    .dt-node .cap { position: absolute; top: 110%; left: 50%; transform: translateX(-50%);
+      width: max-content; max-width: 110px; text-align: center; white-space: normal; line-height: 1.15;
+      font-size: clamp(.5rem, .68vw, .68rem); font-weight: 600; color: var(--theme-color-soft-text); text-shadow: 0 1px 3px rgba(0,0,0,.7); }
+    .dt-node .cap.up { top: auto; bottom: 110%; }
     .dt-hub { position: absolute; transform: translate(-50%, -50%); z-index: 2; text-align: center; }
     .dt-hub .box { padding: .5rem .8rem; border-radius: 10px; font-weight: 700; font-size: clamp(.62rem,.9vw,.82rem);
       color: var(--theme-color-std-text); background: color-mix(in srgb, var(--theme-color-primary) 20%, var(--theme-color-1));
@@ -228,33 +230,33 @@
   };
   // lane: 0..3 capability domain · x: pixel cx in 1400-wide canvas · phase: Design|Realize|Optimize
   const STAGES = [
-    { no:'01', name:'RFP Intake & Capture', prod:'Doc ingestion → Polarion/TC', tier:'bridge', score:null, lane:0, x:300, phase:'Design',
+    { no:'01', name:'RFP Intake & Capture', prod:'Doc ingestion → Polarion/TC', tier:'bridge', score:null, lane:0, x:250, phase:'Design',
       api:'LLM parse of the 41-page USAF spec → write requirements via Polarion REST v1.', headless:'Yes', auth:'Bearer PAT / SSO', lb:'HTTP load balancer', note:'Ingestion bridge; no native "read-a-PDF" product endpoint.' },
-    { no:'02', name:'Requirements & RFLP', prod:'Polarion ALM (+ TC SysML)', tier:'native', score:8, lane:1, x:395, phase:'Design',
+    { no:'02', name:'Requirements & RFLP', prod:'Polarion ALM (+ TC SysML)', tier:'native', score:8, lane:1, x:330, phase:'Design',
       api:'REST API v1 /polarion/rest/v1 (OpenAPI), OSLC, SOAP/WSDL. Polarion 2606 Copilot API. Community MCP peakflames/PolarionMcpServers.', headless:'Yes', auth:'Personal Access Token (bearer) / SAML SSO', lb:'Multi-instance cluster + HTTP LB', note:'Closest to native agent-ready in the PLM/ALM tier. 51 requirements trace-linked.' },
-    { no:'03', name:'Reliability / PhSM', prod:'PHM Technology MADe', tier:'wall', score:3, lane:2, x:465, phase:'Design',
+    { no:'03', name:'Reliability / PhSM', prod:'PHM Technology MADe', tier:'wall', score:3, lane:2, x:410, phase:'Design',
       api:'Import-only API (SysML v2 ingest). NO headless-run and NO results-extraction API. FMECA/FTA/RBD generated only in-GUI.', headless:'No', auth:'—', lb:'—', note:'24 order-1 cut sets → forced dual battery, dual FC, BMS/OR-ing. Hard wall for agents.' },
-    { no:'04', name:'Systems Sim (6-DOF)', prod:'Simcenter Amesim', tier:'bridge', score:7, lane:2, x:525, phase:'Design',
+    { no:'04', name:'Systems Sim (6-DOF)', prod:'Simcenter Amesim', tier:'bridge', score:7, lane:2, x:490, phase:'Design',
       api:'Python API (amesim / legacy ame_apy), CMD batch over .amegp files. Model must be pre-compiled.', headless:'Yes (CMD, no GUI)', auth:'Local license feature', lb:'Worker-session pool', note:'6-DOF cascade controller: attitude recovery ~0.86s, ζ≈0.15. Geometry & control laws coupled.' },
-    { no:'05', name:'Electrical / EWIS', prod:'Siemens Capital', tier:'wall', score:2, lane:2, x:585, phase:'Design',
+    { no:'05', name:'Electrical / EWIS', prod:'Siemens Capital', tier:'wall', score:2, lane:2, x:570, phase:'Design',
       api:'NO public API / CLI / SDK. Integration only via file/PLM (Teamcenter) handoff or RPA.', headless:'No', auth:'—', lb:'—', note:'Hardest wall. Griffin built a custom Capital Java Bridge + Project XML generator. 13 comp → 13 devices, AWG 8.' },
-    { no:'06', name:'Mechanical CAD', prod:'Siemens NX / NX Open', tier:'bridge', score:6, lane:2, x:645, phase:'Design',
+    { no:'06', name:'Mechanical CAD', prod:'Siemens NX / NX Open', tier:'bridge', score:6, lane:2, x:650, phase:'Design',
       api:'NX Open (.NET/C++/Python NXOpen), Journaling, run_journal, -batch. NO official MCP (only 3rd-party DreamEnding/NX_MCP). Design Copilot NX = non-programmatic in-app assistant.', headless:'Yes — NX X "Server User" license (since NX2506.4000)', auth:'NX license token (per session)', lb:'License-token pool + Dispatcher / Mendix Digital Fabric', note:'53-component assembly on a single datum frame via griffin-p-quinn/nx-mcp. Every batch run burns a full license token — the core scaling bottleneck.' },
-    { no:'07', name:'Structural CAE', prod:'Simcenter 3D / Nastran', tier:'bridge', score:7, lane:2, x:705, phase:'Design',
+    { no:'07', name:'Structural CAE', prod:'Simcenter 3D / Nastran', tier:'bridge', score:7, lane:2, x:730, phase:'Design',
       api:'NXOpen.CAE (C#/Python) for pre/post. Nastran solver CLI: nastran deck.dat — SOL 101 / 106 fully headless. HEEDS for design-space exploration.', headless:'Yes (solver decoupled)', auth:'NX authoring + solver license', lb:'Solver farm + dual-license mgmt', note:'Von Mises safety factor 1.63 @ 5G pull-up load case.' },
-    { no:'08', name:'Embedded / FPGA', prod:'Siemens EDA Questa/ModelSim', tier:'native', score:9, lane:2, x:755, phase:'Design',
+    { no:'08', name:'Embedded / FPGA', prod:'Siemens EDA Questa/ModelSim', tier:'native', score:9, lane:2, x:810, phase:'Design',
       api:'vsim -c (console), -do <file>.do (TCL), qrun, -batch. Deterministic text-in/text-out.', headless:'Yes — first-class', auth:'EDA license per invocation', lb:'CI regression farm', note:'Highest agentic readiness of the toolchain. 8 SystemVerilog RTL blocks, self-checking testbenches.' },
-    { no:'09', name:'Program & Build', prod:'Teamcenter (IPP&E)', tier:'bridge', score:6, lane:3, x:850, phase:'Realize',
+    { no:'09', name:'Program & Build', prod:'Teamcenter (IPP&E)', tier:'bridge', score:6, lane:3, x:900, phase:'Realize',
       api:'SOA (.NET Teamcenter.Soa.Client / Java), ITK, TcXML, StructureManagementService. Copilot/AI-BOM-Agent are closed UX, not open MCP.', headless:'Yes (SOA/ITK)', auth:'Session via CredentialManager; SSO (SAML/OIDC) at AWC gateway', lb:'Pool Manager — 4-tier tcserver pool', note:'12-task schedule, 22-item EBOM, stage MBOM, 10-op process plan.' },
-    { no:'10', name:'Mfg / Assembly Sim', prod:'Tecnomatix Process Simulate & Plant Sim', tier:'native', score:8, lane:4, x:930, phase:'Realize',
+    { no:'10', name:'Mfg / Assembly Sim', prod:'Tecnomatix Process Simulate & Plant Sim', tier:'native', score:8, lane:4, x:985, phase:'Realize',
       api:'COM/ActiveX RemoteControl, SimTalk 2.0, pyplantsim, .NET automation. Headless via visible=False, suppress_3d.', headless:'Yes (COM)', auth:'Windows/COM licensed instance', lb:'COM licensed-instance pool', note:'DTC Co-Pilot: robotic fastening, RULA ergonomics (score 2), AMR dispatch.' },
-    { no:'11', name:'Production / MES', prod:'Opcenter (APS/Execution)', tier:'native', score:8, lane:4, x:1010, phase:'Realize',
+    { no:'11', name:'Production / MES', prod:'Opcenter (APS/Execution)', tier:'native', score:8, lane:4, x:1070, phase:'Realize',
       api:'REST + OData v4.1 (Intelligence API; Execution Core REST for recipe/formula/MES objects).', headless:'Yes', auth:'OAuth / API key', lb:'HTTP load balancer', note:'Line tact time 14.2 min after virtual line balancing.' },
-    { no:'12', name:'Telemetry / Edge', prod:'Industrial Edge + Insights Hub', tier:'native', score:9, lane:5, x:1150, phase:'Optimize',
+    { no:'12', name:'Telemetry / Edge', prod:'Industrial Edge + Insights Hub', tier:'native', score:9, lane:5, x:1160, phase:'Optimize',
       api:'REST services, MindConnect MQTT (cert-managed), OPC UA (PubSub over MQTT/JSON). Apps are Docker containers.', headless:'Yes', auth:'X.509 certs / OAuth', lb:'Broker / edge cluster', note:'Real-time torque + laser-scan ingestion for as-built vs CAD compare.' },
-    { no:'13', name:'Verification & Validation', prod:'Teamcenter V&V', tier:'bridge', score:6, lane:6, x:1250, phase:'Optimize',
+    { no:'13', name:'Verification & Validation', prod:'Teamcenter V&V', tier:'bridge', score:6, lane:6, x:1252, phase:'Optimize',
       api:'SOA services + trace-link objects. Programmatic Target→Measured verification.', headless:'Yes', auth:'Session / SSO', lb:'Pool Manager', note:'51/51 requirements PASS, 24 RFP standards section-linked (100%).' },
-    { no:'14', name:'Delivery / Airworthiness', prod:'Teamcenter + AI Lifecycle Harness', tier:'bridge', score:null, lane:6, x:1340, phase:'Optimize',
+    { no:'14', name:'Delivery / Airworthiness', prod:'Teamcenter + AI Lifecycle Harness', tier:'bridge', score:null, lane:6, x:1344, phase:'Optimize',
       api:'SOA cert sign-off + Human-in-the-Loop approval gate stewarded by the AI Lifecycle Harness (Agentic WBS).', headless:'Yes', auth:'Session / SSO + HITL', lb:'—', note:'Final Certificate of Airworthiness: 0 open NCs → 100% CERTIFIED FLIGHT READY.' },
   ];
   // Siemens' seven PUBLISHED Aerospace & Defense digital threads (siemens.com/en-us/digital-thread) — QX-250 is an A&D platform
@@ -267,7 +269,8 @@
     { name:'Optimized sustainment & availability',       icon:'barchart',     y:730 },
     { name:'Connected verification & certification',     icon:'certificate',  y:855 },
   ];
-  const PHASES = [ { name:'Design', x0:230, x1:770, cx:500 }, { name:'Realize', x0:770, x1:1075, cx:922 }, { name:'Optimize', x0:1075, x1:1385, cx:1235 } ];
+  // Design holds 8 of 14 nodes, so it gets the widest band
+  const PHASES = [ { name:'Design', x0:200, x1:855, cx:527 }, { name:'Realize', x0:855, x1:1115, cx:985 }, { name:'Optimize', x0:1115, x1:1390, cx:1252 } ];
 
   const BRIDGES = [
     ['Capital','2/10','wall','No public API at all — hardest wall','Capital Java Bridge + Project XML generator; harness materialized in NX'],
@@ -508,7 +511,7 @@
       if(idx>0) sgml += `<line x1="${p.x0}" y1="24" x2="${p.x0}" y2="${Y-56}" stroke="${tok('--theme-color-soft-bdr')}" stroke-dasharray="3 6" opacity=".7"/>`;
     });
     // lane guide lines
-    LANES.forEach(l=> sgml += `<line x1="220" y1="${l.y}" x2="1385" y2="${l.y}" stroke="${tok('--theme-color-soft-bdr')}" opacity=".28"/>`);
+    LANES.forEach(l=> sgml += `<line x1="195" y1="${l.y}" x2="1390" y2="${l.y}" stroke="${tok('--theme-color-soft-bdr')}" opacity=".28"/>`);
 
     // sequential thread 01→…→14 (curved, colored by source tier, animated flow)
     for(let i=0;i<STAGES.length-1;i++){
@@ -531,7 +534,7 @@
     STAGES.forEach((s,i)=>{
       html += `<div class="dt-node" data-i="${i}" style="left:${cx(s)/X*100}%; top:${cy(s)/Y*100}%; --dt-c:${tierColor(s.tier)}">
           <div class="ring"><span class="snum">${s.no}</span></div>
-          <div class="cap">${prodName(s.prod)}</div>
+          <div class="cap${i % 2 ? ' up' : ''}">${prodName(s.prod)}</div>
         </div>`;
     });
     wrap.insertAdjacentHTML('beforeend', html);
