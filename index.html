@@ -43,35 +43,75 @@
 
     /* ============ BOLD LANDING HERO (living thread) ============ */
     .ail-landing-hero { position: relative; overflow: hidden; border-radius: 18px; isolation: isolate;
-      padding: clamp(1.9rem, 3.6vw, 3.2rem) clamp(1.5rem, 3.6vw, 3rem) clamp(1.5rem, 3vw, 2.4rem);
+      padding: clamp(2.1rem, 4vw, 3.6rem) clamp(1.6rem, 3.6vw, 3.4rem) clamp(1.7rem, 3vw, 2.6rem);
       border: 1px solid var(--theme-color-soft-bdr);
+      background: linear-gradient(162deg, var(--theme-color-2), var(--theme-color-1) 82%); }
+    /* breathing aurora — three blobs drifting + pulsing behind everything */
+    .ail-landing-hero::before { content:""; position:absolute; inset:-35%; z-index:-2;
       background:
-        radial-gradient(900px 420px at 16% -30%, color-mix(in srgb, var(--theme-color-primary) 17%, transparent), transparent 60%),
-        linear-gradient(162deg, var(--theme-color-2), var(--theme-color-1) 78%); }
-    .ail-landing-hero::before { content:""; position:absolute; inset:0; z-index:-1; opacity:.55;
-      background-image: radial-gradient(circle at center, color-mix(in srgb, var(--theme-color-primary) 15%, transparent) 1px, transparent 1.4px);
-      background-size: 26px 26px;
-      -webkit-mask-image: linear-gradient(180deg, #000, transparent 62%); mask-image: linear-gradient(180deg, #000, transparent 62%); }
+        radial-gradient(closest-side at 20% 24%, color-mix(in srgb, var(--theme-color-primary) 40%, transparent), transparent),
+        radial-gradient(closest-side at 84% 8%,  color-mix(in srgb, var(--theme-color-success) 24%, transparent), transparent),
+        radial-gradient(closest-side at 70% 96%, color-mix(in srgb, var(--theme-color-primary) 26%, transparent), transparent);
+      filter: blur(22px); opacity:.55; animation: ail-aurora 15s ease-in-out infinite alternate; }
+    /* drifting dot grid on top of the aurora, faded toward the bottom */
+    .ail-landing-hero::after { content:""; position:absolute; inset:0; z-index:-1; opacity:.5;
+      background-image: radial-gradient(circle at center, color-mix(in srgb, var(--theme-color-primary) 16%, transparent) 1px, transparent 1.5px);
+      background-size: 30px 30px;
+      -webkit-mask-image: linear-gradient(180deg, #000, transparent 72%); mask-image: linear-gradient(180deg, #000, transparent 72%);
+      animation: ail-grid-drift 26s linear infinite; }
+    @keyframes ail-aurora {
+      0%   { transform: translate3d(0,0,0) scale(1);        opacity:.5; }
+      50%  { transform: translate3d(2.4%,-1.8%,0) scale(1.09); opacity:.72; }
+      100% { transform: translate3d(-1.8%,1.2%,0) scale(1.04); opacity:.55; } }
+    @keyframes ail-grid-drift { to { background-position: 30px 30px; } }
+
+    /* full-width asymmetric top: lead copy (left) + live verdict panel (right) */
+    .ail-lh-top { display:grid; grid-template-columns: minmax(0,1.4fr) minmax(300px,.9fr);
+      gap: clamp(1.6rem, 3.2vw, 3.4rem); align-items:center; }
     .ail-lh-kicker { display:inline-flex; align-items:center; gap:.55rem; font-size:.72rem; font-weight:700; letter-spacing:.2em;
       text-transform:uppercase; color: var(--theme-color-primary); }
     .ail-lh-kicker::before { content:""; width:24px; height:2px; background: var(--theme-color-primary); display:inline-block; }
-    .ail-lh-title { margin:.9rem 0 0; font-weight:800; letter-spacing:-.025em; line-height:1.02;
-      font-size: clamp(2.2rem, 5.4vw, 4.1rem); max-width: 22ch; }
+    .ail-lh-title { margin:.9rem 0 0; font-weight:800; letter-spacing:-.028em; line-height:1.0;
+      font-size: clamp(2.4rem, 4.6vw, 4rem); }
     .ail-lh-title .hl { color: var(--theme-color-primary); }
-    .ail-lh-sub { margin:1.05rem 0 0; max-width: 64ch; font-size: clamp(.95rem, 1.25vw, 1.1rem);
+    .ail-lh-sub { margin:1.05rem 0 0; max-width: 56ch; font-size: clamp(.95rem, 1.15vw, 1.08rem);
       line-height:1.6; color: var(--theme-color-soft-text); }
-    .ail-lh-actions { display:flex; flex-wrap:wrap; align-items:center; gap:.8rem 1.6rem; margin-top:1.5rem; }
-    .ail-lh-cta { display:flex; flex-wrap:wrap; gap:.7rem; }
-    /* meaningful tier readout (the real finding, not vanity metrics) */
-    .ail-tier-readout { display:flex; flex-wrap:wrap; gap:1rem 1.2rem; }
-    .ail-tier-readout .tr { display:inline-flex; align-items:center; gap:.45rem; font-size:.84rem; font-weight:600; color: var(--theme-color-soft-text); }
-    .ail-tier-readout .tr b { color: var(--theme-color-std-text); font-weight:800; font-variant-numeric:tabular-nums; }
-    .ail-tier-readout .tr i { width:9px; height:9px; border-radius:50%; display:inline-block; }
-    .ail-tier-readout .native i { background: var(--theme-color-success); box-shadow:0 0 0 3px color-mix(in srgb, var(--theme-color-success) 22%, transparent); }
-    .ail-tier-readout .bridge i { background: var(--theme-color-warning); box-shadow:0 0 0 3px color-mix(in srgb, var(--theme-color-warning) 22%, transparent); }
-    .ail-tier-readout .wall i { background: var(--theme-color-alarm); box-shadow:0 0 0 3px color-mix(in srgb, var(--theme-color-alarm) 22%, transparent); }
+    .ail-lh-cta { display:flex; flex-wrap:wrap; gap:.7rem; margin-top:1.6rem; }
+
+    /* ==== live verdict panel (the real finding, carrying the right side) ==== */
+    .ail-verdict { position:relative; border:1px solid var(--theme-color-soft-bdr); border-radius:16px;
+      padding: clamp(1.1rem,1.6vw,1.4rem) clamp(1.2rem,1.8vw,1.5rem);
+      background: color-mix(in srgb, var(--theme-color-1) 62%, transparent); backdrop-filter: blur(6px);
+      box-shadow: 0 18px 50px color-mix(in srgb, #000 30%, transparent); }
+    .vd-head { display:flex; align-items:baseline; justify-content:space-between; gap:.6rem; margin-bottom:.9rem; }
+    .vd-head .lab { font-size:.68rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color: var(--theme-color-soft-text); }
+    .vd-head .tot { font-size:.78rem; font-weight:700; color: var(--theme-color-weak-text); font-variant-numeric:tabular-nums; }
+    .vd-bar { display:flex; height:14px; border-radius:999px; overflow:hidden; gap:2px; background: color-mix(in srgb, var(--theme-color-2) 60%, transparent); }
+    .vd-bar span { display:block; position:relative; overflow:hidden; }
+    .vd-bar span::after { content:""; position:absolute; inset:0;
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, #fff 40%, transparent), transparent);
+      transform: translateX(-120%); animation: vd-sheen 3.6s ease-in-out infinite; animation-delay: var(--sd, 0s); }
+    .vd-bar .native { background: var(--theme-color-success); }
+    .vd-bar .bridge { background: var(--theme-color-warning); }
+    .vd-bar .wall   { background: var(--theme-color-alarm); }
+    .vd-rows { display:flex; flex-direction:column; gap:.15rem; margin-top:1rem; }
+    .vd-row { display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:.7rem; padding:.5rem .1rem; }
+    .vd-row + .vd-row { border-top:1px solid color-mix(in srgb, var(--theme-color-soft-bdr) 60%, transparent); }
+    .vd-row i { width:11px; height:11px; border-radius:50%; }
+    .vd-row.native i { background: var(--theme-color-success); animation: vd-pulse 3s ease-in-out infinite; }
+    .vd-row.bridge i { background: var(--theme-color-warning); animation: vd-pulse 3s ease-in-out infinite .5s; }
+    .vd-row.wall   i { background: var(--theme-color-alarm);   animation: vd-pulse 1.8s ease-in-out infinite; }
+    .vd-row .t { font-size:.86rem; font-weight:600; color: var(--theme-color-std-text); }
+    .vd-row .t small { display:block; font-size:.72rem; font-weight:500; color: var(--theme-color-weak-text); }
+    .vd-row .c { font-size:1.5rem; font-weight:800; font-variant-numeric:tabular-nums; line-height:1; }
+    .vd-row.native .c { color: var(--theme-color-success); }
+    .vd-row.bridge .c { color: var(--theme-color-warning); }
+    .vd-row.wall   .c { color: var(--theme-color-alarm); }
+    @keyframes vd-sheen { 0%,60%{ transform: translateX(-120%);} 100%{ transform: translateX(120%);} }
+    @keyframes vd-pulse { 0%,100%{ box-shadow:0 0 0 0 color-mix(in srgb, currentColor 40%, transparent);} 50%{ box-shadow:0 0 0 5px color-mix(in srgb, currentColor 0%, transparent);} }
+    @media (max-width: 900px){ .ail-lh-top { grid-template-columns: 1fr; } }
     /* ==== the living thread ribbon (hero centerpiece) ==== */
-    .ail-lh-thread { margin-top: clamp(1.7rem, 3.4vw, 2.6rem); }
+    .ail-lh-thread { margin-top: clamp(1.8rem, 3.4vw, 2.8rem); }
     .ail-ribbon { position:relative; display:flex; gap:0; overflow-x:auto; overflow-y:hidden; padding:.7rem 0 .3rem; scrollbar-width:thin; }
     .rb-node { position:relative; flex:1 0 auto; min-width:74px; text-align:center; padding:0 2px; cursor:pointer;
       opacity:0; transform: translateY(14px); animation: rb-in .55s cubic-bezier(.22,.61,.36,1) forwards; animation-delay: calc(var(--i) * .055s + .25s); }
@@ -121,9 +161,9 @@
     .ctx-stats .s .n { font-size:1.25rem; font-weight:800; line-height:1.1; font-variant-numeric:tabular-nums; }
     .ctx-stats .s.alarm .n { color: var(--theme-color-alarm); }
     .ctx-stats .s .l { font-size:.68rem; color: var(--theme-color-weak-text); font-weight:600; }
-    .ail-lh-kicker, .ail-lh-title, .ail-lh-sub, .ail-lh-actions { animation: ail-rise .7s cubic-bezier(.22,.61,.36,1) both; }
+    .ail-lh-kicker, .ail-lh-title, .ail-lh-sub, .ail-lh-cta, .ail-verdict { animation: ail-rise .7s cubic-bezier(.22,.61,.36,1) both; }
     .ail-lh-kicker{ animation-delay:.02s; } .ail-lh-title{ animation-delay:.10s; }
-    .ail-lh-sub{ animation-delay:.18s; } .ail-lh-actions{ animation-delay:.26s; }
+    .ail-lh-sub{ animation-delay:.18s; } .ail-lh-cta{ animation-delay:.26s; } .ail-verdict{ animation-delay:.34s; }
     @media (max-width: 720px){ .ctx-title { display:none; } .ail-lh-cta ix-button { width:100%; } }
 
     .ail-stage { cursor: pointer; transition: transform .15s ease; }
@@ -291,9 +331,12 @@
     .ail-dl-btn:focus-visible, .ail-pop-all:focus-visible { outline:2px solid var(--theme-color-primary); outline-offset:2px; }
 
     @media (prefers-reduced-motion: reduce){
-      .reveal, .ail-lh-kicker, .ail-lh-title, .ail-lh-sub, .ail-lh-actions,
-      .rb-node, .rb-chip, .rb-node:not(:last-child)::after {
+      .reveal, .ail-lh-kicker, .ail-lh-title, .ail-lh-sub, .ail-lh-cta,
+      .ail-landing-hero::before, .ail-landing-hero::after,
+      .rb-node, .rb-chip, .rb-node:not(:last-child)::after,
+      .vd-bar span::after, .vd-row i {
         animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+      .ail-landing-hero::before { opacity:.5 !important; }
       .ail-dl-btn:hover { transform: none !important; }
     }
     /* ?static — freeze all motion to final state (screenshot / low-motion testing) */
@@ -341,15 +384,17 @@
         <!-- VIEW 0: OVERVIEW / LANDING -->
         <section class="ail-view active" id="view-0">
           <section class="ail-landing-hero">
-            <span class="ail-lh-kicker">FlyNow · "Fly in 3" · QX-250 Quadcopter</span>
-            <h1 class="ail-lh-title">One agent drives the whole Siemens lifecycle&nbsp;— <span class="hl">where it can</span>.</h1>
-            <p class="ail-lh-sub">Fourteen products, from RFP intake to airworthiness, each verified against its <em>real</em> integration layer: the exact API, whether it runs headless, and whether an agent can drive it natively, through a bridge, or not at all. The thread below is colored by that verdict.</p>
-            <div class="ail-lh-actions">
-              <div class="ail-lh-cta">
-                <ix-button id="ctaThread" variant="primary" icon="chevron-right-small">Follow the digital thread</ix-button>
-                <ix-button id="ctaLifecycle" variant="secondary">Explore the lifecycle</ix-button>
+            <div class="ail-lh-top">
+              <div class="ail-lh-lead">
+                <span class="ail-lh-kicker">FlyNow · "Fly in 3" · QX-250 Quadcopter</span>
+                <h1 class="ail-lh-title">One agent drives the whole Siemens lifecycle&nbsp;— <span class="hl">where it can</span>.</h1>
+                <p class="ail-lh-sub">Fourteen products, from RFP intake to airworthiness, each verified against its <em>real</em> integration layer: the exact API, whether it runs headless, and whether an agent can drive it natively, through a bridge, or not at all. The thread below is colored by that verdict.</p>
+                <div class="ail-lh-cta">
+                  <ix-button id="ctaThread" variant="primary" icon="chevron-right-small">Follow the digital thread</ix-button>
+                  <ix-button id="ctaLifecycle" variant="secondary">Explore the lifecycle</ix-button>
+                </div>
               </div>
-              <div class="ail-tier-readout" id="heroReadout"></div>
+              <aside class="ail-verdict" id="heroVerdict"></aside>
             </div>
             <div class="ail-lh-thread"><div class="ail-ribbon" id="heroThread"></div></div>
           </section>
@@ -781,11 +826,19 @@
 
   // ---- the real finding: how many products an agent can actually drive ----
   const tierCount = t => STAGES.filter(s=>s.tier===t).length;
-  const nNative = tierCount('native'), nBridge = tierCount('bridge'), nWall = tierCount('wall');
-  el('heroReadout').innerHTML = `
-    <span class="tr native"><i></i><b>${nNative}</b> native-ready</span>
-    <span class="tr bridge"><i></i><b>${nBridge}</b> need a bridge</span>
-    <span class="tr wall"><i></i><b>${nWall}</b> hard wall</span>`;
+  const nNative = tierCount('native'), nBridge = tierCount('bridge'), nWall = tierCount('wall'), nTot = STAGES.length;
+  el('heroVerdict').innerHTML = `
+    <div class="vd-head"><span class="lab">Can an agent drive it?</span><span class="tot">${nTot} products verified</span></div>
+    <div class="vd-bar" role="img" aria-label="${nNative} native, ${nBridge} bridge, ${nWall} wall of ${nTot}">
+      <span class="native" style="flex:${nNative};--sd:0s"></span>
+      <span class="bridge" style="flex:${nBridge};--sd:.6s"></span>
+      <span class="wall" style="flex:${nWall};--sd:1.2s"></span>
+    </div>
+    <div class="vd-rows">
+      <div class="vd-row native"><i></i><span class="t">Native-ready<small>drive it straight through its own API</small></span><span class="c">${nNative}</span></div>
+      <div class="vd-row bridge"><i></i><span class="t">Need a bridge<small>headless/server layer required first</small></span><span class="c">${nBridge}</span></div>
+      <div class="vd-row wall"><i></i><span class="t">Hard wall<small>no programmatic path — MADe</small></span><span class="c">${nWall}</span></div>
+    </div>`;
   el('ctxStats').innerHTML = `
     <div class="s"><span class="n">14</span><span class="l">lifecycle products verified</span></div>
     <div class="s native"><span class="n">${nNative}</span><span class="l">agent-native</span></div>
