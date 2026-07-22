@@ -225,7 +225,7 @@
 
         <div class="ail-foot">
           <strong>Source of truth:</strong> <code>AGENTIC_READINESS_VERIFIED.md</code> (this repo) · researched against docs.sw.siemens.com, community.sw.siemens.com, developer.siemens.com, docs.mendix.com, phmtechnology.com.
-          <br/><strong>Key finding:</strong> No official Siemens NX MCP exists (only third-party <a href="https://github.com/DreamEnding/NX_MCP" target="_blank" rel="noopener">DreamEnding/NX_MCP</a>); Mendix is the only first-party engineering-adjacent MCP. Custom bridges required for NX, Capital, MADe &amp; Teamcenter.
+          <br/><strong>Key finding:</strong> No first-party Siemens NX MCP exists — Griffin's <a href="https://github.com/griffin-p-quinn/nx-mcp" target="_blank" rel="noopener">griffin-p-quinn/nx-mcp</a> FastMCP server is the NX MCP bridge (an experimental 3rd-party <a href="https://github.com/DreamEnding/NX_MCP" target="_blank" rel="noopener">DreamEnding/NX_MCP</a> also exists); Mendix is the only first-party engineering-adjacent MCP. Custom bridges required for NX, Capital, MADe &amp; Teamcenter.
           <br/>Dual-track: <strong>Griffin's Work</strong> (griffin-p-quinn/nx-mcp, Mendix Digital Fabric, DTC Co-Pilot) vs. <strong>Their Work</strong> (xcelerator.us cloud endpoints, flynow.xcelerator.us).
         </div>
       </div>
@@ -252,7 +252,7 @@
     { no:'05', name:'Electrical / EWIS', prod:'Siemens Capital', tier:'bridge', score:5, lane:2, x:570, phase:'Design',
       api:'Capital REST API (OpenAPI capital/rest/v1) — query harnesses/wires/connectors/EBOM + limited write-back, dynamically wrapped as MCP by Griffin\'s capitalMCP. But NO full ECAD design-authoring over REST — harness creation still needs Capital Studio or file/PLM (Teamcenter) handoff.', headless:'Partial — REST query/write-back headless; ECAD authoring not exposed', auth:'JSESSIONID session (capital_login / secret_login)', lb:'MCP session pool (per-session cookie)', note:'capitalMCP wraps the REST API; harness *authoring* is still materialized via the Capital Java Bridge + Project XML generator → NX. 13 comp → 13 devices, AWG 8.' },
     { no:'06', name:'Mechanical CAD', prod:'Siemens NX / NX Open', tier:'bridge', score:6, lane:2, x:650, phase:'Design',
-      api:'NX Open (.NET/C++/Python NXOpen), Journaling, run_journal, -batch. NO official MCP (only 3rd-party DreamEnding/NX_MCP). Design Copilot NX = non-programmatic in-app assistant.', headless:'Yes — NX X "Server User" license (since NX2506.4000)', auth:'NX license token (per session)', lb:'License-token pool + Dispatcher / Mendix Digital Fabric', note:'53-component assembly on a single datum frame via griffin-p-quinn/nx-mcp. Every batch run burns a full license token — the core scaling bottleneck.' },
+      api:'NX Open (.NET/C++/Python NXOpen), Journaling, run_journal, -batch. No first-party Siemens MCP — Griffin\'s griffin-p-quinn/nx-mcp FastMCP server IS the NX MCP bridge (an experimental 3rd-party DreamEnding/NX_MCP also exists). Design Copilot NX = non-programmatic in-app assistant.', headless:'Yes — NX X "Server User" license (since NX2506.4000)', auth:'NX license token (per session)', lb:'License-token pool + Dispatcher / Mendix Digital Fabric', note:'53-component assembly on a single datum frame via griffin-p-quinn/nx-mcp. Every batch run burns a full license token — the core scaling bottleneck.' },
     { no:'07', name:'Structural CAE', prod:'Simcenter 3D / Nastran', tier:'bridge', score:7, lane:2, x:730, phase:'Design',
       api:'NXOpen.CAE (C#/Python) for pre/post. Nastran solver CLI: nastran deck.dat — SOL 101 / 106 fully headless. HEEDS for design-space exploration.', headless:'Yes (solver decoupled)', auth:'NX authoring + solver license', lb:'Solver farm + dual-license mgmt', note:'Von Mises safety factor 1.63 @ 5G pull-up load case.' },
     { no:'08', name:'Embedded / FPGA', prod:'Siemens EDA Questa/ModelSim', tier:'native', score:9, lane:2, x:810, phase:'Design',
@@ -378,9 +378,9 @@
     nx_serveruser: { term:'NX X Server-User license', kind:'Headless licensing', from:'Siemens community', icon:'shield',
                      what:'Non-interactive NX X session (since NX2506.4000) — the real enabler for the license-token worker pool. Every batch run burns a full token.',
                      url:'https://community.sw.siemens.com/s/article/Running-local-NX-X-session-with-Server-User-license' },
-    nx_mcp:        { term:'No official MCP · 3rd-party NX_MCP', kind:'MCP status', from:'DreamEnding · GitHub', icon:'ai',
-                     what:'No Siemens NX MCP exists, is announced, or is on the public roadmap. Only an experimental third-party server (over NX Open Python).',
-                     url:'https://github.com/DreamEnding/NX_MCP' },
+    nx_mcp:        { term:'griffin-p-quinn/nx-mcp (FastMCP)', kind:'MCP server', from:"Griffin's Work", icon:'ai',
+                     what:'The NX MCP bridge Griffin built — a FastMCP server over NX Open (C#/Python): build parts & assemblies, drive expressions, export STEP/JT, run FEA demos. No first-party Siemens NX MCP exists; an experimental 3rd-party DreamEnding/NX_MCP is the only other option.',
+                     url:'https://github.com/griffin-p-quinn/nx-mcp' },
     nx_copilot:    { term:'Design Copilot NX', kind:'In-app AI (non-programmatic)', from:'Siemens', icon:'ai',
                      what:'Summer-2025 in-app learning/documentation assistant — NOT an agent API; cannot be driven headlessly.',
                      url:'https://news.siemens.com/en-us/siemens-designcenter-nx-summer-2025/' },
