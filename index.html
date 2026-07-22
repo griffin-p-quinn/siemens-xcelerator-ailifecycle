@@ -84,7 +84,7 @@
 
     /* ============ DIGITAL THREAD CANVAS (rich flow diagram) ============ */
     .dt-wrap {
-      position: relative; width: 100%; aspect-ratio: 1400 / 620; min-height: 360px; max-height: 56vh;
+      position: relative; width: 100%; aspect-ratio: 1400 / 700; min-height: 420px; max-height: 62vh;
       border-radius: 14px; overflow: hidden;
       border: 1px solid var(--theme-color-soft-bdr);
       background:
@@ -92,11 +92,9 @@
         radial-gradient(900px 460px at 100% 110%, color-mix(in srgb, var(--theme-color-primary) 10%, transparent), transparent 55%),
         linear-gradient(160deg, var(--theme-color-2), var(--theme-color-1));
     }
-    .dt-stage { position: absolute; inset: 0; transform-origin: 0 0; will-change: transform; }
-    .dt-wrap.zoomed { cursor: grab; }
-    .dt-wrap.panning { cursor: grabbing; }
+    .dt-stage { position: absolute; inset: 0; }
     .dt-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .dt-phase-lbl { position: absolute; bottom: 2.5%; transform: translateX(-50%); text-align: center;
+    .dt-phase-lbl { position: absolute; top: 1.5%; transform: translateX(-50%); text-align: center;
       font-size: clamp(.8rem, 1.4vw, 1.15rem); font-weight: 800; letter-spacing: .04em; color: var(--theme-color-std-text); opacity: .92; }
     .dt-phase-lbl small { display: block; font-size: .58em; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--theme-color-weak-text); }
     .dt-lane-lbl { position: absolute; left: .6%; transform: translateY(-50%); display: flex; align-items: center; gap: .4rem;
@@ -195,6 +193,10 @@
     #skillPop::part(dropdown), #skillPop .dropdown-menu { padding: 0 !important; }
     .skill-pop-body { display:flex; flex-direction:column; gap:.7rem; max-width:340px; padding:1.05rem 1.15rem 1.1rem; }
     .ail-pop-name { font-weight:700; font-size:.98rem; line-height:1.3; }
+    .ail-pop-close { display:inline-grid; place-items:center; width:26px; height:26px; flex:none; padding:0;
+      border:none; border-radius:6px; background:transparent; color: var(--theme-color-soft-text); cursor:pointer; }
+    .ail-pop-close:hover { background: var(--theme-color-3); color: var(--theme-color-std-text); }
+    .ail-pop-close:focus-visible { outline:2px solid var(--theme-color-primary); outline-offset:1px; }
     .ail-pop-sum { margin:.05rem 0 0; font-size:.82rem; line-height:1.5; color: var(--theme-color-soft-text); }
     .ail-pop-chips { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.1rem; }
     .ail-pop-chip { display:inline-flex; align-items:center; gap:.25rem; font-size:.68rem; font-weight:600;
@@ -280,7 +282,7 @@
         <!-- VIEW 2: DIGITAL THREAD (rich flow diagram) -->
         <section class="ail-view" id="view-2">
           <div class="ail-h">QX-250 Digital Thread</div>
-          <p class="ail-sub">The woven thread across Siemens' seven published Aerospace &amp; Defense digital threads and three lifecycle phases — Design → Realize → Optimize. Every node is a live Siemens product; thread color = agentic-readiness tier. Click a node for the verified agent interface. <em>Scroll to zoom · drag to pan · double-click to reset.</em></p>
+          <p class="ail-sub">The woven thread across Siemens' seven published Aerospace &amp; Defense digital threads and three lifecycle phases — Design → Realize → Optimize. Every node is a live Siemens product; thread color = agentic-readiness tier. Click a node for the verified agent interface.</p>
           <div class="dt-wrap" id="dtWrap">
             <div class="dt-stage" id="dtStage">
               <svg class="dt-svg" id="dtSvg" viewBox="0 0 1400 980" preserveAspectRatio="none" aria-hidden="true"></svg>
@@ -472,7 +474,7 @@
   // ===== Overview / landing navigation cards → jump into each corner of the site =====
   const LAND = [
     { idx:1, icon:'factory-reset', nm:'Lifecycle', desc:'All 14 RFP→Delivery stages as inspectable cards — the exact API, headless status and load-balancing pattern per Siemens product.' },
-    { idx:2, icon:'distribution', nm:'Digital Thread', desc:'The woven thread across seven Siemens A&D digital threads and three phases. Zoomable, pannable; node color = agentic-readiness tier.' },
+    { idx:2, icon:'distribution', nm:'Digital Thread', desc:'The woven thread across seven Siemens A&D digital threads and three phases. Node color = agentic-readiness tier.' },
     { idx:3, icon:'ai', nm:'Agent Integration', desc:'How the agent connects and scales — orchestration flow plus the per-product protocol, auth and pooling matrix.' },
     { idx:4, icon:'connector', nm:'Bridge Tracker', desc:'Native vs. custom-bridge status, the exact gaps Griffin\'s Work fills, and the verified first-party Siemens MCP inventory.' },
     { idx:5, icon:'barchart', nm:'Scorecard', desc:'0–10 agentic-readiness scores per product, verified against actual interfaces and color-coded by tier.' },
@@ -715,7 +717,10 @@
       .map(r=>`<span class="ail-pop-chip"><ix-icon name="${r.icon}" size="12"></ix-icon>${r.term}</span>`).join('');
     return `<div class="skill-pop-body">
       <div class="ail-spread" style="gap:.6rem;">
-        <span class="ail-pop-name">${o.name}</span>${tierPill}
+        <span class="ail-pop-name">${o.name}</span>
+        <div class="ail-row" style="gap:.4rem;align-items:center;">${tierPill}
+          <button type="button" class="ail-pop-close" aria-label="Close"><ix-icon name="close" size="16"></ix-icon></button>
+        </div>
       </div>
       <p class="ail-pop-sum">${o.summary||''}</p>
       ${chips?`<div class="ail-pop-chips">${chips}</div>`:''}
@@ -724,6 +729,7 @@
       <a class="ail-pop-all" href="${SKILL_ALL}" download><ix-icon name="download-list" size="13"></ix-icon>Download all agent skills (.zip)</a>
     </div>`;
   }
+  skillPop.addEventListener('click', e=>{ if(e.target.closest('.ail-pop-close')) skillPop.show = false; });
   function openSkillPop(anchorEl, opts){
     if(!anchorEl || !opts) return;
     skillPop.innerHTML = popBodyHtml(opts);
@@ -845,31 +851,8 @@
       n.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openDetail(); pop(); } });
     });
   }
-  // scroll-wheel zoom (to cursor) + drag-to-pan + double-click reset
-  function enableThreadZoom(){
-    const wrap = el('dtWrap'), stage = el('dtStage');
-    const MIN=1, MAX=6; let scale=1, tx=0, ty=0;
-    const apply=()=>{ stage.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`; wrap.classList.toggle('zoomed', scale>1.001); };
-    const clamp=()=>{ const w=wrap.clientWidth, h=wrap.clientHeight;
-      tx=Math.min(0, Math.max(w-w*scale, tx)); ty=Math.min(0, Math.max(h-h*scale, ty)); };
-    wrap.addEventListener('wheel',(e)=>{
-      const ns=Math.min(MAX, Math.max(MIN, scale*(e.deltaY<0?1.15:1/1.15)));
-      if(ns===scale) return;                 // at a zoom limit → let the page scroll
-      e.preventDefault();
-      const r=wrap.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top;
-      tx=mx-(mx-tx)*(ns/scale); ty=my-(my-ty)*(ns/scale); scale=ns; clamp(); apply();
-    }, {passive:false});
-    let panning=false, sx=0, sy=0, stx=0, sty=0;
-    wrap.addEventListener('pointerdown',(e)=>{ if(scale<=1.001 || e.target.closest('.dt-node')) return;
-      panning=true; sx=e.clientX; sy=e.clientY; stx=tx; sty=ty; wrap.classList.add('panning');
-      try{ wrap.setPointerCapture(e.pointerId); }catch(_){} });
-    wrap.addEventListener('pointermove',(e)=>{ if(!panning) return; tx=stx+(e.clientX-sx); ty=sty+(e.clientY-sy); clamp(); apply(); });
-    const end=(e)=>{ if(!panning) return; panning=false; wrap.classList.remove('panning'); try{ wrap.releasePointerCapture(e.pointerId); }catch(_){} };
-    wrap.addEventListener('pointerup',end); wrap.addEventListener('pointercancel',end);
-    wrap.addEventListener('dblclick',()=>{ scale=1; tx=0; ty=0; apply(); });
-  }
   let threadBuilt=false;
-  function ensureThread(){ if(!threadBuilt){ buildThread(); enableThreadZoom(); threadBuilt=true; } }
+  function ensureThread(){ if(!threadBuilt){ buildThread(); threadBuilt=true; } }
 
   // ---- View 2: architecture ----
   el('archDiagram').innerHTML = `
