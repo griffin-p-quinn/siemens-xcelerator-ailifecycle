@@ -5,18 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Xcelerator AI Lifecycle — Agentic Readiness Tracker (RFP → Delivery)</title>
 
-  <!-- Siemens iX Design System 5.1.1 (base css; theme via data-ix-* attributes, per MRO pattern) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@siemens/ix@5.1.1/dist/siemens-ix/siemens-ix.css" />
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@siemens/ix-icons@3.4.0/dist/ix-icons/ix-icons.esm.js"></script>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@siemens/ix@5.1.1/dist/siemens-ix/siemens-ix.esm.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <!-- Siemens iX 5.1.1 — self-hosted (single origin, no third-party CDN waterfall) -->
+  <link rel="stylesheet" href="assets/siemens-ix/siemens-ix.css" />
+  <script type="module" src="assets/ix-icons/ix-icons.esm.js"></script>
+  <script type="module" src="assets/siemens-ix/siemens-ix.esm.js"></script>
 
   <style>
     html, body { height: 100%; margin: 0; padding: 0; }
     body { font-family: "Siemens Sans", "Segoe UI", system-ui, sans-serif; }
 
-    /* ---- layout-only utilities (no component recoloring; colors come from iX tokens) ---- */
-    .ail-page { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.5rem 1.75rem 3rem; max-width: 1480px; }
+    /* ---- layout-only utilities (colors come from iX --theme-color-* tokens) ---- */
+    .ail-page { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.5rem 1.75rem 3rem; max-width: 1520px; }
     .ail-grid { display: grid; gap: 1rem; }
     .ail-grid--kpi { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
     .ail-grid--stage { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
@@ -32,32 +31,26 @@
     .ail-h { margin: .5rem 0 .1rem; font-size: 1.3rem; font-weight: 700; }
     .ail-sub { margin: 0 0 .4rem; color: var(--theme-color-soft-text); font-size: .92rem; line-height: 1.5; }
     .ail-muted { color: var(--theme-color-soft-text); }
-    .ail-weak { color: var(--theme-color-weak-text); }
     .ail-mono { font-family: "Cascadia Code", "Roboto Mono", ui-monospace, Consolas, monospace; font-size: .82rem; line-height: 1.5; color: var(--theme-color-std-text); }
 
-    /* hero band */
     .ail-hero { display: flex; flex-direction: column; gap: .55rem; }
     .ail-hero h1 { margin: .1rem 0; font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.1; font-weight: 700; }
     .ail-hero .kicker { color: var(--theme-color-primary); font-size: .78rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; }
-    .ail-hero p { margin: 0; max-width: 860px; color: var(--theme-color-soft-text); line-height: 1.6; }
+    .ail-hero p { margin: 0; max-width: 880px; color: var(--theme-color-soft-text); line-height: 1.6; }
 
-    /* thread strip */
-    .ail-thread { display: flex; gap: 0; overflow-x: auto; padding: .35rem 0 .6rem; }
-    .ail-thread .node { flex: 1 0 auto; min-width: 92px; text-align: center; position: relative; padding: 0 4px; }
-    .ail-thread .chip { width: 34px; height: 34px; margin: 0 auto .4rem; border-radius: 8px; display: grid; place-items: center;
+    .ail-thread-strip { display: flex; gap: 0; overflow-x: auto; padding: .35rem 0 .6rem; }
+    .ail-thread-strip .node { flex: 1 0 auto; min-width: 92px; text-align: center; position: relative; padding: 0 4px; }
+    .ail-thread-strip .chip { width: 34px; height: 34px; margin: 0 auto .4rem; border-radius: 8px; display: grid; place-items: center;
       background: var(--theme-color-component-1); border: 1px solid var(--theme-color-soft-bdr); color: var(--theme-color-primary); }
-    .ail-thread .node:not(:last-child)::after { content:""; position:absolute; top:17px; left: calc(50% + 24px); right: calc(-50% + 24px); height:2px;
-      background: var(--theme-color-soft-bdr); }
-    .ail-thread .lbl { font-size: .66rem; color: var(--theme-color-weak-text); line-height: 1.25; }
+    .ail-thread-strip .node:not(:last-child)::after { content:""; position:absolute; top:17px; left: calc(50% + 24px); right: calc(-50% + 24px); height:2px; background: var(--theme-color-soft-bdr); }
+    .ail-thread-strip .lbl { font-size: .66rem; color: var(--theme-color-weak-text); line-height: 1.25; }
 
-    /* stage card */
     .ail-stage { cursor: pointer; transition: transform .15s ease; }
     .ail-stage:hover { transform: translateY(-3px); }
     .ail-stage .no { font-size: .68rem; letter-spacing: .1em; color: var(--theme-color-weak-text); }
     .ail-stage .nm { font-weight: 700; font-size: .98rem; margin: .15rem 0 .25rem; }
     .ail-stage .pr { color: var(--theme-color-primary); font-size: .8rem; }
 
-    /* attribute grid inside detail card */
     .ail-attrs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border-top: 1px solid var(--theme-color-soft-bdr); }
     .ail-attr { padding: .85rem 1.05rem; border-bottom: 1px solid var(--theme-color-soft-bdr); border-right: 1px solid var(--theme-color-soft-bdr); }
     .ail-attr:nth-child(even) { border-right: none; }
@@ -66,7 +59,6 @@
     .ail-attr.full { grid-column: 1 / -1; border-right: none; }
     .ail-detail-num { font-size: 1.9rem; font-weight: 800; color: var(--theme-color-primary); opacity: .5; line-height: 1; }
 
-    /* arch layers */
     .ail-layer { border: 1px dashed var(--theme-color-soft-bdr); border-radius: 8px; padding: .85rem 1rem; }
     .ail-layer.hl { border-style: solid; border-color: var(--theme-color-primary); background: color-mix(in srgb, var(--theme-color-primary) 8%, transparent); }
     .ail-layer .lt { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--theme-color-primary); font-weight: 700; margin-bottom: .5rem; }
@@ -75,16 +67,13 @@
     .ail-pool .pn { font-weight: 700; font-size: .84rem; }
     .ail-pool .pd { color: var(--theme-color-soft-text); font-size: .72rem; margin-top: .2rem; }
 
-    /* table */
     table.ail-mtx { width: 100%; border-collapse: collapse; font-size: .85rem; }
     table.ail-mtx th, table.ail-mtx td { text-align: left; padding: .6rem .7rem; border-bottom: 1px solid var(--theme-color-soft-bdr); vertical-align: top; }
     table.ail-mtx th { color: var(--theme-color-weak-text); font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
 
-    /* tier column list item */
     .ail-tier-item { display: flex; justify-content: space-between; align-items: center; gap: .6rem; padding: .6rem 0; border-bottom: 1px solid var(--theme-color-soft-bdr); }
     .ail-tier-item:last-child { border-bottom: none; }
     .ail-tier-item .nm { font-weight: 600; font-size: .9rem; }
-    .ail-tier-item .why { color: var(--theme-color-weak-text); font-size: .74rem; margin-top: .1rem; }
 
     #scoreChart { width: 100%; height: 560px; }
     .ail-view { display: none; }
@@ -92,7 +81,47 @@
     .ail-foot { color: var(--theme-color-soft-text); font-size: .8rem; line-height: 1.6; }
     .ail-foot a { color: var(--theme-color-primary); text-decoration: none; }
     .ail-logo { font-weight: 700; letter-spacing: .3px; }
-    @media (max-width: 820px){ .ail-attrs { grid-template-columns: 1fr; } .ail-attr { border-right: none; } }
+
+    /* ============ DIGITAL THREAD CANVAS (rich flow diagram) ============ */
+    .dt-wrap {
+      position: relative; width: 100%; aspect-ratio: 1400 / 640; min-height: 420px;
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--theme-color-soft-bdr);
+      background:
+        radial-gradient(1100px 520px at 20% -10%, color-mix(in srgb, var(--theme-color-primary) 14%, transparent), transparent 60%),
+        radial-gradient(900px 460px at 100% 110%, color-mix(in srgb, var(--theme-color-primary) 10%, transparent), transparent 55%),
+        linear-gradient(160deg, var(--theme-color-2), var(--theme-color-1));
+    }
+    .dt-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .dt-phase-lbl { position: absolute; bottom: 2.5%; transform: translateX(-50%); text-align: center;
+      font-size: clamp(.8rem, 1.4vw, 1.15rem); font-weight: 800; letter-spacing: .04em; color: var(--theme-color-std-text); opacity: .92; }
+    .dt-phase-lbl small { display: block; font-size: .58em; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--theme-color-weak-text); }
+    .dt-lane-lbl { position: absolute; left: .6%; transform: translateY(-50%); display: flex; align-items: center; gap: .4rem;
+      max-width: 15%; font-size: clamp(.6rem, .82vw, .8rem); font-weight: 600; color: var(--theme-color-soft-text); line-height: 1.15; }
+    .dt-lane-lbl ix-icon { color: var(--theme-color-primary); flex: none; }
+    .dt-node { position: absolute; transform: translate(-50%, -50%); width: clamp(46px, 4.6vw, 66px); aspect-ratio: 1; cursor: pointer; z-index: 3; }
+    .dt-node .ring { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; position: relative;
+      background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--dt-c) 34%, var(--theme-color-1)), var(--theme-color-1) 72%);
+      border: 2px solid var(--dt-c); box-shadow: 0 0 0 4px color-mix(in srgb, var(--dt-c) 16%, transparent), 0 6px 18px rgba(0,0,0,.45);
+      transition: transform .16s ease, box-shadow .16s ease; }
+    .dt-node:hover .ring, .dt-node.sel .ring { transform: scale(1.12); box-shadow: 0 0 0 5px color-mix(in srgb, var(--dt-c) 30%, transparent), 0 0 26px var(--dt-c); }
+    .dt-node .snum { font-weight: 800; font-size: clamp(.72rem, 1.1vw, .98rem); color: #fff; }
+    .dt-node .cap { position: absolute; top: 104%; left: 50%; transform: translateX(-50%); white-space: nowrap;
+      font-size: clamp(.54rem, .74vw, .72rem); font-weight: 600; color: var(--theme-color-soft-text); text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+    .dt-hub { position: absolute; transform: translate(-50%, -50%); z-index: 2; text-align: center; }
+    .dt-hub .box { padding: .5rem .8rem; border-radius: 10px; font-weight: 700; font-size: clamp(.62rem,.9vw,.82rem);
+      color: var(--theme-color-std-text); background: color-mix(in srgb, var(--theme-color-primary) 20%, var(--theme-color-1));
+      border: 1.5px solid var(--theme-color-primary); box-shadow: 0 0 22px color-mix(in srgb, var(--theme-color-primary) 40%, transparent); }
+    .dt-hub small { display:block; font-weight:600; font-size:.72em; color: var(--theme-color-soft-text); }
+    .dt-flow { stroke-dasharray: 7 9; animation: dtflow 1.1s linear infinite; }
+    @keyframes dtflow { to { stroke-dashoffset: -32; } }
+    .dt-legend { position:absolute; top:2.5%; right:1.5%; display:flex; gap:.9rem; flex-wrap:wrap; z-index:4;
+      background: color-mix(in srgb, var(--theme-color-1) 70%, transparent); border:1px solid var(--theme-color-soft-bdr);
+      padding:.4rem .7rem; border-radius:8px; font-size:.68rem; color:var(--theme-color-soft-text); }
+    .dt-legend span { display:inline-flex; align-items:center; gap:.35rem; }
+    .dt-legend i { width:10px; height:10px; border-radius:50%; display:inline-block; }
+
+    @media (max-width: 820px){ .ail-attrs { grid-template-columns: 1fr; } .ail-attr { border-right: none; } .dt-node .cap { display:none; } }
   </style>
 </head>
 <body>
@@ -106,73 +135,69 @@
 
     <ix-menu enable-toggle-theme aria-label="Main navigation">
       <ix-menu-item id="nav-0" icon="factory-reset" active>Lifecycle</ix-menu-item>
-      <ix-menu-item id="nav-1" icon="ai">Agent Integration</ix-menu-item>
-      <ix-menu-item id="nav-2" icon="connector">Bridge Tracker</ix-menu-item>
-      <ix-menu-item id="nav-3" icon="barchart">Scorecard</ix-menu-item>
+      <ix-menu-item id="nav-1" icon="distribution">Digital Thread</ix-menu-item>
+      <ix-menu-item id="nav-2" icon="ai">Agent Integration</ix-menu-item>
+      <ix-menu-item id="nav-3" icon="connector">Bridge Tracker</ix-menu-item>
+      <ix-menu-item id="nav-4" icon="barchart">Scorecard</ix-menu-item>
     </ix-menu>
 
     <ix-content>
       <div class="ail-page">
-
-        <!-- Hero (shared) -->
         <section class="ail-hero">
           <span class="kicker">FlyNow · "Fly in 3" · QX-250 Quadcopter</span>
           <h1>The entire RFP&nbsp;→&nbsp;Delivery cycle, mapped to how an AI agent drives every Siemens product.</h1>
           <p>Fourteen lifecycle stages, each verified against the <em>actual</em> Siemens product interface — the exact API, whether it runs headless, how the agent load-balances against it, and whether it is natively agent-ready or needs a custom bridge. Built entirely on the Siemens iX design system.</p>
-          <div class="ail-thread" id="threadStrip"></div>
+          <div class="ail-thread-strip" id="threadStrip"></div>
           <div class="ail-grid ail-grid--kpi" id="kpiRow"></div>
         </section>
 
-        <!-- ===== VIEW 0: LIFECYCLE ===== -->
+        <!-- VIEW 0: LIFECYCLE -->
         <section class="ail-view active" id="view-0">
           <div class="ail-spread">
-            <div>
-              <div class="ail-h">RFP → Delivery lifecycle</div>
-              <p class="ail-sub">Select any stage to inspect exactly how the agent works with that Siemens product.</p>
-            </div>
+            <div><div class="ail-h">RFP → Delivery lifecycle</div><p class="ail-sub">Select any stage to inspect exactly how the agent works with that Siemens product.</p></div>
             <div class="ail-row" id="tierLegend"></div>
           </div>
           <div class="ail-grid ail-grid--stage" id="stageGrid" style="margin-top:.6rem;"></div>
           <div id="stageDetail" style="margin-top:1rem;"></div>
         </section>
 
-        <!-- ===== VIEW 1: AGENT INTEGRATION ===== -->
+        <!-- VIEW 1: DIGITAL THREAD (rich flow diagram) -->
         <section class="ail-view" id="view-1">
-          <div class="ail-h">How the agent connects &amp; scales</div>
-          <p class="ail-sub">Orchestration flows top-down: request → Mendix Digital Fabric queue → token-gated headless worker pools → Siemens products.</p>
-          <ix-card variant="outline" passive class="ail-fill-card">
-            <div class="ail-card-body ail-stack" id="archDiagram"></div>
-          </ix-card>
-          <div class="ail-h">Per-product connection matrix</div>
-          <p class="ail-sub">Protocol, authentication, and the load-balancer / pooling pattern the agent uses.</p>
-          <ix-card variant="outline" passive class="ail-fill-card">
-            <div class="ail-card-body"><div style="overflow:auto;"><table class="ail-mtx" id="connMatrix"></table></div></div>
-          </ix-card>
+          <div class="ail-h">QX-250 Digital Thread</div>
+          <p class="ail-sub">The woven thread across four capability domains and three lifecycle phases — Design → Realize → Optimize. Every node is a live Siemens product; thread color = agentic-readiness tier. Click a node for the verified agent interface.</p>
+          <div class="dt-wrap" id="dtWrap">
+            <svg class="dt-svg" id="dtSvg" viewBox="0 0 1400 640" preserveAspectRatio="none" aria-hidden="true"></svg>
+          </div>
+          <div id="dtDetail" style="margin-top:1rem;"></div>
         </section>
 
-        <!-- ===== VIEW 2: BRIDGE TRACKER ===== -->
+        <!-- VIEW 2: AGENT INTEGRATION -->
         <section class="ail-view" id="view-2">
+          <div class="ail-h">How the agent connects &amp; scales</div>
+          <p class="ail-sub">Orchestration flows top-down: request → Mendix Digital Fabric queue → token-gated headless worker pools → Siemens products.</p>
+          <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body ail-stack" id="archDiagram"></div></ix-card>
+          <div class="ail-h">Per-product connection matrix</div>
+          <p class="ail-sub">Protocol, authentication, and the load-balancer / pooling pattern the agent uses.</p>
+          <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body"><div style="overflow:auto;"><table class="ail-mtx" id="connMatrix"></table></div></div></ix-card>
+        </section>
+
+        <!-- VIEW 3: BRIDGE TRACKER -->
+        <section class="ail-view" id="view-3">
           <div class="ail-h">Native vs. custom-bridge tracker</div>
           <p class="ail-sub">What is available for agentic interaction today — and what we must build bridges for.</p>
           <div class="ail-grid ail-grid--3" id="tierCols"></div>
-
           <div class="ail-h">Custom bridges required (the gap Griffin's Work fills)</div>
-          <ix-card variant="outline" passive class="ail-fill-card">
-            <div class="ail-card-body"><div style="overflow:auto;"><table class="ail-mtx" id="bridgeTable"></table></div></div>
-          </ix-card>
-
+          <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body"><div style="overflow:auto;"><table class="ail-mtx" id="bridgeTable"></table></div></div></ix-card>
           <div class="ail-h">Official Siemens MCP &amp; AI inventory</div>
           <p class="ail-sub">Verified 2026-07-22. Only design-system docs and Mendix ship first-party MCP today; no engineering-tool MCP exists.</p>
           <div class="ail-grid ail-grid--mcp" id="mcpGrid"></div>
         </section>
 
-        <!-- ===== VIEW 3: SCORECARD ===== -->
-        <section class="ail-view" id="view-3">
+        <!-- VIEW 4: SCORECARD -->
+        <section class="ail-view" id="view-4">
           <div class="ail-h">Agentic-readiness scorecard</div>
           <p class="ail-sub">0–10, verified against actual product interfaces. Color = tier. Amesim, NX &amp; Tecnomatix scores were corrected upward from the provisional goal spec; NX &amp; Capital confirmed as bridge-required.</p>
-          <ix-card variant="outline" passive class="ail-fill-card">
-            <div class="ail-card-body"><div id="scoreChart"></div></div>
-          </ix-card>
+          <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body"><div id="scoreChart"></div></div></ix-card>
         </section>
 
         <div class="ail-foot">
@@ -186,42 +211,49 @@
 
   <script>
   // ================= VERIFIED DATA (mirrors AGENTIC_READINESS_VERIFIED.md) =================
-  // tier -> iX semantic variant (drives ix-pill variant + token color lookups)
   const TIER = {
     native: { label:'Native-ready', variant:'success', token:'--theme-color-success', icon:'success' },
     bridge: { label:'Needs bridge', variant:'warning', token:'--theme-color-warning', icon:'connector' },
     wall:   { label:'Custom bridge', variant:'alarm', token:'--theme-color-alarm', icon:'warning' },
   };
+  // lane: 0..3 capability domain · x: pixel cx in 1400-wide canvas · phase: Design|Realize|Optimize
   const STAGES = [
-    { no:'01', name:'RFP Intake & Capture', prod:'Doc ingestion → Polarion/TC', tier:'bridge', score:null,
+    { no:'01', name:'RFP Intake & Capture', prod:'Doc ingestion → Polarion/TC', tier:'bridge', score:null, lane:0, x:300, phase:'Design',
       api:'LLM parse of the 41-page USAF spec → write requirements via Polarion REST v1.', headless:'Yes', auth:'Bearer PAT / SSO', lb:'HTTP load balancer', note:'Ingestion bridge; no native "read-a-PDF" product endpoint.' },
-    { no:'02', name:'Requirements & RFLP', prod:'Polarion ALM (+ TC SysML)', tier:'native', score:8,
+    { no:'02', name:'Requirements & RFLP', prod:'Polarion ALM (+ TC SysML)', tier:'native', score:8, lane:0, x:470, phase:'Design',
       api:'REST API v1 /polarion/rest/v1 (OpenAPI), OSLC, SOAP/WSDL. Polarion 2606 Copilot API. Community MCP peakflames/PolarionMcpServers.', headless:'Yes', auth:'Personal Access Token (bearer) / SAML SSO', lb:'Multi-instance cluster + HTTP LB', note:'Closest to native agent-ready in the PLM/ALM tier. 51 requirements trace-linked.' },
-    { no:'03', name:'Reliability / PhSM', prod:'PHM Technology MADe', tier:'wall', score:3,
+    { no:'03', name:'Reliability / PhSM', prod:'PHM Technology MADe', tier:'wall', score:3, lane:1, x:300, phase:'Design',
       api:'Import-only API (SysML v2 ingest). NO headless-run and NO results-extraction API. FMECA/FTA/RBD generated only in-GUI.', headless:'No', auth:'—', lb:'—', note:'24 order-1 cut sets → forced dual battery, dual FC, BMS/OR-ing. Hard wall for agents.' },
-    { no:'04', name:'Systems Sim (6-DOF)', prod:'Simcenter Amesim', tier:'bridge', score:7,
+    { no:'04', name:'Systems Sim (6-DOF)', prod:'Simcenter Amesim', tier:'bridge', score:7, lane:1, x:470, phase:'Design',
       api:'Python API (amesim / legacy ame_apy), CMD batch over .amegp files. Model must be pre-compiled.', headless:'Yes (CMD, no GUI)', auth:'Local license feature', lb:'Worker-session pool', note:'6-DOF cascade controller: attitude recovery ~0.86s, ζ≈0.15. Geometry & control laws coupled.' },
-    { no:'05', name:'Electrical / EWIS', prod:'Siemens Capital', tier:'wall', score:2,
+    { no:'05', name:'Electrical / EWIS', prod:'Siemens Capital', tier:'wall', score:2, lane:2, x:310, phase:'Design',
       api:'NO public API / CLI / SDK. Integration only via file/PLM (Teamcenter) handoff or RPA.', headless:'No', auth:'—', lb:'—', note:'Hardest wall. Griffin built a custom Capital Java Bridge + Project XML generator. 13 comp → 13 devices, AWG 8.' },
-    { no:'06', name:'Mechanical CAD', prod:'Siemens NX / NX Open', tier:'bridge', score:6,
+    { no:'06', name:'Mechanical CAD', prod:'Siemens NX / NX Open', tier:'bridge', score:6, lane:2, x:490, phase:'Design',
       api:'NX Open (.NET/C++/Python NXOpen), Journaling, run_journal, -batch. NO official MCP (only 3rd-party DreamEnding/NX_MCP). Design Copilot NX = non-programmatic in-app assistant.', headless:'Yes — NX X "Server User" license (since NX2506.4000)', auth:'NX license token (per session)', lb:'License-token pool + Dispatcher / Mendix Digital Fabric', note:'53-component assembly on a single datum frame via griffin-p-quinn/nx-mcp. Every batch run burns a full license token — the core scaling bottleneck.' },
-    { no:'07', name:'Structural CAE', prod:'Simcenter 3D / Nastran', tier:'bridge', score:7,
+    { no:'07', name:'Structural CAE', prod:'Simcenter 3D / Nastran', tier:'bridge', score:7, lane:3, x:320, phase:'Design',
       api:'NXOpen.CAE (C#/Python) for pre/post. Nastran solver CLI: nastran deck.dat — SOL 101 / 106 fully headless. HEEDS for design-space exploration.', headless:'Yes (solver decoupled)', auth:'NX authoring + solver license', lb:'Solver farm + dual-license mgmt', note:'Von Mises safety factor 1.63 @ 5G pull-up load case.' },
-    { no:'08', name:'Embedded / FPGA', prod:'Siemens EDA Questa/ModelSim', tier:'native', score:9,
+    { no:'08', name:'Embedded / FPGA', prod:'Siemens EDA Questa/ModelSim', tier:'native', score:9, lane:3, x:500, phase:'Design',
       api:'vsim -c (console), -do <file>.do (TCL), qrun, -batch. Deterministic text-in/text-out.', headless:'Yes — first-class', auth:'EDA license per invocation', lb:'CI regression farm', note:'Highest agentic readiness of the toolchain. 8 SystemVerilog RTL blocks, self-checking testbenches.' },
-    { no:'09', name:'Program & Build', prod:'Teamcenter (IPP&E)', tier:'bridge', score:6,
+    { no:'09', name:'Program & Build', prod:'Teamcenter (IPP&E)', tier:'bridge', score:6, lane:0, x:900, phase:'Realize',
       api:'SOA (.NET Teamcenter.Soa.Client / Java), ITK, TcXML, StructureManagementService. Copilot/AI-BOM-Agent are closed UX, not open MCP.', headless:'Yes (SOA/ITK)', auth:'Session via CredentialManager; SSO (SAML/OIDC) at AWC gateway', lb:'Pool Manager — 4-tier tcserver pool', note:'12-task schedule, 22-item EBOM, stage MBOM, 10-op process plan.' },
-    { no:'10', name:'Mfg / Assembly Sim', prod:'Tecnomatix Process Simulate & Plant Sim', tier:'native', score:8,
+    { no:'10', name:'Mfg / Assembly Sim', prod:'Tecnomatix Process Simulate & Plant Sim', tier:'native', score:8, lane:1, x:930, phase:'Realize',
       api:'COM/ActiveX RemoteControl, SimTalk 2.0, pyplantsim, .NET automation. Headless via visible=False, suppress_3d.', headless:'Yes (COM)', auth:'Windows/COM licensed instance', lb:'COM licensed-instance pool', note:'DTC Co-Pilot: robotic fastening, RULA ergonomics (score 2), AMR dispatch.' },
-    { no:'11', name:'Production Execution / MES', prod:'Opcenter (APS/Execution)', tier:'native', score:8,
+    { no:'11', name:'Production / MES', prod:'Opcenter (APS/Execution)', tier:'native', score:8, lane:2, x:930, phase:'Realize',
       api:'REST + OData v4.1 (Intelligence API; Execution Core REST for recipe/formula/MES objects).', headless:'Yes', auth:'OAuth / API key', lb:'HTTP load balancer', note:'Line tact time 14.2 min after virtual line balancing.' },
-    { no:'12', name:'Shop-floor Telemetry / Edge', prod:'Industrial Edge + Insights Hub', tier:'native', score:9,
+    { no:'12', name:'Telemetry / Edge', prod:'Industrial Edge + Insights Hub', tier:'native', score:9, lane:1, x:1240, phase:'Optimize',
       api:'REST services, MindConnect MQTT (cert-managed), OPC UA (PubSub over MQTT/JSON). Apps are Docker containers.', headless:'Yes', auth:'X.509 certs / OAuth', lb:'Broker / edge cluster', note:'Real-time torque + laser-scan ingestion for as-built vs CAD compare.' },
-    { no:'13', name:'Verification & Validation', prod:'Teamcenter V&V', tier:'bridge', score:6,
+    { no:'13', name:'Verification & Validation', prod:'Teamcenter V&V', tier:'bridge', score:6, lane:2, x:1240, phase:'Optimize',
       api:'SOA services + trace-link objects. Programmatic Target→Measured verification.', headless:'Yes', auth:'Session / SSO', lb:'Pool Manager', note:'51/51 requirements PASS, 24 RFP standards section-linked (100%).' },
-    { no:'14', name:'Delivery / Airworthiness', prod:'Teamcenter + AI Lifecycle Harness', tier:'bridge', score:null,
+    { no:'14', name:'Delivery / Airworthiness', prod:'Teamcenter + AI Lifecycle Harness', tier:'bridge', score:null, lane:3, x:1240, phase:'Optimize',
       api:'SOA cert sign-off + Human-in-the-Loop approval gate stewarded by the AI Lifecycle Harness (Agentic WBS).', headless:'Yes', auth:'Session / SSO + HITL', lb:'—', note:'Final Certificate of Airworthiness: 0 open NCs → 100% CERTIFIED FLIGHT READY.' },
   ];
+  const LANES = [
+    { name:'Systems & Requirements', icon:'hierarchy', y:120 },
+    { name:'Accelerated Product Dev', icon:'ai', y:250 },
+    { name:'Smart Manufacturing', icon:'factory-reset', y:390 },
+    { name:'Service, Lifecycle & Analytics', icon:'barchart', y:515 },
+  ];
+  const PHASES = [ { name:'Design', x0:230, x1:770, cx:500 }, { name:'Realize', x0:770, x1:1075, cx:922 }, { name:'Optimize', x0:1075, x1:1385, cx:1235 } ];
 
   const BRIDGES = [
     ['Capital','2/10','wall','No public API at all — hardest wall','Capital Java Bridge + Project XML generator; harness materialized in NX'],
@@ -230,7 +262,6 @@
     ['Teamcenter','6/10','bridge','Rich SOA/ITK, but Copilot/AI-BOM-Agent are closed UX','SOA C# DataManagement wrapper + AWC RDS data service'],
     ['Simcenter Amesim/3D','7/10','bridge','Headless solve exists; no agent layer + license gating','Python ame_apy / NXOpen.CAE + Nastran CLI wrappers'],
   ];
-
   const MCP_INV = [
     { nm:'Siemens iX docs MCP', st:'yes', txt:'First-party. mcp.siemens.com / ix.siemens.io — design-system docs (RAG) only. Powers THIS site.' },
     { nm:'Mendix MCP', st:'yes', txt:'First-party, both directions: MCP Server module (microflows→tools) + MCP Client & Maia MCP Client (Studio Pro 11.8+).' },
@@ -247,13 +278,11 @@
   const el = (id) => document.getElementById(id);
 
   // ---- thread strip ----
-  el('threadStrip').innerHTML = STAGES.map((s,i)=>`
-    <div class="node">
-      <div class="chip"><ix-icon name="${TIER[s.tier].icon}" size="16"></ix-icon></div>
-      <div class="lbl">${s.name.split(' ')[0]}${s.name.split(' ')[1] ? '<br/>'+s.name.split(' ').slice(1).join(' ') : ''}</div>
-    </div>`).join('');
+  el('threadStrip').innerHTML = STAGES.map((s)=>`
+    <div class="node"><div class="chip"><ix-icon name="${TIER[s.tier].icon}" size="16"></ix-icon></div>
+      <div class="lbl">${s.name.split(' ')[0]}${s.name.split(' ')[1] ? '<br/>'+s.name.split(' ').slice(1).join(' ') : ''}</div></div>`).join('');
 
-  // ---- KPI row (ix-kpi in ix-card) ----
+  // ---- KPI row ----
   const kpis = [
     { label:'RFP→Delivery stages verified', value:14, state:'neutral' },
     { label:'Native agent-ready products', value:6, unit:'/ 14', state:'neutral' },
@@ -261,65 +290,109 @@
     { label:'Build time · 0 human tool clicks', value:'23.8', unit:'h', state:'neutral' },
   ];
   el('kpiRow').innerHTML = kpis.map(k=>`
-    <ix-card variant="filled" passive class="ail-fill-card">
-      <div class="ail-card-body">
-        <ix-kpi label="${k.label}" value="${k.value}" ${k.unit?`unit="${k.unit}"`:''} state="${k.state}" orientation="vertical"></ix-kpi>
-      </div>
-    </ix-card>`).join('');
+    <ix-card variant="filled" passive class="ail-fill-card"><div class="ail-card-body">
+      <ix-kpi label="${k.label}" value="${k.value}" ${k.unit?`unit="${k.unit}"`:''} state="${k.state}" orientation="vertical"></ix-kpi>
+    </div></ix-card>`).join('');
 
-  // ---- tier legend (pills) ----
-  el('tierLegend').innerHTML = Object.entries(TIER).map(([k,v])=>
-    `<ix-pill variant="${v.variant}">${v.label}</ix-pill>`).join('');
+  // ---- tier legend ----
+  el('tierLegend').innerHTML = Object.values(TIER).map(v=>`<ix-pill variant="${v.variant}">${v.label}</ix-pill>`).join('');
 
-  // ---- stage grid (ix-card + ix-pill) ----
+  // ---- stage grid ----
   el('stageGrid').innerHTML = STAGES.map((s,i)=>`
-    <ix-card variant="filled" class="ail-fill-card ail-stage" data-i="${i}">
-      <div class="ail-card-body">
-        <div class="no">STAGE ${s.no}</div>
-        <div class="nm">${s.name}</div>
-        <div class="pr">${s.prod}</div>
-        <div class="ail-spread" style="margin-top:.35rem;">
-          <ix-pill variant="${TIER[s.tier].variant}" outline>${TIER[s.tier].label}</ix-pill>
-          ${s.score!=null ? `<ix-pill variant="${TIER[s.tier].variant}">${s.score}/10</ix-pill>` : `<ix-pill variant="neutral" outline>HITL</ix-pill>`}
-        </div>
-      </div>
-    </ix-card>`).join('');
+    <ix-card variant="filled" class="ail-fill-card ail-stage" data-i="${i}"><div class="ail-card-body">
+      <div class="no">STAGE ${s.no}</div><div class="nm">${s.name}</div><div class="pr">${s.prod}</div>
+      <div class="ail-spread" style="margin-top:.35rem;">
+        <ix-pill variant="${TIER[s.tier].variant}" outline>${TIER[s.tier].label}</ix-pill>
+        ${s.score!=null ? `<ix-pill variant="${TIER[s.tier].variant}">${s.score}/10</ix-pill>` : `<ix-pill variant="neutral" outline>HITL</ix-pill>`}
+      </div></div></ix-card>`).join('');
 
-  function drawDetail(i){
-    const s = STAGES[i];
-    el('stageGrid').querySelectorAll('ix-card').forEach(c=>{ c.selected = (+c.dataset.i === i); });
-    el('stageDetail').innerHTML = `
-      <ix-card variant="outline" passive class="ail-fill-card">
-        <div class="ail-card-body" style="gap:0;padding:0;">
-          <div class="ail-spread" style="padding:1.1rem 1.2rem;">
-            <div class="ail-row" style="gap:1rem;align-items:flex-start;">
-              <div class="ail-detail-num">${s.no}</div>
-              <div><div class="ail-title" style="font-size:1.2rem;">${s.name}</div><div class="pr" style="color:var(--theme-color-primary);font-size:.9rem;margin-top:.15rem;">${s.prod}</div></div>
-            </div>
-            <div class="ail-row">
-              <ix-pill variant="${TIER[s.tier].variant}" outline>${TIER[s.tier].label}</ix-pill>
-              ${s.score!=null ? `<ix-pill variant="${TIER[s.tier].variant}">${s.score}/10</ix-pill>` : ''}
-            </div>
+  function detailCard(s){
+    return `<ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body" style="gap:0;padding:0;">
+        <div class="ail-spread" style="padding:1.1rem 1.2rem;">
+          <div class="ail-row" style="gap:1rem;align-items:flex-start;">
+            <div class="ail-detail-num">${s.no}</div>
+            <div><div class="ail-title" style="font-size:1.2rem;">${s.name}</div><div style="color:var(--theme-color-primary);font-size:.9rem;margin-top:.15rem;">${s.prod}</div></div>
           </div>
-          <div class="ail-attrs">
-            <div class="ail-attr"><div class="lab">Agent Interface (verified)</div><div class="val ail-mono">${s.api}</div></div>
-            <div class="ail-attr"><div class="lab">Headless Execution</div><div class="val">${s.headless}</div></div>
-            <div class="ail-attr"><div class="lab">Authentication</div><div class="val">${s.auth}</div></div>
-            <div class="ail-attr"><div class="lab">Load Balancing / Scale Pattern</div><div class="val">${s.lb}</div></div>
-            <div class="ail-attr full"><div class="lab">QX-250 Ground Truth</div><div class="val">${s.note}</div></div>
+          <div class="ail-row">
+            <ix-pill variant="${TIER[s.tier].variant}" outline>${TIER[s.tier].label}</ix-pill>
+            ${s.score!=null ? `<ix-pill variant="${TIER[s.tier].variant}">${s.score}/10</ix-pill>` : ''}
           </div>
         </div>
-      </ix-card>`;
+        <div class="ail-attrs">
+          <div class="ail-attr"><div class="lab">Agent Interface (verified)</div><div class="val ail-mono">${s.api}</div></div>
+          <div class="ail-attr"><div class="lab">Headless Execution</div><div class="val">${s.headless}</div></div>
+          <div class="ail-attr"><div class="lab">Authentication</div><div class="val">${s.auth}</div></div>
+          <div class="ail-attr"><div class="lab">Load Balancing / Scale Pattern</div><div class="val">${s.lb}</div></div>
+          <div class="ail-attr full"><div class="lab">QX-250 Ground Truth</div><div class="val">${s.note}</div></div>
+        </div></div></ix-card>`;
+  }
+  function drawDetail(i){
+    STAGES.forEach((_,j)=>{ const c = el('stageGrid').querySelector(`[data-i="${j}"]`); if(c) c.selected = (j===i); });
+    el('stageDetail').innerHTML = detailCard(STAGES[i]);
   }
   el('stageGrid').addEventListener('click', e=>{ const c = e.target.closest('ix-card'); if(c) drawDetail(+c.dataset.i); });
-  drawDetail(5); // NX — the headline gap
+  drawDetail(5);
 
-  // ---- View 1: architecture ----
+  // ================= DIGITAL THREAD DIAGRAM =================
+  function buildThread(){
+    const wrap = el('dtWrap'), svg = el('dtSvg');
+    const X = 1400, Y = 640;
+    const cx = s => s.x, cy = s => LANES[s.lane].y;
+
+    // phase bands + vertical dividers (SVG)
+    let sgml = '';
+    PHASES.forEach((p,idx)=>{
+      const fill = idx % 2 === 0 ? 'rgba(255,255,255,0.020)' : 'rgba(255,255,255,0.045)';
+      sgml += `<rect x="${p.x0}" y="18" width="${p.x1-p.x0}" height="${Y-70}" fill="${fill}" rx="10"/>`;
+      if(idx>0) sgml += `<line x1="${p.x0}" y1="24" x2="${p.x0}" y2="${Y-56}" stroke="${tok('--theme-color-soft-bdr')}" stroke-dasharray="3 6" opacity=".7"/>`;
+    });
+    // lane guide lines
+    LANES.forEach(l=> sgml += `<line x1="220" y1="${l.y}" x2="1385" y2="${l.y}" stroke="${tok('--theme-color-soft-bdr')}" opacity=".28"/>`);
+
+    // sequential thread 01→…→14 (curved, colored by source tier, animated flow)
+    for(let i=0;i<STAGES.length-1;i++){
+      const a = STAGES[i], b = STAGES[i+1];
+      const ax=cx(a), ay=cy(a), bx=cx(b), by=cy(b);
+      const dx = Math.max(60,(bx-ax)*0.45);
+      const d = `M ${ax} ${ay} C ${ax+dx} ${ay}, ${bx-dx} ${by}, ${bx} ${by}`;
+      const c = tierColor(a.tier);
+      sgml += `<path d="${d}" fill="none" stroke="${c}" stroke-width="3" opacity=".28"/>`;
+      sgml += `<path class="dt-flow" d="${d}" fill="none" stroke="${c}" stroke-width="2.4" opacity=".95" stroke-linecap="round"/>`;
+    }
+    svg.innerHTML = sgml;
+
+    // phase labels
+    let html = '';
+    PHASES.forEach(p=> html += `<div class="dt-phase-lbl" style="left:${p.cx/X*100}%">${p.name}<small>${p.name==='Design'?'Requirements → Engineering':p.name==='Realize'?'Build → Manufacture':'Verify → Deliver'}</small></div>`);
+    // lane labels
+    LANES.forEach(l=> html += `<div class="dt-lane-lbl" style="top:${l.y/Y*100}%"><ix-icon name="${l.icon}" size="16"></ix-icon><span>${l.name}</span></div>`);
+    // nodes
+    STAGES.forEach((s,i)=>{
+      html += `<div class="dt-node" data-i="${i}" style="left:${cx(s)/X*100}%; top:${cy(s)/Y*100}%; --dt-c:${tierColor(s.tier)}">
+          <div class="ring"><span class="snum">${s.no}</span></div>
+          <div class="cap">${prodName(s.prod)}</div>
+        </div>`;
+    });
+    wrap.insertAdjacentHTML('beforeend', html);
+    wrap.insertAdjacentHTML('beforeend', `<div class="dt-legend">
+      <span><i style="background:${tierColor('native')}"></i>Native</span>
+      <span><i style="background:${tierColor('bridge')}"></i>Bridge</span>
+      <span><i style="background:${tierColor('wall')}"></i>Wall</span></div>`);
+
+    wrap.querySelectorAll('.dt-node').forEach(n=> n.addEventListener('click', ()=>{
+      const i = +n.dataset.i;
+      wrap.querySelectorAll('.dt-node').forEach(m=>m.classList.toggle('sel', m===n));
+      el('dtDetail').innerHTML = detailCard(STAGES[i]);
+      el('dtDetail').scrollIntoView({behavior:'smooth', block:'nearest'});
+    }));
+  }
+  let threadBuilt=false;
+  function ensureThread(){ if(!threadBuilt){ buildThread(); threadBuilt=true; } }
+
+  // ---- View 2: architecture ----
   el('archDiagram').innerHTML = `
-    <div class="ail-layer"><div class="lt">1 · Request Ingestion</div>
-      AgentCenter Control Tower &amp; web agents → REST/GraphQL gateway. HTTP load balancer fronts the fabric.</div>
-    <div class="ail-layer hl"><div class="lt">2 · Mendix Digital Fabric — Orchestration &amp; Queue Dispatch (official MCP)</div>
-      Asynchronous priority job queue converts synchronous calls into job IDs (JOB-2026-####). State machine + Teamcenter OAuth token management. Exposes microflows as MCP tools.</div>
+    <div class="ail-layer"><div class="lt">1 · Request Ingestion</div>AgentCenter Control Tower &amp; web agents → REST/GraphQL gateway. HTTP load balancer fronts the fabric.</div>
+    <div class="ail-layer hl"><div class="lt">2 · Mendix Digital Fabric — Orchestration &amp; Queue Dispatch (official MCP)</div>Asynchronous priority job queue converts synchronous calls into job IDs (JOB-2026-####). State machine + Teamcenter OAuth token management. Exposes microflows as MCP tools.</div>
     <div class="ail-layer"><div class="lt">3 · License-Token Pool &amp; Load Balancers (per domain)</div>
       <div class="ail-pools">
         <div class="ail-pool"><div class="pn">NX token pool</div><div class="pd">NX X Server-User seats; warm sessions avoid ~18s cold GUI spawn</div></div>
@@ -328,69 +401,40 @@
         <div class="ail-pool"><div class="pn">HTTP LB</div><div class="pd">Polarion / Opcenter / Insights Hub REST clusters</div></div>
       </div></div>
     <div class="ail-layer"><div class="lt">4 · Headless Worker Sessions → Siemens Products</div>
-      <div class="ail-pools">
-        ${STAGES.filter(s=>s.score!=null).map(s=>`<div class="ail-pool" style="border-left:3px solid ${tierColor(s.tier)}"><div class="pn">${prodName(s.prod)}</div><div class="pd">${s.headless}</div></div>`).join('')}
-      </div>
-      <p class="ail-sub" style="margin-top:.6rem;">Results flow back up as artifacts (STEP/JT, .fem, XML, telemetry) → Teamcenter system of record → HITL gate.</p>
-    </div>`;
+      <div class="ail-pools">${STAGES.filter(s=>s.score!=null).map(s=>`<div class="ail-pool" style="border-left:3px solid ${tierColor(s.tier)}"><div class="pn">${prodName(s.prod)}</div><div class="pd">${s.headless}</div></div>`).join('')}</div>
+      <p class="ail-sub" style="margin-top:.6rem;">Results flow back up as artifacts (STEP/JT, .fem, XML, telemetry) → Teamcenter system of record → HITL gate.</p></div>`;
 
-  // ---- connection matrix ----
   el('connMatrix').innerHTML = `<thead><tr><th>Product</th><th>Protocol / Interface</th><th>Auth</th><th>Load balancing</th><th>Tier</th></tr></thead><tbody>${
-    STAGES.filter(s=>s.score!=null).map(s=>`<tr>
-      <td><strong>${prodName(s.prod)}</strong></td>
-      <td class="ail-mono">${s.api.split('.')[0]}.</td>
-      <td>${s.auth}</td>
-      <td>${s.lb}</td>
-      <td><ix-pill variant="${TIER[s.tier].variant}">${s.score}/10</ix-pill></td>
-    </tr>`).join('')}</tbody>`;
+    STAGES.filter(s=>s.score!=null).map(s=>`<tr><td><strong>${prodName(s.prod)}</strong></td><td class="ail-mono">${s.api.split('.')[0]}.</td><td>${s.auth}</td><td>${s.lb}</td><td><ix-pill variant="${TIER[s.tier].variant}">${s.score}/10</ix-pill></td></tr>`).join('')}</tbody>`;
 
-  // ---- View 2: tiers ----
+  // ---- View 3: tiers ----
   const tierGroups = { native:[], bridge:[], wall:[] };
   STAGES.filter(s=>s.score!=null).forEach(s=>tierGroups[s.tier].push(s));
-  const tierMeta = [
-    ['native','Native agent-ready','Open programmatic interface, headless, deterministic'],
-    ['bridge','Scriptable — needs bridge','Rich API but no agent/MCP layer; wrap it'],
-    ['wall','Custom bridge required','No or import-only API — a wall for agents'],
-  ];
+  const tierMeta = [['native','Native agent-ready','Open programmatic interface, headless, deterministic'],['bridge','Scriptable — needs bridge','Rich API but no agent/MCP layer; wrap it'],['wall','Custom bridge required','No or import-only API — a wall for agents']];
   el('tierCols').innerHTML = tierMeta.map(([k,t,d])=>`
-    <ix-card variant="outline" passive class="ail-fill-card">
-      <div class="ail-card-body">
-        <div class="ail-row" style="gap:.5rem;"><ix-icon name="${TIER[k].icon}" style="color:${tierColor(k)}"></ix-icon><span class="ail-title">${t}</span></div>
-        <p class="ail-eyebrow" style="margin:.1rem 0 .3rem;">${d}</p>
-        ${tierGroups[k].sort((a,b)=>b.score-a.score).map(s=>`
-          <div class="ail-tier-item">
-            <div><div class="nm">${prodName(s.prod)}</div></div>
-            <ix-pill variant="${TIER[k].variant}">${s.score}</ix-pill>
-          </div>`).join('')}
-      </div>
-    </ix-card>`).join('');
+    <ix-card variant="outline" passive class="ail-fill-card"><div class="ail-card-body">
+      <div class="ail-row" style="gap:.5rem;"><ix-icon name="${TIER[k].icon}" style="color:${tierColor(k)}"></ix-icon><span class="ail-title">${t}</span></div>
+      <p class="ail-eyebrow" style="margin:.1rem 0 .3rem;">${d}</p>
+      ${tierGroups[k].sort((a,b)=>b.score-a.score).map(s=>`<div class="ail-tier-item"><div class="nm">${prodName(s.prod)}</div><ix-pill variant="${TIER[k].variant}">${s.score}</ix-pill></div>`).join('')}
+    </div></ix-card>`).join('');
 
-  // ---- bridge table ----
-  el('bridgeTable').innerHTML =
-    `<thead><tr><th>Product</th><th>Score</th><th>Why a bridge is needed</th><th>Griffin's bridge</th></tr></thead><tbody>${
-    BRIDGES.map(b=>`<tr>
-      <td><strong>${b[0]}</strong></td>
-      <td><ix-pill variant="${TIER[b[2]].variant}">${b[1]}</ix-pill></td>
-      <td>${b[3]}</td>
-      <td class="ail-mono">${b[4]}</td>
-    </tr>`).join('')}</tbody>`;
+  el('bridgeTable').innerHTML = `<thead><tr><th>Product</th><th>Score</th><th>Why a bridge is needed</th><th>Griffin's bridge</th></tr></thead><tbody>${
+    BRIDGES.map(b=>`<tr><td><strong>${b[0]}</strong></td><td><ix-pill variant="${TIER[b[2]].variant}">${b[1]}</ix-pill></td><td>${b[3]}</td><td class="ail-mono">${b[4]}</td></tr>`).join('')}</tbody>`;
 
-  // ---- mcp inventory ----
   const stMap = { yes:{v:'success',t:'Shipped',i:'success'}, no:{v:'alarm',t:'None',i:'warning'}, part:{v:'warning',t:'Community/partial',i:'connector'} };
   el('mcpGrid').innerHTML = MCP_INV.map(m=>`
-    <ix-card variant="filled" passive class="ail-fill-card">
-      <div class="ail-card-body">
-        <div class="ail-row" style="gap:.5rem;"><ix-pill variant="${stMap[m.st].v}" icon="${stMap[m.st].i}">${stMap[m.st].t}</ix-pill><span class="ail-title" style="font-size:.95rem;">${m.nm}</span></div>
-        <p class="ail-muted" style="margin:.2rem 0 0;font-size:.82rem;line-height:1.45;">${m.txt}</p>
-      </div>
-    </ix-card>`).join('');
+    <ix-card variant="filled" passive class="ail-fill-card"><div class="ail-card-body">
+      <div class="ail-row" style="gap:.5rem;"><ix-pill variant="${stMap[m.st].v}" icon="${stMap[m.st].i}">${stMap[m.st].t}</ix-pill><span class="ail-title" style="font-size:.95rem;">${m.nm}</span></div>
+      <p class="ail-muted" style="margin:.2rem 0 0;font-size:.82rem;line-height:1.45;">${m.txt}</p>
+    </div></ix-card>`).join('');
 
-  // ---- View 3: chart ----
+  // ---- View 4: chart (echarts lazy-loaded, self-hosted) ----
   let chart;
-  function drawChart(){
-    if(chart) return;
-    const all = [...STAGES.filter(s=>s.score!=null).map(s=>({n:prodName(s.prod), v:s.score, t:s.tier})),
-                 {n:'Mendix Digital Fabric', v:9, t:'native'}];
+  function ensureECharts(){ return new Promise((res)=>{ if(window.echarts) return res(); const sc=document.createElement('script'); sc.src='assets/echarts.min.js'; sc.onload=()=>res(); document.head.appendChild(sc); }); }
+  async function drawChart(){
+    await ensureECharts();
+    if(chart){ chart.resize(); return; }
+    const all = [...STAGES.filter(s=>s.score!=null).map(s=>({n:prodName(s.prod), v:s.score, t:s.tier})), {n:'Mendix Digital Fabric', v:9, t:'native'}];
     all.sort((a,b)=>a.v-b.v);
     chart = echarts.init(el('scoreChart'), null, {renderer:'canvas'});
     chart.setOption({
@@ -398,22 +442,19 @@
       tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
       xAxis:{ type:'value', max:10, splitLine:{lineStyle:{color:'rgba(255,255,255,.06)'}}, axisLabel:{color:tok('--theme-color-weak-text')} },
       yAxis:{ type:'category', data:all.map(d=>d.n), axisLabel:{color:tok('--theme-color-std-text'), fontSize:12}, axisLine:{lineStyle:{color:tok('--theme-color-soft-bdr')}} },
-      series:[{ type:'bar', data:all.map(d=>({ value:d.v, itemStyle:{ color:tierColor(d.t), borderRadius:[0,4,4,0] } })),
-        barWidth:'62%', label:{show:true, position:'right', color:tok('--theme-color-std-text'), fontWeight:700, formatter:'{c}/10'} }]
+      series:[{ type:'bar', data:all.map(d=>({ value:d.v, itemStyle:{ color:tierColor(d.t), borderRadius:[0,4,4,0] } })), barWidth:'62%', label:{show:true, position:'right', color:tok('--theme-color-std-text'), fontWeight:700, formatter:'{c}/10'} }]
     });
   }
 
-  // ---- navigation (ix-menu-item click switches views) ----
+  // ---- navigation ----
   function showView(idx){
     document.querySelectorAll('.ail-view').forEach((v,i)=>v.classList.toggle('active', i===idx));
-    for(let i=0;i<4;i++){ const n = el('nav-'+i); if(n) n.active = (i===idx); }
-    if(idx===3){ drawChart(); setTimeout(()=>chart&&chart.resize(),80); }
+    for(let i=0;i<5;i++){ const n = el('nav-'+i); if(n) n.active = (i===idx); }
+    if(idx===1) ensureThread();
+    if(idx===4){ drawChart(); }
   }
-  for(let i=0;i<4;i++){
-    const n = el('nav-'+i);
-    if(n) n.addEventListener('click', ()=>showView(i));
-  }
-  window.addEventListener('resize', ()=> chart && chart.resize());
+  for(let i=0;i<5;i++){ const n = el('nav-'+i); if(n) n.addEventListener('click', ()=>showView(i)); }
+  window.addEventListener('resize', ()=>{ if(chart) chart.resize(); });
   </script>
 </body>
 </html>
