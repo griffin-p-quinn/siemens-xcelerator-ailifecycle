@@ -84,7 +84,7 @@
 
     /* ============ DIGITAL THREAD CANVAS (rich flow diagram) ============ */
     .dt-wrap {
-      position: relative; width: 100%; aspect-ratio: 1400 / 640; min-height: 420px;
+      position: relative; width: 100%; aspect-ratio: 1400 / 980; min-height: 560px;
       border-radius: 14px; overflow: hidden;
       border: 1px solid var(--theme-color-soft-bdr);
       background:
@@ -176,7 +176,7 @@
           <div class="ail-h">QX-250 Digital Thread</div>
           <p class="ail-sub">The woven thread across four capability domains and three lifecycle phases — Design → Realize → Optimize. Every node is a live Siemens product; thread color = agentic-readiness tier. Click a node for the verified agent interface.</p>
           <div class="dt-wrap" id="dtWrap">
-            <svg class="dt-svg" id="dtSvg" viewBox="0 0 1400 640" preserveAspectRatio="none" aria-hidden="true"></svg>
+            <svg class="dt-svg" id="dtSvg" viewBox="0 0 1400 980" preserveAspectRatio="none" aria-hidden="true"></svg>
           </div>
           <div id="dtDetail" style="margin-top:1rem;"></div>
         </section>
@@ -230,38 +230,42 @@
   const STAGES = [
     { no:'01', name:'RFP Intake & Capture', prod:'Doc ingestion → Polarion/TC', tier:'bridge', score:null, lane:0, x:300, phase:'Design',
       api:'LLM parse of the 41-page USAF spec → write requirements via Polarion REST v1.', headless:'Yes', auth:'Bearer PAT / SSO', lb:'HTTP load balancer', note:'Ingestion bridge; no native "read-a-PDF" product endpoint.' },
-    { no:'02', name:'Requirements & RFLP', prod:'Polarion ALM (+ TC SysML)', tier:'native', score:8, lane:0, x:470, phase:'Design',
+    { no:'02', name:'Requirements & RFLP', prod:'Polarion ALM (+ TC SysML)', tier:'native', score:8, lane:1, x:395, phase:'Design',
       api:'REST API v1 /polarion/rest/v1 (OpenAPI), OSLC, SOAP/WSDL. Polarion 2606 Copilot API. Community MCP peakflames/PolarionMcpServers.', headless:'Yes', auth:'Personal Access Token (bearer) / SAML SSO', lb:'Multi-instance cluster + HTTP LB', note:'Closest to native agent-ready in the PLM/ALM tier. 51 requirements trace-linked.' },
-    { no:'03', name:'Reliability / PhSM', prod:'PHM Technology MADe', tier:'wall', score:3, lane:1, x:300, phase:'Design',
+    { no:'03', name:'Reliability / PhSM', prod:'PHM Technology MADe', tier:'wall', score:3, lane:2, x:465, phase:'Design',
       api:'Import-only API (SysML v2 ingest). NO headless-run and NO results-extraction API. FMECA/FTA/RBD generated only in-GUI.', headless:'No', auth:'—', lb:'—', note:'24 order-1 cut sets → forced dual battery, dual FC, BMS/OR-ing. Hard wall for agents.' },
-    { no:'04', name:'Systems Sim (6-DOF)', prod:'Simcenter Amesim', tier:'bridge', score:7, lane:1, x:470, phase:'Design',
+    { no:'04', name:'Systems Sim (6-DOF)', prod:'Simcenter Amesim', tier:'bridge', score:7, lane:2, x:525, phase:'Design',
       api:'Python API (amesim / legacy ame_apy), CMD batch over .amegp files. Model must be pre-compiled.', headless:'Yes (CMD, no GUI)', auth:'Local license feature', lb:'Worker-session pool', note:'6-DOF cascade controller: attitude recovery ~0.86s, ζ≈0.15. Geometry & control laws coupled.' },
-    { no:'05', name:'Electrical / EWIS', prod:'Siemens Capital', tier:'wall', score:2, lane:2, x:310, phase:'Design',
+    { no:'05', name:'Electrical / EWIS', prod:'Siemens Capital', tier:'wall', score:2, lane:2, x:585, phase:'Design',
       api:'NO public API / CLI / SDK. Integration only via file/PLM (Teamcenter) handoff or RPA.', headless:'No', auth:'—', lb:'—', note:'Hardest wall. Griffin built a custom Capital Java Bridge + Project XML generator. 13 comp → 13 devices, AWG 8.' },
-    { no:'06', name:'Mechanical CAD', prod:'Siemens NX / NX Open', tier:'bridge', score:6, lane:2, x:490, phase:'Design',
+    { no:'06', name:'Mechanical CAD', prod:'Siemens NX / NX Open', tier:'bridge', score:6, lane:2, x:645, phase:'Design',
       api:'NX Open (.NET/C++/Python NXOpen), Journaling, run_journal, -batch. NO official MCP (only 3rd-party DreamEnding/NX_MCP). Design Copilot NX = non-programmatic in-app assistant.', headless:'Yes — NX X "Server User" license (since NX2506.4000)', auth:'NX license token (per session)', lb:'License-token pool + Dispatcher / Mendix Digital Fabric', note:'53-component assembly on a single datum frame via griffin-p-quinn/nx-mcp. Every batch run burns a full license token — the core scaling bottleneck.' },
-    { no:'07', name:'Structural CAE', prod:'Simcenter 3D / Nastran', tier:'bridge', score:7, lane:3, x:320, phase:'Design',
+    { no:'07', name:'Structural CAE', prod:'Simcenter 3D / Nastran', tier:'bridge', score:7, lane:2, x:705, phase:'Design',
       api:'NXOpen.CAE (C#/Python) for pre/post. Nastran solver CLI: nastran deck.dat — SOL 101 / 106 fully headless. HEEDS for design-space exploration.', headless:'Yes (solver decoupled)', auth:'NX authoring + solver license', lb:'Solver farm + dual-license mgmt', note:'Von Mises safety factor 1.63 @ 5G pull-up load case.' },
-    { no:'08', name:'Embedded / FPGA', prod:'Siemens EDA Questa/ModelSim', tier:'native', score:9, lane:3, x:500, phase:'Design',
+    { no:'08', name:'Embedded / FPGA', prod:'Siemens EDA Questa/ModelSim', tier:'native', score:9, lane:2, x:755, phase:'Design',
       api:'vsim -c (console), -do <file>.do (TCL), qrun, -batch. Deterministic text-in/text-out.', headless:'Yes — first-class', auth:'EDA license per invocation', lb:'CI regression farm', note:'Highest agentic readiness of the toolchain. 8 SystemVerilog RTL blocks, self-checking testbenches.' },
-    { no:'09', name:'Program & Build', prod:'Teamcenter (IPP&E)', tier:'bridge', score:6, lane:0, x:900, phase:'Realize',
+    { no:'09', name:'Program & Build', prod:'Teamcenter (IPP&E)', tier:'bridge', score:6, lane:3, x:850, phase:'Realize',
       api:'SOA (.NET Teamcenter.Soa.Client / Java), ITK, TcXML, StructureManagementService. Copilot/AI-BOM-Agent are closed UX, not open MCP.', headless:'Yes (SOA/ITK)', auth:'Session via CredentialManager; SSO (SAML/OIDC) at AWC gateway', lb:'Pool Manager — 4-tier tcserver pool', note:'12-task schedule, 22-item EBOM, stage MBOM, 10-op process plan.' },
-    { no:'10', name:'Mfg / Assembly Sim', prod:'Tecnomatix Process Simulate & Plant Sim', tier:'native', score:8, lane:1, x:930, phase:'Realize',
+    { no:'10', name:'Mfg / Assembly Sim', prod:'Tecnomatix Process Simulate & Plant Sim', tier:'native', score:8, lane:4, x:930, phase:'Realize',
       api:'COM/ActiveX RemoteControl, SimTalk 2.0, pyplantsim, .NET automation. Headless via visible=False, suppress_3d.', headless:'Yes (COM)', auth:'Windows/COM licensed instance', lb:'COM licensed-instance pool', note:'DTC Co-Pilot: robotic fastening, RULA ergonomics (score 2), AMR dispatch.' },
-    { no:'11', name:'Production / MES', prod:'Opcenter (APS/Execution)', tier:'native', score:8, lane:2, x:930, phase:'Realize',
+    { no:'11', name:'Production / MES', prod:'Opcenter (APS/Execution)', tier:'native', score:8, lane:4, x:1010, phase:'Realize',
       api:'REST + OData v4.1 (Intelligence API; Execution Core REST for recipe/formula/MES objects).', headless:'Yes', auth:'OAuth / API key', lb:'HTTP load balancer', note:'Line tact time 14.2 min after virtual line balancing.' },
-    { no:'12', name:'Telemetry / Edge', prod:'Industrial Edge + Insights Hub', tier:'native', score:9, lane:1, x:1240, phase:'Optimize',
+    { no:'12', name:'Telemetry / Edge', prod:'Industrial Edge + Insights Hub', tier:'native', score:9, lane:5, x:1150, phase:'Optimize',
       api:'REST services, MindConnect MQTT (cert-managed), OPC UA (PubSub over MQTT/JSON). Apps are Docker containers.', headless:'Yes', auth:'X.509 certs / OAuth', lb:'Broker / edge cluster', note:'Real-time torque + laser-scan ingestion for as-built vs CAD compare.' },
-    { no:'13', name:'Verification & Validation', prod:'Teamcenter V&V', tier:'bridge', score:6, lane:2, x:1240, phase:'Optimize',
+    { no:'13', name:'Verification & Validation', prod:'Teamcenter V&V', tier:'bridge', score:6, lane:6, x:1250, phase:'Optimize',
       api:'SOA services + trace-link objects. Programmatic Target→Measured verification.', headless:'Yes', auth:'Session / SSO', lb:'Pool Manager', note:'51/51 requirements PASS, 24 RFP standards section-linked (100%).' },
-    { no:'14', name:'Delivery / Airworthiness', prod:'Teamcenter + AI Lifecycle Harness', tier:'bridge', score:null, lane:3, x:1240, phase:'Optimize',
+    { no:'14', name:'Delivery / Airworthiness', prod:'Teamcenter + AI Lifecycle Harness', tier:'bridge', score:null, lane:6, x:1340, phase:'Optimize',
       api:'SOA cert sign-off + Human-in-the-Loop approval gate stewarded by the AI Lifecycle Harness (Agentic WBS).', headless:'Yes', auth:'Session / SSO + HITL', lb:'—', note:'Final Certificate of Airworthiness: 0 open NCs → 100% CERTIFIED FLIGHT READY.' },
   ];
+  // Siemens' seven PUBLISHED Aerospace & Defense digital threads (siemens.com/en-us/digital-thread) — QX-250 is an A&D platform
   const LANES = [
-    { name:'Systems & Requirements', icon:'hierarchy', y:120 },
-    { name:'Accelerated Product Dev', icon:'ai', y:250 },
-    { name:'Smart Manufacturing', icon:'factory-reset', y:390 },
-    { name:'Service, Lifecycle & Analytics', icon:'barchart', y:515 },
+    { name:'Model-based acquisition & program pursuit', icon:'document',     y:105 },
+    { name:'Mission-driven systems engineering',         icon:'hierarchy',    y:230 },
+    { name:'Multi-disciplinary design & optimization',   icon:'cogwheel',     y:355 },
+    { name:'Value chain collaboration & intelligence',   icon:'globe',        y:480 },
+    { name:'Smart manufacturing',                        icon:'factory-reset',y:605 },
+    { name:'Optimized sustainment & availability',       icon:'barchart',     y:730 },
+    { name:'Connected verification & certification',     icon:'certificate',  y:855 },
   ];
   const PHASES = [ { name:'Design', x0:230, x1:770, cx:500 }, { name:'Realize', x0:770, x1:1075, cx:922 }, { name:'Optimize', x0:1075, x1:1385, cx:1235 } ];
 
@@ -382,14 +386,29 @@
     docker:        { term:'Docker containers', kind:'Runtime', from:'Docker', icon:'package',
                      what:'Industrial Edge apps are packaged and deployed as OCI containers to shop-floor devices.',
                      url:'https://www.docker.com/' },
+    amesim_batch:  { term:'Amesim CMD batch (.amegp)', kind:'CLI / batch', from:'Simcenter Amesim', icon:'code',
+                     what:'Command-line batch run over a pre-compiled .amegp circuit — no GUI, so many attitude-recovery cases fan out across a worker-session pool.',
+                     url:'https://plm.sw.siemens.com/en-US/simcenter/systems-simulation/amesim/' },
+    fmi:           { term:'FMI / FMU co-simulation', kind:'Interop standard', from:'Modelica Association', icon:'certificate',
+                     what:'Functional Mock-up Interface — Amesim exports/imports FMUs so the 6-DOF plant co-simulates with control-law and structural models across tools.',
+                     url:'https://fmi-standard.org/' },
+    capital_bridge:{ term:'Capital Java Bridge', kind:'Custom bridge', from:"Griffin's Work", icon:'connector',
+                     what:'A custom Java bridge that drives Capital programmatically where no public API exists — the workaround Griffin built for the hardest wall.',
+                     url:'https://github.com/griffin-p-quinn/siemens-xcelerator-ailifecycle/blob/main/AGENTIC_READINESS_VERIFIED.md' },
+    capital_xml:   { term:'Capital Project XML generator', kind:'File bridge', from:"Griffin's Work", icon:'document',
+                     what:'Generates Capital project XML for file/PLM handoff; the wiring harness is then materialized in NX (13 components → 13 devices, AWG 8).',
+                     url:'https://github.com/griffin-p-quinn/siemens-xcelerator-ailifecycle/blob/main/AGENTIC_READINESS_VERIFIED.md' },
+    tc_vv:         { term:'Teamcenter V&V trace-link objects', kind:'SOA + trace model', from:'Siemens Teamcenter', icon:'connected',
+                     what:'Programmatic Target→Measured verification via SOA services and trace-link objects — 51/51 requirements PASS, 24 RFP standards section-linked.',
+                     url:'https://www.siemens.com/en-us/products/teamcenter/' },
   };
   // which interfaces each stage exposes (keys into REF), in priority order
   const IFACES = {
     '01':['harness','polarion_rest'],
     '02':['polarion_rest','oslc','wsdl','polarion_copilot','polarion_mcp'],
     '03':['made','sysml2'],
-    '04':['amesim_py'],
-    '05':['capital'],
+    '04':['amesim_py','amesim_batch','fmi'],
+    '05':['capital','capital_bridge','capital_xml'],
     '06':['nxopen','nx_batch','nx_serveruser','nx_mcp','nx_copilot'],
     '07':['nxcae','nastran','heeds'],
     '08':['questa','tcl'],
@@ -397,7 +416,7 @@
     '10':['plantsim_com','simtalk','pyplantsim','procsim','com'],
     '11':['opcenter_odata','odata'],
     '12':['insightshub','mqtt','opcua','docker'],
-    '13':['tc_soa'],
+    '13':['tc_soa','tc_vv'],
     '14':['tc_soa','harness'],
   };
 
@@ -478,7 +497,7 @@
   // ================= DIGITAL THREAD DIAGRAM =================
   function buildThread(){
     const wrap = el('dtWrap'), svg = el('dtSvg');
-    const X = 1400, Y = 640;
+    const X = 1400, Y = 980;
     const cx = s => s.x, cy = s => LANES[s.lane].y;
 
     // phase bands + vertical dividers (SVG)
