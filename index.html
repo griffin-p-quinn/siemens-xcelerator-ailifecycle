@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Xcelerator AI Lifecycle — Agentic Readiness Tracker (RFP → Delivery)</title>
-  <meta name="description" content="Siemens Xcelerator AI Lifecycle — Agentic Readiness Tracker evaluating 14 Siemens products across RFP Intake to Delivery." />
-  <meta property="og:title" content="Xcelerator AI Lifecycle — Agentic Readiness Tracker" />
-  <meta property="og:description" content="Interactive agentic-readiness map for Siemens PLM, CAD, ALM, and Digital Twin products." />
+  <title>Xcelerator AI Lifecycle — Product Lifecycle Harness</title>
+  <meta name="description" content="A product lifecycle harness connecting Siemens Design, Realize, and Optimize systems through agents and agentic frameworks." />
+  <meta property="og:title" content="Xcelerator AI Lifecycle — Product Lifecycle Harness" />
+  <meta property="og:description" content="One governed agent layer across the Siemens product lifecycle, from initial requirement to flight-ready product." />
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/svg+xml" href="assets/siemens-ix/favicon.svg" />
 
@@ -48,152 +48,136 @@
     .ail-thread-strip .node:not(:last-child)::after { content:""; position:absolute; top:17px; left: calc(50% + 24px); right: calc(-50% + 24px); height:2px; background: var(--theme-color-soft-bdr); }
     .ail-thread-strip .lbl { font-size: .66rem; color: var(--theme-color-weak-text); line-height: 1.25; }
 
-    /* ============ MATERIAL SCROLL STORY ============ */
-    .ail-landing-story { position:relative; isolation:isolate;
-      margin-inline:calc(-1 * clamp(1rem,1.7vw,3.25rem)); background:#020405; }
+    /* ============ PRODUCT LIFECYCLE SCROLL STORY ============ */
+    .ail-landing-story { --design:#00e6dc; --realize:#ffb45e; --optimize:#b69cff; --agent:#5ea7ff;
+      position:relative; isolation:isolate; margin-inline:calc(-1 * clamp(1rem,1.7vw,3.25rem)); background:#020405; }
     .ail-story-sticky { position:sticky; top:0; height:calc(100svh - 4.5rem); min-height:620px; overflow:hidden;
-      background:#020405; }
+      background:radial-gradient(circle at 50% 48%,#101b27 0%,#060a0e 45%,#020405 76%); }
     .ail-story-sticky::before { content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
-      background:linear-gradient(90deg,#020405 0%,rgba(2,4,5,.94) 28%,rgba(2,4,5,.4) 55%,rgba(2,4,5,.06) 82%),
-        linear-gradient(0deg,rgba(2,4,5,.72),transparent 30%,transparent 80%,rgba(2,4,5,.28)); }
-    .ail-material-glow { position:absolute; z-index:0; left:12%; right:-12%; bottom:-28%; height:76%; pointer-events:none;
-      background:radial-gradient(ellipse 70% 68% at 68% 62%,rgba(83,149,237,.28),rgba(44,94,160,.12) 42%,transparent 72%);
-      mix-blend-mode:plus-lighter; }
-    .ail-material-viewport { position:absolute; z-index:1; top:5%; right:-2%; width:61%; height:90%; perspective:1400px;
+      background:linear-gradient(90deg,rgba(2,4,5,.98),rgba(2,4,5,.82) 18%,rgba(2,4,5,.08) 38%,rgba(2,4,5,.08) 62%,rgba(2,4,5,.82) 82%,rgba(2,4,5,.98)),
+        linear-gradient(0deg,rgba(2,4,5,.8),transparent 28%,transparent 76%,rgba(2,4,5,.4)); }
+    .ail-material-glow { position:absolute; z-index:0; inset:8% 8% -18%; pointer-events:none; opacity:.72;
+      background:radial-gradient(ellipse 36% 48% at 24% 55%,rgba(0,230,220,.22),transparent 72%),
+        radial-gradient(ellipse 35% 48% at 50% 48%,rgba(255,180,94,.16),transparent 72%),
+        radial-gradient(ellipse 36% 48% at 76% 55%,rgba(182,156,255,.22),transparent 72%);
+      filter:blur(10px); mix-blend-mode:plus-lighter; }
+    .ail-material-viewport { position:absolute; z-index:1; top:4%; bottom:4%; left:20%; right:20%; perspective:1450px;
       pointer-events:none; opacity:.98; }
     .ail-material-object { position:absolute; inset:0; transform-style:preserve-3d; will-change:transform; }
-    .ail-material-unit { --unit-tier:#75aef6; --tier-mix:0%; --tier-edge:12%; position:absolute; left:50%; top:50%;
-      width:clamp(112px,10vw,188px); aspect-ratio:1.58; box-sizing:border-box; transform-style:preserve-3d;
-      border:1px solid color-mix(in srgb,var(--unit-tier) var(--tier-edge),rgba(222,240,255,.32));
-      background:linear-gradient(145deg,rgba(232,245,255,.3),rgba(84,115,148,.14) 42%,rgba(5,10,15,.38)),
-        color-mix(in srgb,var(--unit-tier) var(--tier-mix),rgba(17,37,54,.82));
-      box-shadow:inset 0 1px rgba(255,255,255,.24),0 20px 48px rgba(0,0,0,.32); backface-visibility:hidden; }
-    .ail-material-unit::before,.ail-material-unit::after { content:""; position:absolute; background:color-mix(in srgb,var(--unit-tier) var(--tier-mix),#091019);
-      border:1px solid color-mix(in srgb,var(--unit-tier) var(--tier-edge),rgba(222,240,255,.1)); }
-    .ail-material-unit::before { top:-1px; left:100%; width:10px; height:100%; transform-origin:left center; transform:rotateY(90deg); }
-    .ail-material-unit::after { top:100%; left:-1px; width:100%; height:10px; transform-origin:center top; transform:rotateX(-90deg); }
-    .ail-material-unit span { position:absolute; top:10px; left:12px; color:rgba(231,243,255,.5);
-      font:500 .62rem/1 "Cascadia Code","Roboto Mono",monospace; letter-spacing:.12em; }
-    .ail-material-unit.native { --unit-tier:#3ee6a6; }
-    .ail-material-unit.bridge { --unit-tier:#f4b860; }
-    .ail-material-unit.wall { --unit-tier:#ff526a; }
-    .ail-story-figure { position:absolute; z-index:0; right:-.03em; bottom:-.14em; color:transparent;
-      -webkit-text-stroke:1px rgba(214,232,248,.075); font-size:clamp(15rem,31vw,44rem); font-weight:700;
-      letter-spacing:-.09em; line-height:.72; white-space:nowrap; user-select:none; }
-    .ail-story-figure.is-changing { animation:story-figure-in .56s cubic-bezier(.22,.61,.36,1); }
-    @keyframes story-figure-in { from{opacity:0;transform:translateY(3%)} to{opacity:1;transform:none} }
+    .ail-material-unit { --phase-color:var(--agent); position:absolute; left:50%; top:50%;
+      width:clamp(92px,7.6vw,148px); aspect-ratio:1.64; box-sizing:border-box; transform-style:preserve-3d;
+      border:1px solid color-mix(in srgb,var(--phase-color) 58%,rgba(229,242,255,.34));
+      background:linear-gradient(145deg,rgba(236,248,255,.25),rgba(84,115,148,.1) 42%,rgba(4,8,13,.5)),
+        color-mix(in srgb,var(--phase-color) 18%,rgba(12,27,40,.9));
+      box-shadow:inset 0 1px rgba(255,255,255,.25),0 18px 46px rgba(0,0,0,.42),
+        0 0 30px color-mix(in srgb,var(--phase-color) 13%,transparent); backface-visibility:hidden; }
+    .ail-material-unit::before,.ail-material-unit::after { content:""; position:absolute;
+      background:color-mix(in srgb,var(--phase-color) 15%,#071019);
+      border:1px solid color-mix(in srgb,var(--phase-color) 42%,rgba(222,240,255,.1)); }
+    .ail-material-unit::before { top:-1px; left:100%; width:9px; height:100%; transform-origin:left center; transform:rotateY(90deg); }
+    .ail-material-unit::after { top:100%; left:-1px; width:100%; height:9px; transform-origin:center top; transform:rotateX(-90deg); }
+    .ail-material-unit span { position:absolute; inset:auto 9px 8px; overflow:hidden; color:color-mix(in srgb,var(--phase-color) 52%,#eaf6ff);
+      font:600 clamp(.48rem,.5vw,.62rem)/1.15 "Cascadia Code","Roboto Mono",monospace; letter-spacing:.08em; text-overflow:ellipsis; white-space:nowrap; }
+    .ail-material-unit.design { --phase-color:var(--design); }
+    .ail-material-unit.realize { --phase-color:var(--realize); }
+    .ail-material-unit.optimize { --phase-color:var(--optimize); }
+    .ail-system-core { position:absolute; z-index:3; left:50%; top:50%; width:clamp(122px,10.5vw,196px); aspect-ratio:1;
+      display:grid; place-items:center; border:1px solid rgba(218,238,255,.38); border-radius:50%;
+      background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.2),rgba(52,112,173,.2) 40%,rgba(4,10,17,.88) 72%);
+      box-shadow:inset 0 0 34px rgba(108,179,255,.16),0 0 54px rgba(73,151,237,.22); opacity:0;
+      transform:translate(-50%,-50%) scale(.35); will-change:transform,opacity; }
+    .ail-system-core::before,.ail-system-core::after { content:""; position:absolute; border:1px solid rgba(130,190,255,.24); border-radius:50%; }
+    .ail-system-core::before { inset:-15%; }
+    .ail-system-core::after { inset:-31%; border-color:rgba(130,190,255,.1); }
+    .ail-core-copy { position:relative; text-align:center; color:#f1f8fc; font:650 clamp(.64rem,.7vw,.82rem)/1.2 "Siemens Sans","Segoe UI",sans-serif;
+      letter-spacing:.13em; text-transform:uppercase; }
+    .ail-core-copy small { display:block; margin-top:.35rem; color:rgba(217,235,247,.48); font:500 .55rem/1.2 "Cascadia Code","Roboto Mono",monospace;
+      letter-spacing:.14em; }
+    .ail-core-copy.is-changing { animation:ail-core-in .42s cubic-bezier(.22,.61,.36,1); }
+    @keyframes ail-core-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+    .ail-phase-tag { position:absolute; z-index:4; left:50%; top:50%; padding:.34rem .55rem; border-top:1px solid currentColor;
+      font:600 clamp(.52rem,.55vw,.68rem)/1 "Cascadia Code","Roboto Mono",monospace; letter-spacing:.16em; text-transform:uppercase;
+      will-change:transform,opacity; }
+    .ail-phase-tag.design { color:var(--design); }
+    .ail-phase-tag.realize { color:var(--realize); }
+    .ail-phase-tag.optimize { color:var(--optimize); }
     .ail-story-scenes { position:relative; z-index:3; margin-top:calc(-100svh + 4.5rem); }
-    .ail-story-scene { --scene-opacity:0; --scene-y:28px; min-height:calc(100svh - 4.5rem); box-sizing:border-box;
+    .ail-story-scene { --scene-opacity:0; --scene-y:28px; --scene-accent:var(--agent); min-height:calc(100svh - 4.5rem); box-sizing:border-box;
       display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); align-items:center;
-      padding:clamp(4.5rem,7vw,8.5rem) clamp(2.5rem,6vw,9rem); opacity:var(--scene-opacity); pointer-events:none; }
+      padding:clamp(4.5rem,6vw,7rem) clamp(2.5rem,5vw,7rem); opacity:var(--scene-opacity); pointer-events:none; }
+    .ail-story-scene.segmented { --scene-accent:var(--design); }
+    .ail-story-scene.agents { --scene-accent:var(--agent); }
+    .ail-story-scene.harness { --scene-accent:var(--realize); }
+    .ail-story-scene.outcome { --scene-accent:var(--optimize); }
     .ail-story-scene:first-child { --scene-opacity:1; --scene-y:0px; }
     .ail-story-scene.is-active { pointer-events:auto; }
-    .ail-scene-copy { position:relative; z-index:4; grid-column:1 / span 6; max-width:760px;
+    .ail-scene-copy { position:relative; z-index:4; grid-column:1 / span 4; max-width:560px;
       transform:translate3d(0,var(--scene-y),0); will-change:transform,opacity; }
-    .ail-scene-kicker { margin-bottom:clamp(1.2rem,2vw,2.1rem); color:rgba(231,243,255,.48);
-      font:500 clamp(.62rem,.58vw,.75rem)/1.3 "Cascadia Code","Roboto Mono",monospace;
-      letter-spacing:.18em; text-transform:uppercase; }
-    .ail-scene-title { max-width:12ch; margin:0; color:#f3f8fb; font-size:clamp(3.6rem,min(6.4vw,10vh),8rem);
+    .ail-story-scene:nth-child(even) .ail-scene-copy { grid-column:9 / span 4; justify-self:end; }
+    .ail-scene-kicker { margin-bottom:clamp(1.15rem,1.8vw,1.9rem); color:color-mix(in srgb,var(--scene-accent) 68%,#dcecf5);
+      font:600 clamp(.6rem,.58vw,.72rem)/1.3 "Cascadia Code","Roboto Mono",monospace;
+      letter-spacing:.17em; text-transform:uppercase; }
+    .ail-scene-title { max-width:9ch; margin:0; color:#f3f8fb; font-size:clamp(3.1rem,min(5.35vw,8.5vh),6.7rem);
       font-weight:600; letter-spacing:-.058em; line-height:.91; text-wrap:balance; }
-    .ail-story-scene:not(:first-child) .ail-scene-title { font-size:clamp(3.1rem,min(5.5vw,8.8vh),6.6rem); }
-    .ail-story-scene.verdict .ail-scene-title { font-size:clamp(2.8rem,min(4.9vw,7.7vh),5.7rem); }
+    .ail-story-scene.outcome .ail-scene-title { font-size:clamp(4rem,min(7vw,11vh),8.5rem); }
     .ail-title-line { display:block; opacity:0; transform:translateY(.24em); transition:opacity .48s ease,transform .58s cubic-bezier(.22,.61,.36,1); }
     .ail-title-line:nth-child(2) { transition-delay:.07s; }
     .ail-title-line:nth-child(3) { transition-delay:.14s; }
+    .ail-title-line.design { color:var(--design); }
+    .ail-title-line.realize { color:var(--realize); }
+    .ail-title-line.optimize { color:var(--optimize); }
     .ail-landing-story.is-ready .ail-story-scene.is-active .ail-title-line { opacity:1; transform:none; }
-    .ail-scene-sub { max-width:54ch; margin:clamp(1.35rem,2vw,2.25rem) 0 0; color:rgba(222,235,242,.66);
-      font-size:clamp(.98rem,1vw,1.22rem); line-height:1.62; }
-    .ail-scene-actions { display:flex; flex-wrap:wrap; gap:1.4rem; margin-top:clamp(1.5rem,2.2vw,2.5rem); }
+    .ail-scene-sub { max-width:46ch; margin:clamp(1.25rem,1.8vw,2rem) 0 0; color:rgba(222,235,242,.7);
+      font-size:clamp(.92rem,.9vw,1.08rem); line-height:1.62; }
+    .ail-scene-signals { display:flex; flex-wrap:wrap; gap:.52rem 1rem; margin-top:clamp(1.15rem,1.6vw,1.8rem);
+      padding-top:.85rem; border-top:1px solid rgba(222,235,242,.16); }
+    .ail-scene-signals span { color:rgba(229,241,247,.68); font:600 .68rem/1.35 "Cascadia Code","Roboto Mono",monospace;
+      letter-spacing:.08em; text-transform:uppercase; }
+    .ail-scene-signals span::before { content:""; display:inline-block; width:5px; height:5px; margin:0 .48rem .08rem 0;
+      background:var(--scene-accent); }
+    .ail-scene-actions { display:flex; flex-wrap:wrap; gap:1.4rem; margin-top:clamp(1.4rem,2vw,2.2rem); }
     .ail-story-link { appearance:none; padding:.18rem 0 .3rem; border:0; border-bottom:1px solid rgba(234,245,250,.72);
       background:none; color:#eef8fb; font:600 .83rem/1.2 "Siemens Sans","Segoe UI",sans-serif; cursor:pointer; }
     .ail-story-link:hover { border-bottom-color:transparent; }
-    .ail-story-link:focus-visible { outline:2px solid #75aef6; outline-offset:5px; }
-    .ail-scene-facts { display:flex; flex-wrap:wrap; max-width:680px; gap:.75rem 1.8rem; margin-top:clamp(1.6rem,2.6vw,3rem);
-      padding-top:1rem; border-top:1px solid rgba(222,235,242,.18); }
-    .ail-scene-fact { position:relative; min-width:150px; padding-left:.8rem; color:rgba(222,235,242,.62); font-size:.76rem; line-height:1.45; }
-    .ail-scene-fact::before { content:""; position:absolute; left:0; top:.46em; width:4px; height:4px; background:#dbe8ed; }
-    .ail-scene-fact strong { display:block; color:#f1f7f9; font-size:.86rem; font-weight:600; }
-    .ail-story-proof { display:grid; grid-template-columns:minmax(270px,.4fr) minmax(0,1.6fr); gap:clamp(1rem,1.6vw,2rem);
-      margin-top:clamp(1.2rem,2vw,2.5rem); }
-    .ail-verdict { position:relative; padding:clamp(1.1rem,1.6vw,1.5rem); border-top:1px solid var(--theme-color-soft-bdr);
-      border-bottom:1px solid var(--theme-color-soft-bdr); background:transparent; }
-    .vd-head { display:flex; align-items:baseline; justify-content:space-between; gap:.6rem; margin-bottom:.9rem; }
-    .vd-head .lab { font-size:.68rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color: var(--theme-color-soft-text); }
-    .vd-head .tot { font-size:.78rem; font-weight:700; color: var(--theme-color-weak-text); font-variant-numeric:tabular-nums; }
-    .vd-bar { display:flex; height:14px; border-radius:999px; overflow:hidden; gap:2px; background: color-mix(in srgb, var(--theme-color-2) 60%, transparent); }
-    .vd-bar span { display:block; position:relative; overflow:hidden; }
-    .vd-bar span::after { content:""; position:absolute; inset:0;
-      background: linear-gradient(90deg, transparent, color-mix(in srgb, #fff 40%, transparent), transparent);
-      transform: translateX(-120%); animation: vd-sheen 3.6s ease-in-out infinite; animation-delay: var(--sd, 0s); }
-    .vd-bar .native { background: var(--theme-color-success); }
-    .vd-bar .bridge { background: var(--theme-color-warning); }
-    .vd-bar .wall   { background: var(--theme-color-alarm); }
-    .vd-rows { display:flex; flex-direction:column; gap:.15rem; margin-top:1rem; }
-    .vd-row { display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:.7rem; padding:.5rem .1rem; }
-    .vd-row + .vd-row { border-top:1px solid color-mix(in srgb, var(--theme-color-soft-bdr) 60%, transparent); }
-    .vd-row i { width:11px; height:11px; border-radius:50%; }
-    .vd-row.native i { background: var(--theme-color-success); animation: vd-pulse 3s ease-in-out infinite; }
-    .vd-row.bridge i { background: var(--theme-color-warning); animation: vd-pulse 3s ease-in-out infinite .5s; }
-    .vd-row.wall   i { background: var(--theme-color-alarm);   animation: vd-pulse 1.8s ease-in-out infinite; }
-    .vd-row .t { font-size:.86rem; font-weight:600; color: var(--theme-color-std-text); }
-    .vd-row .t small { display:block; font-size:.72rem; font-weight:500; color: var(--theme-color-weak-text); }
-    .vd-row .c { font-size:1.5rem; font-weight:800; font-variant-numeric:tabular-nums; line-height:1; }
-    .vd-row.native .c { color: var(--theme-color-success); }
-    .vd-row.bridge .c { color: var(--theme-color-warning); }
-    .vd-row.wall   .c { color: var(--theme-color-alarm); }
-    @keyframes vd-sheen { 0%,60%{ transform: translateX(-120%);} 100%{ transform: translateX(120%);} }
-    @keyframes vd-pulse { 0%,100%{ box-shadow:0 0 0 0 color-mix(in srgb, currentColor 40%, transparent);} 50%{ box-shadow:0 0 0 5px color-mix(in srgb, currentColor 0%, transparent);} }
-    .ail-lh-thread { min-width:0; display:flex; align-items:center; padding:clamp(.65rem,1vw,1.1rem);
-      border-top:1px solid var(--theme-color-soft-bdr); border-bottom:1px solid var(--theme-color-soft-bdr); }
-    .ail-ribbon { position:relative; display:flex; width:100%; gap:0; overflow-x:auto; overflow-y:hidden; padding:.7rem 0 .3rem; scrollbar-width:thin; }
-    .rb-node { position:relative; flex:1 0 68px; min-width:64px; text-align:center; padding:0 2px; cursor:pointer;
-      opacity:0; transform: translateY(14px); animation: rb-in .55s cubic-bezier(.22,.61,.36,1) forwards; animation-delay: calc(var(--i) * .055s + .25s); }
-    .rb-node:not(:last-child)::after { content:""; position:absolute; top:31px; left: calc(50% + 27px); right: calc(-50% + 27px); height:3px; border-radius:3px;
-      background: linear-gradient(90deg, var(--nd-c), color-mix(in srgb, var(--nd-c) 12%, transparent));
-      background-size: 220% 100%; animation: ail-flow 2.6s linear infinite; }
-    .rb-chip { width:54px; height:54px; margin:0 auto .55rem; border-radius:15px; display:grid; place-items:center;
-      color: var(--nd-c); border:1.5px solid color-mix(in srgb, var(--nd-c) 55%, transparent);
-      background: color-mix(in srgb, var(--nd-c) 15%, var(--theme-color-1));
-      box-shadow: 0 0 0 5px color-mix(in srgb, var(--nd-c) 10%, transparent);
-      animation: rb-breathe 3.4s ease-in-out infinite; animation-delay: calc(var(--i) * .17s);
-      transition: transform .2s ease, box-shadow .2s ease; }
-    .rb-node:hover .rb-chip { transform: translateY(-5px) scale(1.09);
-      box-shadow: 0 0 0 6px color-mix(in srgb, var(--nd-c) 22%, transparent), 0 10px 26px color-mix(in srgb, var(--nd-c) 45%, transparent); }
-    .rb-node.wall .rb-chip { animation: rb-breathe 3.4s ease-in-out infinite, rb-alarm 1.9s ease-in-out infinite; }
-    .rb-no { display:block; font-size:.6rem; font-weight:700; letter-spacing:.08em; color: var(--theme-color-weak-text); }
-    .rb-nm { display:block; font-size:.73rem; font-weight:600; line-height:1.2; color: var(--theme-color-soft-text); margin-top:.12rem; }
-    .rb-node:hover .rb-nm { color: var(--theme-color-std-text); }
-    @keyframes rb-in { to { opacity:1; transform: translateY(0);} }
-    @keyframes rb-breathe { 0%,100%{ transform: translateY(0) scale(1);} 50%{ transform: translateY(-2px) scale(1.045);} }
-    @keyframes rb-alarm { 0%,100%{ box-shadow:0 0 0 5px color-mix(in srgb, var(--nd-c) 10%, transparent);} 50%{ box-shadow:0 0 0 9px color-mix(in srgb, var(--nd-c) 32%, transparent);} }
-    @keyframes ail-flow { to { background-position: -220% 0; } }
+    .ail-story-link:focus-visible { outline:2px solid var(--agent); outline-offset:5px; }
+    .ail-lifecycle-continuum { position:relative; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0;
+      margin-top:clamp(1.2rem,2vw,2.5rem); border-top:1px solid var(--theme-color-soft-bdr); border-bottom:1px solid var(--theme-color-soft-bdr); }
+    .ail-lifecycle-continuum::before { content:""; position:absolute; top:-1px; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,var(--design),var(--realize),var(--optimize)); }
+    .ail-continuum-phase { --phase-color:var(--theme-color-primary); min-height:180px; padding:clamp(1.2rem,2vw,2rem); }
+    .ail-continuum-phase + .ail-continuum-phase { border-left:1px solid var(--theme-color-soft-bdr); }
+    .ail-continuum-phase.design { --phase-color:#00a5a5; }
+    .ail-continuum-phase.realize { --phase-color:#c97b1c; }
+    .ail-continuum-phase.optimize { --phase-color:#8e72d8; }
+    .ail-continuum-phase .phase-name { color:var(--phase-color); font:700 .68rem/1.2 "Cascadia Code","Roboto Mono",monospace;
+      letter-spacing:.16em; text-transform:uppercase; }
+    .ail-continuum-phase h3 { margin:1.25rem 0 .65rem; color:var(--theme-color-std-text); font-size:clamp(1.12rem,1.4vw,1.5rem); line-height:1.15; }
+    .ail-continuum-phase p { max-width:34ch; margin:0; color:var(--theme-color-weak-text); font-size:.85rem; line-height:1.55; }
 
     @media (max-width: 900px){
-      .ail-story-proof { grid-template-columns:1fr; }
-      .ail-material-viewport { right:-12%; width:72%; opacity:.74; }
-      .ail-scene-copy { grid-column:1 / span 8; }
+      .ail-material-viewport { left:14%; right:14%; opacity:.82; }
+      .ail-scene-copy { grid-column:1 / span 5; }
+      .ail-story-scene:nth-child(even) .ail-scene-copy { grid-column:8 / span 5; }
     }
     @media (max-width: 720px){
       .ail-page { width:100%; max-width:100%; padding:.75rem .75rem 2.5rem; }
       .ail-landing-story { margin-inline:-.75rem; }
       .ail-story-sticky { height:calc(100svh - 4rem); min-height:600px; }
-      .ail-story-sticky::before { background:linear-gradient(180deg,#020405 0%,rgba(2,4,5,.9) 44%,rgba(2,4,5,.2) 72%,rgba(2,4,5,.04) 100%); }
+      .ail-story-sticky::before { background:linear-gradient(180deg,#020405 0%,rgba(2,4,5,.92) 43%,rgba(2,4,5,.22) 65%,rgba(2,4,5,.28) 100%); }
       .ail-story-scenes { margin-top:calc(-100svh + 4rem); }
       .ail-story-scene { min-height:calc(100svh - 4rem); grid-template-columns:1fr; align-items:start; padding:5.8rem 1.25rem 4.4rem; }
-      .ail-scene-copy { grid-column:1; max-width:none; }
-      .ail-scene-title,.ail-story-scene:not(:first-child) .ail-scene-title,.ail-story-scene.verdict .ail-scene-title {
-        max-width:11ch; font-size:clamp(2.55rem,11vw,3.55rem); line-height:.92; }
+      .ail-scene-copy,.ail-story-scene:nth-child(even) .ail-scene-copy { grid-column:1; max-width:none; justify-self:start; }
+      .ail-scene-title,.ail-story-scene.outcome .ail-scene-title { max-width:10ch; font-size:clamp(2.5rem,10.8vw,3.45rem); line-height:.92; }
       .ail-scene-sub { max-width:38ch; font-size:.91rem; line-height:1.52; }
       .ail-scene-actions { gap:1rem; }
-      .ail-scene-facts { gap:.55rem 1rem; margin-top:1.35rem; padding-top:.75rem; }
-      .ail-scene-fact { min-width:118px; flex:1; font-size:.67rem; }
-      .ail-scene-fact strong { font-size:.75rem; }
-      .ail-material-viewport { top:35%; right:-30%; width:126%; height:68%; opacity:.74; }
-      .ail-material-glow { left:-35%; right:-45%; bottom:-20%; height:64%; opacity:.72; }
-      .ail-story-figure { right:-.08em; bottom:-.03em; font-size:16rem; opacity:.72; }
-      .ail-story-proof { margin-top:1rem; }
-      .ail-lh-thread { padding:.35rem .2rem; }
-      .rb-node { flex-basis:70px; }
+      .ail-scene-signals { gap:.35rem .8rem; margin-top:1rem; }
+      .ail-material-viewport { top:39%; bottom:-4%; left:-18%; right:-18%; opacity:.72; }
+      .ail-material-glow { inset:38% -30% -12%; opacity:.78; }
+      .ail-system-core { width:118px; }
+      .ail-phase-tag { display:none; }
+      .ail-lifecycle-continuum { grid-template-columns:1fr; }
+      .ail-continuum-phase { min-height:0; }
+      .ail-continuum-phase + .ail-continuum-phase { border-left:0; border-top:1px solid var(--theme-color-soft-bdr); }
     }
 
     /* ============ COLLAPSIBLE CONTEXT BAR (inner views) ============ */
@@ -407,17 +391,14 @@
     .ail-dl-btn:focus-visible, .ail-pop-all:focus-visible { outline:2px solid var(--theme-color-primary); outline-offset:2px; }
 
     @media (prefers-reduced-motion: reduce){
-      .reveal, .ail-story-scene, .ail-scene-copy, .ail-title-line, .ail-story-figure,
-      .rb-node, .rb-chip, .rb-node:not(:last-child)::after,
-      .vd-bar span::after, .vd-row i {
+      .reveal, .ail-story-scene, .ail-scene-copy, .ail-title-line, .ail-core-copy {
         animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
       .ail-dl-btn:hover { transform: none !important; }
     }
     /* ?static — freeze all motion to final state (screenshot / low-motion testing) */
     html.static-motion *, html.static-motion *::before, html.static-motion *::after {
       animation: none !important; transition: none !important; }
-    html.static-motion .reveal, html.static-motion .ail-story-scene, html.static-motion .ail-scene-copy, html.static-motion .ail-title-line,
-    html.static-motion .rb-node, html.static-motion .rb-chip {
+    html.static-motion .reveal, html.static-motion .ail-story-scene, html.static-motion .ail-scene-copy, html.static-motion .ail-title-line {
       opacity: 1 !important; transform: none !important; }
   </style>
 </head>
@@ -425,7 +406,7 @@
   <div class="ail-scroll-progress" id="scrollProgress"></div>
   <ix-dropdown id="skillPop" close-behavior="outside" placement="bottom-start" positioning-strategy="fixed"></ix-dropdown>
   <ix-application>
-    <ix-application-header name="Xcelerator AI Lifecycle — Agentic Readiness Tracker">
+    <ix-application-header name="Xcelerator AI Lifecycle — Product Lifecycle Harness">
       <div slot="logo" class="ail-logo" style="display:flex;align-items:center;gap:.5rem;">
         <ix-icon name="ai" size="24"></ix-icon>
       </div>
@@ -448,7 +429,7 @@
         <div class="ail-ctxbar collapsed" id="ctxBar" hidden>
           <button type="button" class="ctx-head" id="ctxToggle" aria-expanded="false" aria-controls="ctxBody">
             <span class="ctx-kicker">FlyNow · QX-250</span>
-            <span class="ctx-title">The entire RFP&nbsp;→&nbsp;Delivery cycle, driven by one AI agent</span>
+            <span class="ctx-title">The entire RFP&nbsp;→&nbsp;Delivery cycle, coordinated by one product lifecycle harness</span>
             <span class="ctx-mini" id="ctxMini"></span>
             <ix-icon class="ctx-chev" name="chevron-down-small" size="20"></ix-icon>
           </button>
@@ -463,76 +444,95 @@
           <section class="ail-landing-story" id="landingStory">
             <div class="ail-story-sticky" id="storyStage" aria-hidden="true">
               <div class="ail-material-glow"></div>
-              <div class="ail-material-viewport"><div class="ail-material-object" id="storyObject"></div></div>
-              <div class="ail-story-figure" id="storyFigure">41</div>
+              <div class="ail-material-viewport">
+                <div class="ail-material-object" id="storyObject"></div>
+                <div class="ail-system-core" id="storyCore">
+                  <div class="ail-core-copy" id="storyCoreCopy">Agent framework<small>connect</small></div>
+                </div>
+                <div class="ail-phase-tag design">Design</div>
+                <div class="ail-phase-tag realize">Realize</div>
+                <div class="ail-phase-tag optimize">Optimize</div>
+              </div>
             </div>
             <div class="ail-story-scenes">
-              <section class="ail-story-scene is-active" data-scene="0">
+              <section class="ail-story-scene segmented is-active" data-scene="0">
                 <div class="ail-scene-copy">
-                  <div class="ail-scene-kicker">USAF QX-250 / RFP → DELIVERY</div>
-                  <h1 class="ail-scene-title"><span class="ail-title-line">41-page RFP.</span><span class="ail-title-line">14 Siemens products.</span></h1>
-                  <p class="ail-scene-sub">The solicitation becomes 51 trace-linked requirements, then passes through 14 Siemens products. This tracker records the interface used at every step.</p>
+                  <div class="ail-scene-kicker">The product lifecycle / today</div>
+                  <h1 class="ail-scene-title">
+                    <span class="ail-title-line design">Design.</span>
+                    <span class="ail-title-line realize">Realize.</span>
+                    <span class="ail-title-line optimize">Optimize.</span>
+                  </h1>
+                  <p class="ail-scene-sub">Specialist systems already carry the aircraft from requirements through engineering, production, verification, and service. Each phase is powerful in its own domain; the opportunity is to make the lifecycle move as one.</p>
+                  <div class="ail-scene-signals">
+                    <span>Product definition</span><span>Production</span><span>Operational evidence</span>
+                  </div>
+                </div>
+              </section>
+              <section class="ail-story-scene agents" data-scene="1">
+                <div class="ail-scene-copy">
+                  <div class="ail-scene-kicker">Agents + agentic frameworks</div>
+                  <h2 class="ail-scene-title"><span class="ail-title-line">Agents connect the lifecycle.</span></h2>
+                  <p class="ail-scene-sub">APIs, MCP servers, and agent skills expose the capabilities already inside each Siemens product. An agentic framework can select tools, carry context, and coordinate the handoffs between them.</p>
+                  <div class="ail-scene-signals">
+                    <span>APIs</span><span>MCP</span><span>Agent skills</span><span>Human approval</span>
+                  </div>
+                </div>
+              </section>
+              <section class="ail-story-scene harness" data-scene="2">
+                <div class="ail-scene-copy">
+                  <div class="ail-scene-kicker">The product lifecycle harness</div>
+                  <h2 class="ail-scene-title"><span class="ail-title-line">One harness.</span><span class="ail-title-line">Design through optimize.</span></h2>
+                  <p class="ail-scene-sub">The harness carries intent, product context, and evidence across the lifecycle. It plans work, dispatches the right agents, preserves traceability, and keeps people at the decisions that require judgment.</p>
+                  <div class="ail-scene-signals">
+                    <span>Plan</span><span>Dispatch</span><span>Trace</span><span>Govern</span>
+                  </div>
+                </div>
+              </section>
+              <section class="ail-story-scene outcome" data-scene="3">
+                <div class="ail-scene-copy">
+                  <div class="ail-scene-kicker">The target</div>
+                  <h2 class="ail-scene-title"><span class="ail-title-line">Fly in 3.</span></h2>
+                  <p class="ail-scene-sub">The goal is not another point solution. It is one governed execution layer that can move an aircraft program from requirement to a flight-ready product through a continuous, agent-driven lifecycle.</p>
                   <div class="ail-scene-actions">
-                    <button class="ail-story-link" id="ctaThread" type="button">Trace all 14 products →</button>
-                    <button class="ail-story-link" id="ctaLifecycle" type="button">Inspect every stage →</button>
-                  </div>
-                </div>
-              </section>
-              <section class="ail-story-scene" data-scene="1">
-                <div class="ail-scene-copy">
-                  <div class="ail-scene-kicker">POLARION ALM / REQUIREMENTS</div>
-                  <h2 class="ail-scene-title"><span class="ail-title-line">51 requirements.</span><span class="ail-title-line">Each source attached.</span></h2>
-                  <p class="ail-scene-sub">Polarion REST v1 holds each requirement, its RFP source, standard reference, and verification state before the first model opens.</p>
-                  <div class="ail-scene-facts">
-                    <div class="ail-scene-fact"><strong>Polarion ALM</strong>Native REST API · 8/10</div>
-                    <div class="ail-scene-fact"><strong>TC SysML</strong>SOA / ITK bridge</div>
-                  </div>
-                </div>
-              </section>
-              <section class="ail-story-scene" data-scene="2">
-                <div class="ail-scene-copy">
-                  <div class="ail-scene-kicker">NX → TEAMCENTER / TOOLCHAIN</div>
-                  <h2 class="ail-scene-title"><span class="ail-title-line">14 products.</span><span class="ail-title-line">Actual interfaces only.</span></h2>
-                  <p class="ail-scene-sub">NX Open, Amesim Python, Questa TCL, Opcenter REST, and Teamcenter SOA are evaluated as they exist—not as a product roadmap claims they might work.</p>
-                  <div class="ail-scene-facts">
-                    <div class="ail-scene-fact"><strong>Design</strong>8 products</div>
-                    <div class="ail-scene-fact"><strong>Realize</strong>3 products</div>
-                    <div class="ail-scene-fact"><strong>Optimize</strong>3 products</div>
-                  </div>
-                </div>
-              </section>
-              <section class="ail-story-scene verdict" data-scene="3">
-                <div class="ail-scene-copy">
-                  <div class="ail-scene-kicker">INTERFACE AUDIT / RESULT</div>
-                  <h2 class="ail-scene-title"><span class="ail-title-line">5 native.</span><span class="ail-title-line">8 need a bridge.</span><span class="ail-title-line">1 stops the run.</span></h2>
-                  <p class="ail-scene-sub">PHM MADe has no headless-run API and no results extraction. Eight other products need a server layer before an agent can use them.</p>
-                  <div class="ail-scene-facts">
-                    <div class="ail-scene-fact"><strong>5 native</strong>Direct API path</div>
-                    <div class="ail-scene-fact"><strong>8 bridge</strong>Server layer first</div>
-                    <div class="ail-scene-fact"><strong>1 wall</strong>MADe · no programmatic path</div>
+                    <button class="ail-story-link" id="ctaLifecycle" type="button">Explore the lifecycle →</button>
+                    <button class="ail-story-link" id="ctaThread" type="button">See the agent fabric →</button>
                   </div>
                 </div>
               </section>
             </div>
           </section>
-          <section class="ail-story-proof" aria-label="Verified lifecycle readiness summary">
-            <aside class="ail-verdict" id="heroVerdict"></aside>
-            <div class="ail-lh-thread"><div class="ail-ribbon" id="heroThread"></div></div>
+          <section class="ail-lifecycle-continuum" aria-label="One connected product lifecycle">
+            <article class="ail-continuum-phase design">
+              <span class="phase-name">Design</span>
+              <h3>Turn intent into a verified product definition.</h3>
+              <p>Requirements, systems engineering, simulation, electrical, mechanical, and embedded design stay connected to the original mission.</p>
+            </article>
+            <article class="ail-continuum-phase realize">
+              <span class="phase-name">Realize</span>
+              <h3>Turn the definition into a buildable product.</h3>
+              <p>PLM, manufacturing simulation, and production execution receive governed context instead of disconnected handoff packages.</p>
+            </article>
+            <article class="ail-continuum-phase optimize">
+              <span class="phase-name">Optimize</span>
+              <h3>Turn evidence into the next lifecycle decision.</h3>
+              <p>Telemetry, verification, and certification close the loop so operational learning can inform the product continuously.</p>
+            </article>
           </section>
           <div class="ail-land-intro reveal" style="margin-top:2.4rem;">
             <div class="ail-land-intro-copy">
-              <span class="ail-eyebrow">Explore the tracker</span>
-              <div class="ail-h" style="font-size:1.55rem;">Six views. One connected lifecycle.</div>
+              <span class="ail-eyebrow">Explore the system</span>
+              <div class="ail-h" style="font-size:1.55rem;">Follow the lifecycle from product detail to agent orchestration.</div>
             </div>
-            <p class="ail-sub">Trace the <strong>entire Siemens RFP&nbsp;→&nbsp;Delivery lifecycle</strong>, verified product by product. Follow the woven digital thread, inspect how the agent connects and scales, or see exactly which walls still need a custom bridge.</p>
+            <p class="ail-sub">Inspect the lifecycle stages, follow the digital thread, and see how agent interfaces, data, orchestration, and governance combine into the product lifecycle harness.</p>
           </div>
           <div class="ail-grid ail-land-grid" id="landGrid" style="margin-top:1.1rem;"></div>
           <div class="ail-land-foot reveal">
             <div>
-              <span class="ail-eyebrow">At a glance</span>
-              <div class="ail-h" style="font-size:1.15rem;">The complete thread</div>
+              <span class="ail-eyebrow">The implementation</span>
+              <div class="ail-h" style="font-size:1.15rem;">A governed agent layer across the existing product lifecycle</div>
             </div>
-            <p class="ail-sub">14 lifecycle stages · 3 phases · 7 Siemens digital threads · one governed AI &amp; data fabric. Every claim traces to <code>AGENTIC_READINESS_VERIFIED.md</code>.</p>
+            <p class="ail-sub">The detailed views preserve the verified interface, headless execution, authentication, and orchestration evidence behind every product connection.</p>
             <div class="ail-land-foot-action">
               <p class="ail-sub">Every product includes a downloadable <strong>agent-skill doc</strong> that teaches an agent its verified integration layer.</p>
               <a class="ail-dl-btn lg" href="agent_skills/siemens-agent-skills.zip" download style="margin-top:.5rem;">
@@ -943,30 +943,9 @@
   const prodName = (p) => p.split('(')[0].trim();
   const el = (id) => document.getElementById(id);
 
-  // ---- hero: living thread ribbon (real product names, tier-colored) ----
-  const RB_SHORT = ['Ingest','Polarion','MADe','Amesim','Capital','NX','Simcenter 3D','Questa','Teamcenter','Tecnomatix','Opcenter','Industrial Edge','TC V&V','Delivery'];
-  el('heroThread').innerHTML = STAGES.map((s,i)=>`
-    <div class="rb-node ${s.tier==='wall'?'wall':''}" style="--nd-c:${tierColor(s.tier)};--i:${i}" tabindex="0" role="button" aria-label="${s.no} ${prodName(s.prod)} — ${TIER[s.tier].label}">
-      <div class="rb-chip"><ix-icon name="${TIER[s.tier].icon}" size="22"></ix-icon></div>
-      <span class="rb-no">${s.no}</span>
-      <span class="rb-nm">${RB_SHORT[i]}</span>
-    </div>`).join('');
-
-  // ---- the real finding: how many products an agent can actually drive ----
+  // ---- verified readiness remains available in the detailed information views ----
   const tierCount = t => STAGES.filter(s=>s.tier===t).length;
   const nNative = tierCount('native'), nBridge = tierCount('bridge'), nWall = tierCount('wall'), nTot = STAGES.length;
-  el('heroVerdict').innerHTML = `
-    <div class="vd-head"><span class="lab">Can an agent drive it?</span><span class="tot">${nTot} products verified</span></div>
-    <div class="vd-bar" role="img" aria-label="${nNative} native, ${nBridge} bridge, ${nWall} wall of ${nTot}">
-      <span class="native" style="flex:${nNative};--sd:0s"></span>
-      <span class="bridge" style="flex:${nBridge};--sd:.6s"></span>
-      <span class="wall" style="flex:${nWall};--sd:1.2s"></span>
-    </div>
-    <div class="vd-rows">
-      <div class="vd-row native"><i></i><span class="t">Native-ready<small>drive it straight through its own API</small></span><span class="c">${nNative}</span></div>
-      <div class="vd-row bridge"><i></i><span class="t">Need a bridge<small>headless/server layer required first</small></span><span class="c">${nBridge}</span></div>
-      <div class="vd-row wall"><i></i><span class="t">Hard wall<small>no programmatic path — MADe</small></span><span class="c">${nWall}</span></div>
-    </div>`;
   el('ctxStats').innerHTML = `
     <div class="s"><span class="n">14</span><span class="l">lifecycle products verified</span></div>
     <div class="s native"><span class="n">${nNative}</span><span class="l">agent-native</span></div>
@@ -974,30 +953,32 @@
     <div class="s alarm"><span class="n">${nWall}</span><span class="l">hard wall (MADe)</span></div>`;
   el('ctxMini').innerHTML = `<span class="m">${nNative} native</span><span class="m">${nBridge} bridge</span><span class="m alarm">${nWall} wall</span>`;
 
-  // ---- hero ribbon nodes → open the same skill popover as the thread view ----
-  document.querySelectorAll('#heroThread .rb-node').forEach((n,i)=>{
-    const o = stagePopOpts(STAGES[i].no);
-    const pop = ()=>{ if(o) openSkillPop(n,o); };
-    n.addEventListener('click', pop);
-    n.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pop(); } });
-  });
-
   // ---- landing CTAs ----
-  el('ctaThread').addEventListener('click', ()=>showView(2));
+  el('ctaThread').addEventListener('click', ()=>showView(6));
   el('ctaLifecycle').addEventListener('click', ()=>showView(1));
 
-  // Fourteen rigid layers morph from source stack to toolchain and readiness groups.
+  // Existing product systems converge through agent interfaces into one lifecycle harness.
   const landingStory = el('landingStory');
   const storyStage = el('storyStage');
   const storyObject = el('storyObject');
   if(landingStory && storyStage && storyObject){
     const scenes = [...landingStory.querySelectorAll('.ail-story-scene')];
-    const storyFigures = ['41','51','14','5·8·1'];
-    storyObject.innerHTML = STAGES.map(s=>`<div class="ail-material-unit ${s.tier}"><span>${s.no}</span></div>`).join('');
-    const units = [...storyObject.children];
-    const tierPositions = new Map();
-    ['native','bridge','wall'].forEach(tier=>{
-      STAGES.filter(s=>s.tier===tier).forEach((stage,index)=>tierPositions.set(stage.no,index));
+    const storyCore = el('storyCore');
+    const storyCoreCopy = el('storyCoreCopy');
+    const phaseTags = [...landingStory.querySelectorAll('.ail-phase-tag')];
+    const productLabels = ['SPEC','POLARION','MADe','AMESIM','CAPITAL','NX','SIMCENTER','QUESTA','TEAMCENTER','TECNOMATIX','OPCENTER','EDGE','V&V','DELIVERY'];
+    const phases = ['Design','Realize','Optimize'];
+    const coreLabels = [
+      {title:'', detail:''},
+      {title:'Agent framework', detail:'connect'},
+      {title:'Lifecycle harness', detail:'orchestrate'},
+      {title:'Fly in 3', detail:'one lifecycle'},
+    ];
+    storyObject.innerHTML = STAGES.map((s,index)=>`<div class="ail-material-unit ${s.phase.toLowerCase()}"><span>${productLabels[index]}</span></div>`).join('');
+    const units = [...storyObject.querySelectorAll('.ail-material-unit')];
+    const phasePositions = new Map();
+    phases.forEach(phase=>{
+      STAGES.filter(s=>s.phase===phase).forEach((stage,index)=>phasePositions.set(stage.no,index));
     });
     const reducedStoryMotion = document.documentElement.classList.contains('static-motion')
       || matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1027,61 +1008,73 @@
       if(nearest!==activeScene){
         activeScene = nearest;
         scenes.forEach((scene,index)=>scene.classList.toggle('is-active',index===nearest));
-        const figure=el('storyFigure');
-        figure.textContent=storyFigures[nearest];
-        figure.classList.remove('is-changing');
-        requestAnimationFrame(()=>figure.classList.add('is-changing'));
+        const label = coreLabels[nearest];
+        storyCoreCopy.innerHTML = `${label.title}<small>${label.detail}</small>`;
+        storyCoreCopy.classList.remove('is-changing');
+        requestAnimationFrame(()=>storyCoreCopy.classList.add('is-changing'));
       }
       return {progress,nearest};
     };
 
     const unitLayout = (index,state,width,height)=>{
       const sx=Math.min(1.2,width/820), sy=Math.min(1.15,height/760);
+      const stage=STAGES[index], phaseIndex=phases.indexOf(stage.phase);
+      const phasePosition=phasePositions.get(stage.no);
       if(state===0){
-        const offset=index-6.5;
-        return {x:offset*6*sx,y:offset*3.6*sy,z:offset*12,rz:-12+index*1.8,scale:1.18,opacity:.86};
+        const centerX=[-190,0,190][phaseIndex];
+        const localX=stage.phase==='Design' ? (phasePosition%2-.5)*88 : 0;
+        const localY=stage.phase==='Design' ? (Math.floor(phasePosition/2)-1.5)*76 : (phasePosition-1)*82;
+        return {x:(centerX+localX)*sx,y:localY*sy,z:phasePosition*7,rz:phaseIndex*3-3,scale:.56,opacity:.92};
       }
       if(state===1){
-        const offset=index-6.5;
-        return {x:offset*25*sx,y:offset*9*sy,z:Math.sin(index*.8)*16,rz:-23,scale:.78,opacity:.82};
+        const angle=-Math.PI/2+(index/units.length)*Math.PI*2;
+        return {x:Math.cos(angle)*282*sx,y:Math.sin(angle)*190*sy,z:Math.sin(angle*2)*22,rz:angle*180/Math.PI+90,scale:.54,opacity:.9};
       }
       if(state===2){
-        const col=index%4, row=Math.floor(index/4);
-        return {x:(col-1.5)*156*sx,y:(row-1.35)*106*sy,z:(col+row)*7,rz:0,scale:.72,opacity:.94};
+        const angle=-Math.PI/2+(index/units.length)*Math.PI*2;
+        return {x:Math.cos(angle)*205*sx,y:Math.sin(angle)*142*sy,z:Math.cos(angle*3)*18,rz:angle*180/Math.PI+90,scale:.62,opacity:.96};
       }
-      const tier=STAGES[index].tier, position=tierPositions.get(STAGES[index].no);
-      if(tier==='native'){
-        return {x:(-235+(position%2)*120)*sx,y:(-126+Math.floor(position/2)*104)*sy,z:position*6,rz:-4,scale:.72,opacity:.98};
-      }
-      if(tier==='bridge'){
-        return {x:(15+(position%2)*120)*sx,y:(-174+Math.floor(position/2)*96)*sy,z:position*5,rz:2,scale:.72,opacity:.92};
-      }
-      return {x:278*sx,y:126*sy,z:42,rz:8,scale:.82,opacity:1};
+      const offset=index-(units.length-1)/2;
+      return {x:offset*2.8*sx,y:offset*2.2*sy,z:offset*11,rz:-10+offset*.9,scale:.92,opacity:.95};
     };
 
     const drawStory = (time,progress,nearest)=>{
       const width=storyObject.clientWidth, height=storyObject.clientHeight;
+      const sx=Math.min(1.2,width/820), sy=Math.min(1.15,height/760);
       const position=(reducedStoryMotion?nearest:progress*(scenes.length-1));
       const from=Math.min(scenes.length-1,Math.floor(position));
       const to=Math.min(scenes.length-1,from+1);
       const blend=smooth(position-from);
       const idle=reducedStoryMotion?0:Math.sin(time*.00023)*.8;
       const objectStates=[
-        {rx:61,rz:-34,scale:1},
-        {rx:57,rz:-25,scale:1.02},
-        {rx:53,rz:-17,scale:1.03},
-        {rx:50,rz:-10,scale:1.04},
+        {rx:52,rz:-4,scale:1},
+        {rx:55,rz:0,scale:1.02},
+        {rx:58,rz:0,scale:1.06},
+        {rx:64,rz:-28,scale:1.08},
       ];
       const objectFrom=objectStates[from], objectTo=objectStates[to];
       storyObject.style.transform=`rotateX(${mix(objectFrom.rx,objectTo.rx,blend).toFixed(2)}deg) rotateZ(${(mix(objectFrom.rz,objectTo.rz,blend)+idle).toFixed(2)}deg) scale(${mix(objectFrom.scale,objectTo.scale,blend).toFixed(3)})`;
-      const tierReveal=clamp((position-2)*.92);
       units.forEach((unit,index)=>{
         const a=unitLayout(index,from,width,height), b=unitLayout(index,to,width,height);
         const float=reducedStoryMotion?0:Math.sin(time*.00042+index*.71)*1.8;
         unit.style.transform=`translate3d(calc(-50% + ${mix(a.x,b.x,blend).toFixed(1)}px),calc(-50% + ${(mix(a.y,b.y,blend)+float).toFixed(1)}px),${mix(a.z,b.z,blend).toFixed(1)}px) rotateZ(${mix(a.rz,b.rz,blend).toFixed(2)}deg) scale(${mix(a.scale,b.scale,blend).toFixed(3)})`;
         unit.style.opacity=mix(a.opacity,b.opacity,blend).toFixed(3);
-        unit.style.setProperty('--tier-mix',`${Math.round(tierReveal*24)}%`);
-        unit.style.setProperty('--tier-edge',`${Math.round(12+tierReveal*66)}%`);
+      });
+      const coreStates=[
+        {opacity:0,scale:.35,rotation:-8},
+        {opacity:.88,scale:.72,rotation:-3},
+        {opacity:1,scale:1.02,rotation:0},
+        {opacity:1,scale:1.18,rotation:4},
+      ];
+      const coreFrom=coreStates[from], coreTo=coreStates[to];
+      storyCore.style.opacity=mix(coreFrom.opacity,coreTo.opacity,blend).toFixed(3);
+      storyCore.style.transform=`translate(-50%,-50%) scale(${mix(coreFrom.scale,coreTo.scale,blend).toFixed(3)}) rotate(${mix(coreFrom.rotation,coreTo.rotation,blend).toFixed(2)}deg)`;
+      const tagOpacity=clamp(1-position*.62);
+      const tagY=190*sy;
+      phaseTags.forEach((tag,index)=>{
+        const x=[-190,0,190][index]*sx;
+        tag.style.opacity=tagOpacity.toFixed(3);
+        tag.style.transform=`translate(calc(-50% + ${x.toFixed(1)}px),calc(-50% + ${tagY.toFixed(1)}px))`;
       });
     };
 
