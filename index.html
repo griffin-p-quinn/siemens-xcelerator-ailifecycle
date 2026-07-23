@@ -81,7 +81,7 @@
     .ail-material-unit.design { --phase-color:var(--design); }
     .ail-material-unit.realize { --phase-color:var(--realize); }
     .ail-material-unit.optimize { --phase-color:var(--optimize); }
-    .ail-system-core { position:absolute; z-index:3; left:50%; top:50%; width:clamp(122px,10.5vw,196px); aspect-ratio:1;
+    .ail-system-core { position:absolute; z-index:3; left:50%; top:50%; width:clamp(130px,11.2vw,208px); aspect-ratio:1;
       display:grid; place-items:center; border:1px solid rgba(218,238,255,.38); border-radius:50%;
       background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.2),rgba(52,112,173,.2) 40%,rgba(4,10,17,.88) 72%);
       box-shadow:inset 0 0 34px rgba(108,179,255,.16),0 0 54px rgba(73,151,237,.22); opacity:0;
@@ -173,7 +173,7 @@
       .ail-scene-signals { gap:.35rem .8rem; margin-top:1rem; }
       .ail-material-viewport { top:39%; bottom:-4%; left:-18%; right:-18%; opacity:.72; }
       .ail-material-glow { inset:38% -30% -12%; opacity:.78; }
-      .ail-system-core { width:118px; }
+      .ail-system-core { width:124px; }
       .ail-phase-tag { display:none; }
       .ail-lifecycle-continuum { grid-template-columns:1fr; }
       .ail-continuum-phase { min-height:0; }
@@ -1047,10 +1047,10 @@
       const blend=smooth(position-from);
       const idle=reducedStoryMotion?0:Math.sin(time*.00023)*.8;
       const objectStates=[
-        {rx:52,rz:-4,scale:1},
-        {rx:55,rz:0,scale:1.02},
-        {rx:58,rz:0,scale:1.06},
-        {rx:64,rz:-28,scale:1.08},
+        {rx:52,rz:-4,scale:1.06},
+        {rx:55,rz:0,scale:1.08},
+        {rx:58,rz:0,scale:1.12},
+        {rx:64,rz:-28,scale:1.14},
       ];
       const objectFrom=objectStates[from], objectTo=objectStates[to];
       storyObject.style.transform=`rotateX(${mix(objectFrom.rx,objectTo.rx,blend).toFixed(2)}deg) rotateZ(${(mix(objectFrom.rz,objectTo.rz,blend)+idle).toFixed(2)}deg) scale(${mix(objectFrom.scale,objectTo.scale,blend).toFixed(3)})`;
