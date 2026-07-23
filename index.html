@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Xcelerator AI Lifecycle — Agentic Readiness Tracker (RFP → Delivery)</title>
+  <meta name="description" content="Siemens Xcelerator AI Lifecycle — Agentic Readiness Tracker evaluating 14 Siemens products across RFP Intake to Delivery." />
+  <meta property="og:title" content="Xcelerator AI Lifecycle — Agentic Readiness Tracker" />
+  <meta property="og:description" content="Interactive agentic-readiness map for Siemens PLM, CAD, ALM, and Digital Twin products." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="assets/siemens-ix/favicon.svg" />
 
   <!-- Siemens iX 5.1.1 — self-hosted (single origin, no third-party CDN waterfall) -->
   <link rel="stylesheet" href="assets/siemens-ix/siemens-ix.css" />
@@ -1080,7 +1085,7 @@
     all.sort((a,b)=>a.v-b.v);
     chart = echarts.init(el('scoreChart'), null, {renderer:'canvas'});
     chart.setOption({
-      grid:{ left:210, right:56, top:16, bottom:26 },
+      grid:{ left:260, right:56, top:16, bottom:26, containLabel:true },
       tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
       xAxis:{ type:'value', max:10, splitLine:{lineStyle:{color:'rgba(255,255,255,.06)'}}, axisLabel:{color:tok('--theme-color-weak-text')} },
       yAxis:{ type:'category', data:all.map(d=>d.n), axisLabel:{color:tok('--theme-color-std-text'), fontSize:12}, axisLine:{lineStyle:{color:tok('--theme-color-soft-bdr')}} },

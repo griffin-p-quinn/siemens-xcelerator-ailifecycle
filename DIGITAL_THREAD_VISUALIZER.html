@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FlyNow QX-250 — Griffin's Work vs. Their Work Landscape Visualizer</title>
+<meta name="description" content="FlyNow QX-250 — Griffin's Work vs. Their Work Landscape Visualizer comparing FastMCP work vs cloud endpoints across Siemens PLM lifecycle.">
+<meta property="og:title" content="FlyNow QX-250 — Landscape Visualizer">
+<meta property="og:description" content="Digital Thread visualizer comparing Griffin's local FastMCP work vs cloud REST endpoints.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="assets/siemens-ix/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -246,6 +251,15 @@
     font-size: 12px;
     color: var(--text-tertiary);
   }
+
+  @media (max-width: 768px) {
+    main { padding: 16px 12px 40px; }
+    .hub-bar { flex-direction: column; align-items: flex-start; padding: 16px; gap: 12px; }
+    .nav-tabs { flex-wrap: wrap; width: 100%; }
+    .tab-btn { flex: 1 1 auto; text-align: center; }
+    .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { min-width: 600px; }
+  }
 </style>
 </head>
 <body>
@@ -268,9 +282,9 @@
   </div>
 
   <div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('landscape')">Griffin vs. Chris Landscape</button>
-    <button class="tab-btn" onclick="switchTab('thread')">QX-250 Digital Thread</button>
-    <button class="tab-btn" onclick="switchTab('scorecard')">Agentic Scorecard</button>
+    <button type="button" class="tab-btn active" onclick="switchTab('landscape')">Griffin vs. Chris Landscape</button>
+    <button type="button" class="tab-btn" onclick="switchTab('thread')">QX-250 Digital Thread</button>
+    <button type="button" class="tab-btn" onclick="switchTab('scorecard')">Agentic Scorecard</button>
   </div>
 </header>
 
@@ -399,11 +413,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>Siemens EDA Questa</td><td>YES</td><td>NO</td><td><strong>7 / 10</strong></td><td>Most agent-ready native tool. Batch CLI scripts run headlessly.</td></tr>
+          <tr><td>Siemens EDA Questa</td><td>YES</td><td>NO</td><td><strong>9 / 10</strong></td><td>Most agent-ready native tool. Batch CLI scripts &amp; self-checking testbenches run headlessly.</td></tr>
           <tr><td>Teamcenter SOA Backend</td><td>YES</td><td>NO</td><td><strong>6 / 10</strong></td><td>Strong backend C# API (<code>Teamcenter.Soa.Client</code>).</td></tr>
-          <tr><td>Simcenter Amesim</td><td>YES</td><td>NO</td><td><strong>5 / 10</strong></td><td><code>ame_apy</code> Python API runs 6-DOF simulation unattended.</td></tr>
-          <tr><td>Siemens Capital EWIS</td><td>PARTIAL</td><td>NO</td><td><strong>4 / 10</strong></td><td>Griffin Quinn built custom Java Bridge &amp; Project XML generator.</td></tr>
-          <tr><td>Siemens NX CAD</td><td>PARTIAL</td><td>NO</td><td><strong>3 / 10</strong></td><td>NX Open batch exists; Griffin built <code>griffin-p-quinn/nx-mcp</code> FastMCP server.</td></tr>
+          <tr><td>Simcenter Amesim</td><td>YES</td><td>NO</td><td><strong>7 / 10</strong></td><td><code>ame_apy</code> Python API runs 6-DOF simulation unattended. Score updated from provisional.</td></tr>
+          <tr><td>Siemens Capital EWIS</td><td>PARTIAL</td><td>NO</td><td><strong>5 / 10</strong></td><td>Griffin Quinn built custom Java Bridge &amp; Project XML generator.</td></tr>
+          <tr><td>Siemens NX CAD</td><td>PARTIAL</td><td>NO</td><td><strong>6 / 10</strong></td><td>NX Open batch exists; Griffin built <code>griffin-p-quinn/nx-mcp</code> FastMCP server. Score updated from provisional.</td></tr>
           <tr><td>Teamcenter Active Workspace UI</td><td>NO</td><td>NO</td><td><strong>3 / 10</strong></td><td>Web UI renderer freezes under CDP browser automation.</td></tr>
           <tr><td>PHM Technology MADe</td><td>NO</td><td>NO</td><td><strong>2 / 10</strong></td><td>0% headless path. GUI-only, PDF-only exports. Complete wall for agents.</td></tr>
           <tr><td>Neutral MCP Bridge (Griffin Quinn)</td><td>YES</td><td>YES</td><td><strong>9 / 10</strong></td><td>Custom FastMCP bridge by Griffin Quinn proving the MCP pattern.</td></tr>

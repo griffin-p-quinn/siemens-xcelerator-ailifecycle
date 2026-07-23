@@ -50,7 +50,7 @@ The **OPTIMIZE Stage** completes the digital thread by connecting real-time shop
 ## 2. Deep-Dive Component Technical Specifications
 
 ### 2.1 Opcenter Execution Discrete & DTC Co-Pilot
-- **Primary Engine:** Opcenter Execution Discrete (MOM / MES) + Digital Twin Composer (DTC) ([d:/projectsD/DTComposer](file:///d:/projectsD/DTComposer)).
+- **Primary Engine:** Opcenter Execution Discrete (MOM / MES) + Digital Twin Composer (DTC) (`d:/projectsD/DTComposer`).
 - **Mechanism:** Releases shop-floor work orders (`WO-2026-0041`) to assembly stations (`FINAL ASSY 1`).
 - **DTC Co-Pilot Diagnostics API Payload:**
 ```json

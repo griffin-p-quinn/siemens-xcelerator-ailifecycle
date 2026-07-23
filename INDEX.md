@@ -36,13 +36,14 @@ This framework synthesizes and compares **Griffin's Work** against **Chris's Wor
 
 ---
 
-## Core Landscape Documents ([AILifecycle](file:///d:/projectsD/AILifecycle))
+## Core Landscape Documents
 
-1. **[GRIFFIN_VS_CHRIS_LANDSCAPE_ANALYSIS.md](file:///d:/projectsD/AILifecycle/GRIFFIN_VS_CHRIS_LANDSCAPE_ANALYSIS.md)** — **(NEW)** Authority analysis comparing Griffin's Work vs. Chris's Work, finding commonalities, and documenting technical gap resolutions.
-2. **[CHRIS_VS_GRIFFIN_ALIGNMENT.md](file:///d:/projectsD/AILifecycle/CHRIS_VS_GRIFFIN_ALIGNMENT.md)** — Cloud-to-Local Synergy Matrix.
-3. **[SIEMENS_AUTHENTIC_PORTFOLIO_MAP.md](file:///d:/projectsD/AILifecycle/SIEMENS_AUTHENTIC_PORTFOLIO_MAP.md)** — Ground-truth QX-250 Taxonomy Map & Siemens Agentic-Readiness Scorecard.
-4. **[DIGITAL_THREAD_VISION.md](file:///d:/projectsD/AILifecycle/DIGITAL_THREAD_VISION.md)** — QX-250 Quadcopter 7-Step Digital Thread & AI Lifecycle Harness Architecture.
-5. **[STAGE_1_DESIGN.md](file:///d:/projectsD/AILifecycle/STAGE_1_DESIGN.md)**, **[STAGE_2_REALIZE.md](file:///d:/projectsD/AILifecycle/STAGE_2_REALIZE.md)**, **[STAGE_3_OPTIMIZE.md](file:///d:/projectsD/AILifecycle/STAGE_3_OPTIMIZE.md)** — 3-Stage Engineering Manuals.
-6. **Product Deep Dives ([AILifecycle/products](file:///d:/projectsD/AILifecycle/products))**: 7 Product Deep Dives.
-7. **Executable Code & FastMCP Servers ([AILifecycle/mcp_servers](file:///d:/projectsD/AILifecycle/mcp_servers) & [AILifecycle/workflows](file:///d:/projectsD/AILifecycle/workflows))**: Tested Python Scripts — 4 FastMCP servers, `agentcenter_workflow_dag.py`, `dtc_copilot_engine.py`, and **(NEW)** `mendix_digital_fabric_dispatcher.py` (license-token pool + worker queue integrating all FastMCP servers).
-8. **Interactive Visualizer & Machine Schema**: **[DIGITAL_THREAD_VISUALIZER.html](file:///d:/projectsD/AILifecycle/DIGITAL_THREAD_VISUALIZER.html)** & **[digital_thread_schema.json](file:///d:/projectsD/AILifecycle/digital_thread_schema.json)**.
+1. **[GRIFFIN_VS_CHRIS_LANDSCAPE_ANALYSIS.md](GRIFFIN_VS_CHRIS_LANDSCAPE_ANALYSIS.md)** — **(NEW)** Authority analysis comparing Griffin's Work vs. Chris's Work, finding commonalities, and documenting technical gap resolutions.
+2. **[CHRIS_VS_GRIFFIN_ALIGNMENT.md](CHRIS_VS_GRIFFIN_ALIGNMENT.md)** — Cloud-to-Local Synergy Matrix.
+3. **[SIEMENS_AUTHENTIC_PORTFOLIO_MAP.md](SIEMENS_AUTHENTIC_PORTFOLIO_MAP.md)** — Ground-truth QX-250 Taxonomy Map & Siemens Agentic-Readiness Scorecard.
+4. **[DIGITAL_THREAD_VISION.md](DIGITAL_THREAD_VISION.md)** — QX-250 Quadcopter 7-Step Digital Thread & AI Lifecycle Harness Architecture.
+5. **[STAGE_1_DESIGN.md](STAGE_1_DESIGN.md)**, **[STAGE_2_REALIZE.md](STAGE_2_REALIZE.md)**, **[STAGE_3_OPTIMIZE.md](STAGE_3_OPTIMIZE.md)** — 3-Stage Engineering Manuals.
+6. **Product Deep Dives ([products/](products/))**: 7 Product Deep Dives.
+7. **Executable Code & FastMCP Servers ([mcp_servers/](mcp_servers/) & [workflows/](workflows/))**: Tested Python Scripts — 4 FastMCP servers, `agentcenter_workflow_dag.py`, `dtc_copilot_engine.py`, and **(NEW)** `mendix_digital_fabric_dispatcher.py` (license-token pool + worker queue integrating all FastMCP servers).
+8. **Interactive Visualizer & Machine Schema**: **[DIGITAL_THREAD_VISUALIZER.html](DIGITAL_THREAD_VISUALIZER.html)** & **[digital_thread_schema.json](digital_thread_schema.json)**.
+9. **Agent Handoff & Architecture Index**: **[AGENT_HANDOFF_INDEX.md](AGENT_HANDOFF_INDEX.md)** — **(NEW)** Complete technical handoff guide and lookup matrix for AI agents.

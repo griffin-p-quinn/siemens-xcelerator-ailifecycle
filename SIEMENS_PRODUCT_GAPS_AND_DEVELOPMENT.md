@@ -77,7 +77,7 @@
 - **Mitigation Phase 3:** Deploy an LLM defeaturing retry loop (`simcenter_defeaturing_agent`) that simplifies small radius fillets in NX CAD before re-meshing.
 
 ### 2.5 Tecnomatix & Digital Twin Composer (DTC)
-- **Current State:** Production Co-Pilot ([d:/projectsD/DTComposer](file:///d:/projectsD/DTComposer)), Tecnomatix Process Simulate, and Plant Simulation.
+- **Current State:** Production Co-Pilot (`d:/projectsD/DTComposer`), Tecnomatix Process Simulate, and Plant Simulation.
 - **Gaps:** Omniverse 3D USD scene updates require manual rendering passes.
 - **Mitigation Phase 3:** Embed OpenUSD Python scripts in Tecnomatix to stream CAD pose changes live into Omniverse scenes.
 

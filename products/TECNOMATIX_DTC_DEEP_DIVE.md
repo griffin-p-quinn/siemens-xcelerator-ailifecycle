@@ -44,7 +44,7 @@ The **REALIZE Stage** transforms the verified CAD/FEA digital model into a manuf
 
 ## 2. DTC Production Co-Pilot System Architecture
 
-Rooted in the local codebase implementation ([d:/projectsD/DTComposer](file:///d:/projectsD/DTComposer)), the Digital Twin Composer (DTC) Co-Pilot provides real-time operator chat, tool calling, and station recovery:
+Rooted in the local codebase implementation (`d:/projectsD/DTComposer`), the Digital Twin Composer (DTC) Co-Pilot provides real-time operator chat, tool calling, and station recovery:
 
 ### 2.1 DTC Co-Pilot Backend Architecture (`app/backend/dtc_copilot/`)
 - **FastAPI + SSE Stream Engine:** Exposes `POST /api/copilot/run` to stream real-time tool calls (`load_production_line`, `get_station_diagnostics`, `propose_recovery_strategy`).
